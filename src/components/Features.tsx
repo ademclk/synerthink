@@ -327,73 +327,16 @@ const FeatureCard = ({ title, colorClass, bgClass, subLabel, span = "", compact 
 };
 
 export default function Features() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const cardsRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Animate the section title and description
-            gsap.from(".features-title", {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".features-title",
-                    start: "top bottom-=100",
-                    end: "top center",
-                    toggleActions: "play none none reverse"
-                }
-            });
-
-            gsap.from(".features-description", {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                delay: 0.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".features-description",
-                    start: "top bottom-=100",
-                    end: "top center",
-                    toggleActions: "play none none reverse"
-                }
-            });
-
-            // Animate feature cards with stagger
-            const cards = cardsRef.current?.children;
-            if (cards) {
-                gsap.from(cards, {
-                    y: 50,
-                    opacity: 0,
-                    duration: 1.2,
-                    stagger: 0.1,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: cardsRef.current,
-                        start: "top bottom-=100",
-                        end: "top center",
-                        toggleActions: "play none none reverse"
-                    }
-                });
-            }
-        }, sectionRef);
-
-        return () => {
-            ctx.revert();
-        };
-    }, []);
-
     return (
-        <section ref={sectionRef} className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32">
+        <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12 sm:mb-16 md:mb-20">
-                    <h2 className="features-title text-4xl md:text-5xl font-bold mb-4">Introducing Dotlanth</h2>
-                    <p className="features-description text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto">
+                    <h2 className="text-4xl md:text-5xl font-bold mb-4">Introducing Dotlanth</h2>
+                    <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto">
                         Write your business logic once, deploy instantly, and get a polished UI out of the box.
                     </p>
                 </div>
-                <div ref={cardsRef} className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8 auto-rows-[90px] sm:auto-rows-[100px] md:auto-rows-[120px] lg:auto-rows-[140px]">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8 auto-rows-[90px] sm:auto-rows-[100px] md:auto-rows-[120px] lg:auto-rows-[140px]">
                     {/* Modular APIs at top-left */}
                     <FeatureCard
                         title=""
@@ -401,7 +344,6 @@ export default function Features() {
                         bgClass="bg-gray-100 dark:bg-neutral-900 relative overflow-hidden"
                         span="col-span-2 row-span-2"
                     >
-                        <ModularAPIsAnimation />
                         <div className="absolute inset-0 z-10 flex items-center justify-center w-full h-full pointer-events-none">
                             <span className="font-bold text-2xl md:text-3xl text-black-400 drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)] text-center select-none">Modular APIs</span>
                         </div>
@@ -429,7 +371,6 @@ export default function Features() {
                         bgClass="bg-gray-100 dark:bg-neutral-900 relative overflow-hidden"
                         span="col-span-2 row-span-2"
                     >
-                        <WarpSpeedAnimation />
                         <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
                             <span className="font-bold text-2xl md:text-3xl text-pink-500 text-center">Auto Updates</span>
                             <span className="mt-1 text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 text-center opacity-95 drop-shadow-[0_1px_2px_rgba(0,0,0,0.12)]">

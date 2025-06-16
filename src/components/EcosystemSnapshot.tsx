@@ -22,65 +22,8 @@ const EcosystemCard = ({ title, description, colorClass }: EcosystemCardProps) =
 };
 
 export default function EcosystemSnapshot() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const cardsRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Animate the section title and description
-            gsap.from(".ecosystem-title", {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".ecosystem-title",
-                    start: "top bottom-=100",
-                    end: "top center",
-                    toggleActions: "play none none none"
-                }
-            });
-
-            gsap.from(".ecosystem-description", {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                delay: 0.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".ecosystem-description",
-                    start: "top bottom-=100",
-                    end: "top center",
-                    toggleActions: "play none none none"
-                }
-            });
-
-            // Animate ecosystem cards with stagger
-            const cards = cardsRef.current?.children;
-            if (cards) {
-                gsap.from(cards, {
-                    y: 50,
-                    opacity: 0,
-                    duration: 1.2,
-                    stagger: 0.2,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: cardsRef.current,
-                        start: "top bottom-=100",
-                        end: "top center",
-                        toggleActions: "play none none none"
-                    }
-                });
-            }
-        }, sectionRef);
-
-        return () => {
-            ctx.revert();
-        };
-    }, []);
-
     return (
-        <section ref={sectionRef} className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32">
+        <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32">
             <div className="max-w-7xl mx-auto">
                 <div className="relative">
                     {/* Background rectangle */}
@@ -89,12 +32,12 @@ export default function EcosystemSnapshot() {
                     {/* Content */}
                     <div className="relative z-10 py-12 sm:py-16 md:py-20 px-6 sm:px-8 md:px-12 lg:px-16">
                         <div className="text-center mb-12 sm:mb-16 md:mb-20">
-                            <h2 className="ecosystem-title text-4xl md:text-5xl font-bold mb-6">The Dotlanth Ecosystem</h2>
-                            <p className="ecosystem-description text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto">
+                            <h2 className="text-4xl md:text-5xl font-bold mb-6">The Dotlanth Ecosystem</h2>
+                            <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto">
                                 Everything you need seamlessly integrated.
                             </p>
                         </div>
-                        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                             <EcosystemCard
                                 title="dotVM"
                                 description="A parallel, multi-architecture virtual machine built for speed and security."

@@ -28,65 +28,8 @@ const Step = ({ title, description, colorClass, number }: StepProps) => {
 };
 
 export default function HowItWorks() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const stepsRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Animate the section title and description
-            gsap.from(".how-it-works-title", {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".how-it-works-title",
-                    start: "top bottom-=100",
-                    end: "top center",
-                    toggleActions: "play none none none"
-                }
-            });
-
-            gsap.from(".how-it-works-description", {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                delay: 0.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".how-it-works-description",
-                    start: "top bottom-=100",
-                    end: "top center",
-                    toggleActions: "play none none none"
-                }
-            });
-
-            // Animate steps with stagger
-            const steps = stepsRef.current?.children;
-            if (steps) {
-                gsap.from(steps, {
-                    x: -50,
-                    opacity: 0,
-                    duration: 1.2,
-                    stagger: 0.2,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: stepsRef.current,
-                        start: "top bottom-=100",
-                        end: "top center",
-                        toggleActions: "play none none none"
-                    }
-                });
-            }
-        }, sectionRef);
-
-        return () => {
-            ctx.revert();
-        };
-    }, []);
-
     return (
-        <section ref={sectionRef} className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32">
+        <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32">
             <div className="max-w-7xl mx-auto">
                 <div className="relative">
                     {/* Background rectangle */}
@@ -95,12 +38,12 @@ export default function HowItWorks() {
                     {/* Content */}
                     <div className="relative z-10 py-12 sm:py-16 md:py-20 px-6 sm:px-8 md:px-12 lg:px-16">
                         <div className="text-center mb-12 sm:mb-16 md:mb-20">
-                            <h2 className="how-it-works-title text-4xl md:text-5xl font-bold mb-6">How It Works</h2>
-                            <p className="how-it-works-description text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto">
+                            <h2 className="text-4xl md:text-5xl font-bold mb-6">How It Works</h2>
+                            <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto">
                                 A simple, powerful way to build and deploy your applications.
                             </p>
                         </div>
-                        <div ref={stepsRef} className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                             <Step
                                 number={1}
                                 title="Write"
