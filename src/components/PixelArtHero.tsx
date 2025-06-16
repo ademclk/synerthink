@@ -24,7 +24,7 @@ const PixelArtHero: React.FC = () => {
 
                 // Cache colors array for performance
                 cachedColors = [
-                    [0, 180, 200], // Primary cyan
+                    [0, 166, 174], // Primary cyan
                     isDark ? [50, 50, 50] : [100, 100, 100], // Gray - lighter in dark mode for better contrast
                     isDark ? [0, 0, 0] : [255, 255, 255], // Background blend - matches CSS background exactly
                     isDark ? [0, 0, 0] : [255, 255, 255] // Background for hover - same as background blend
