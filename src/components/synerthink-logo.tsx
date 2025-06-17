@@ -1,8 +1,8 @@
-export default function SynerthinkLogo(props) {
+export default function SynerthinkLogo(props: React.SVGProps<SVGSVGElement>) {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
-			viewBox='0 0 380.75 633.92'
+			viewBox='0 0 410 425'
 			{...props}
 		>
 			<polygon
@@ -18,6 +18,6 @@ export default function SynerthinkLogo(props) {
 				fill='currentColor'
 			/>
 		</svg>
-		
+
 	);
 }

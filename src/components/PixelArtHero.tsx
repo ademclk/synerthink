@@ -279,16 +279,53 @@ const PixelArtHero: React.FC = () => {
             isHovering = false;
         };
 
+        // Touch event handlers for mobile devices
+        const handleTouchStart = (e: TouchEvent) => {
+            e.preventDefault(); // Prevent scrolling when touching the canvas
+            isHovering = true;
+            if (e.touches.length > 0 && p5Instance) {
+                const rect = containerRef.current?.getBoundingClientRect();
+                if (rect) {
+                    mouseX = e.touches[0].clientX - rect.left;
+                    mouseY = e.touches[0].clientY - rect.top;
+                }
+            }
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            e.preventDefault(); // Prevent scrolling when touching the canvas
+            if (e.touches.length > 0 && p5Instance) {
+                const rect = containerRef.current?.getBoundingClientRect();
+                if (rect) {
+                    mouseX = e.touches[0].clientX - rect.left;
+                    mouseY = e.touches[0].clientY - rect.top;
+                }
+            }
+        };
+
+        const handleTouchEnd = (e: TouchEvent) => {
+            e.preventDefault();
+            isHovering = false;
+        };
+
         window.addEventListener('resize', handleResize);
         const container = containerRef.current;
         container?.addEventListener('mouseenter', handleMouseEnter);
         container?.addEventListener('mouseleave', handleMouseLeave);
+        // Add touch event listeners for mobile support
+        container?.addEventListener('touchstart', handleTouchStart, { passive: false });
+        container?.addEventListener('touchmove', handleTouchMove, { passive: false });
+        container?.addEventListener('touchend', handleTouchEnd, { passive: false });
 
         return () => {
             clearTimeout(initTimeout);
             window.removeEventListener('resize', handleResize);
             container?.removeEventListener('mouseenter', handleMouseEnter);
             container?.removeEventListener('mouseleave', handleMouseLeave);
+            // Remove touch event listeners
+            container?.removeEventListener('touchstart', handleTouchStart);
+            container?.removeEventListener('touchmove', handleTouchMove);
+            container?.removeEventListener('touchend', handleTouchEnd);
             if (p5Instance) {
                 p5Instance.remove();
             }

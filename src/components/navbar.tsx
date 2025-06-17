@@ -12,14 +12,16 @@ const NAV_LINKS = [
     { name: "Blog", href: "/blog" },
 ];
 
-function useBodyScrollLock(isLocked) {
+function useBodyScrollLock(isLocked: boolean) {
     useEffect(() => {
         if (isLocked) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
         }
-        return () => (document.body.style.overflow = "");
+        return () => {
+            document.body.style.overflow = "";
+        };
     }, [isLocked]);
 }
 
@@ -124,20 +126,20 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="sticky top-4 z-[100] flex h-14 items-center justify-between bg-background/10 backdrop-blur-3xl px-4 lg:px-6 rounded-xl mx-4 lg:mx-6 max-w-5xl lg:mx-auto border border-border/50 shadow-sm">
-                <div className="mx-auto flex w-full max-w-5xl items-center justify-between">
-                    <Link to="/" className="flex items-center gap-2 text-lg font-semibold md:text-base lg:order-1" onClick={closeMenu}>
-                        <SynerthinkLogo className="h-10 w-10 pt-2" />
-                        <span className="sr-only">Synerthink</span>
+            <header className="sticky top-4 z-[100] flex h-14 items-center justify-end bg-foreground/10 backdrop-blur-3xl px-4 lg:px-6 rounded-full mx-4 lg:mx-6 border border-border/50 shadow-sm">
+                <div className="mx-auto flex w-full items-center relative">
+                    <Link to="/" className="flex items-center text-center gap-2 text-lg font-semibold md:text-base" onClick={closeMenu}>
+                        <SynerthinkLogo className="h-6 w-6" />
+                        <span className="text-sm">Synerthink</span>
                     </Link>
-                    <nav className="hidden md:flex flex-1 justify-center space-x-10 lg:order-2">
+                    <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-10">
                         {NAV_LINKS.map(({ name, href }) => (
-                            <Link key={name} to={href} className="text-sm font-extralight text-link">
+                            <Link key={name} to={href} className="text-sm font-extralight text-link dark:text-foreground/80">
                                 {name}
                             </Link>
                         ))}
                     </nav>
-                    <div className="relative z-[101]">
+                    <div className="relative z-[101] ml-auto">
                         <button
                             ref={menuButtonRef}
                             className="md:hidden lg:order-3 p-2"
