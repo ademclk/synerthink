@@ -9,10 +9,12 @@ import About from './pages/About';
 import Solutions from './pages/Solutions';
 import Resources from './pages/Resources';
 import { Footer } from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path='/' element={<Home />} />

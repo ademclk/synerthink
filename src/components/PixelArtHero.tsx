@@ -1,16 +1,125 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import p5 from 'p5';
+
+// Device performance detection utility
+const detectLowEndDevice = (): boolean => {
+    // Check hardware concurrency (CPU cores)
+    const cores = navigator.hardwareConcurrency || 1;
+
+    // Check memory (if available)
+    const memory = (navigator as any).deviceMemory;
+
+    // Check user agent for old devices
+    const ua = navigator.userAgent;
+    const isOldAndroid = /Android\s([1-6]\.|7\.[0-1])/.test(ua);
+    const isOldIOS = /iPhone OS [1-9]_/.test(ua) || /iPhone OS 1[0-2]_/.test(ua);
+
+    // Low-end device criteria:
+    // - Less than 4 CPU cores
+    // - Less than 4GB RAM (if available)
+    // - Old Android/iOS versions
+    // - Connection speed (if available)
+    const connection = (navigator as any).connection;
+    const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+
+    return cores < 4 ||
+        (memory && memory < 4) ||
+        isOldAndroid ||
+        isOldIOS ||
+        isSlowConnection ||
+        false; // Default to false for unknown devices
+};
 
 const PixelArtHero: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isLowEndDevice, setIsLowEndDevice] = useState<boolean>(false);
+    const [staticPattern, setStaticPattern] = useState<string>('');
+
+    // Generate a static SVG pattern for low-end devices
+    const generateStaticPattern = () => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const rect = container.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+
+        const pixelSize = 12;
+        const spacing = 24; // Larger spacing for fewer pixels
+        const cols = Math.floor(width / spacing);
+        const rows = Math.floor(height / spacing);
+
+        // Limit pixels for performance
+        const maxPixels = 500;
+        const totalPixels = cols * rows;
+        const keepProbability = totalPixels > maxPixels ? maxPixels / totalPixels : 1;
+
+        // Generate SVG pixels
+        let svgContent = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
+
+        // Get theme colors
+        const isDark = document.documentElement.classList.contains('dark');
+        const primaryColor = '#00A6AE'; // Cyan
+        const grayColor = isDark ? '#323232' : '#646464';
+        const bgColor = isDark ? '#000000' : '#FFFFFF';
+
+        const colors = [primaryColor, grayColor, bgColor];
+
+        for (let col = 0; col < cols; col++) {
+            for (let row = 0; row < rows; row++) {
+                if (Math.random() < keepProbability) {
+                    const x = col * spacing + spacing / 2 - pixelSize / 2;
+                    const y = row * spacing + spacing / 2 - pixelSize / 2;
+                    const colorIndex = Math.random() < 0.1 ? 0 : (Math.random() < 0.3 ? 1 : 2);
+                    const color = colors[colorIndex];
+                    const opacity = 0.7 + Math.random() * 0.3;
+
+                    svgContent += `<rect x="${x}" y="${y}" width="${pixelSize}" height="${pixelSize}" fill="${color}" opacity="${opacity}" />`;
+                }
+            }
+        }
+
+        svgContent += '</svg>';
+
+        // Convert to data URL
+        const dataUrl = `data:image/svg+xml;base64,${btoa(svgContent)}`;
+        setStaticPattern(dataUrl);
+    };
 
     useEffect(() => {
+        // Detect device performance on mount
+        const lowEnd = detectLowEndDevice();
+        setIsLowEndDevice(lowEnd);
+
+        // For low-end devices, generate a static SVG pattern once
+        if (lowEnd) {
+            // Delay generation to ensure container is sized
+            setTimeout(generateStaticPattern, 100);
+
+            // Add resize handler for static pattern
+            const handleStaticResize = () => {
+                setTimeout(generateStaticPattern, 100);
+            };
+
+            window.addEventListener('resize', handleStaticResize);
+
+            return () => {
+                window.removeEventListener('resize', handleStaticResize);
+            };
+        }
+
         let pixels: any[] = [];
         let mouseX = 0;
         let mouseY = 0;
         let isHovering = false;
         let lastThemeCheck = 0;
         let cachedColors: number[][] = [];
+
+        // Touch tracking for scroll detection
+        let touchStartY = 0;
+        let touchStartX = 0;
+        let touchStartTime = 0;
+        let isScrolling = false;
 
         const sketch = (p: any) => {
             const pixelSize = 12; // Perfect square size
@@ -138,7 +247,7 @@ const PixelArtHero: React.FC = () => {
                 cnv.style.top = '0';
                 cnv.style.left = '0';
                 cnv.style.display = 'block';
-                cnv.style.pointerEvents = 'auto'; // Enable pointer events for hover
+                cnv.style.pointerEvents = 'none'; // Disable pointer events on canvas to allow scrolling
                 cnv.style.zIndex = '1';
                 cnv.style.cursor = 'auto'; // Keep default cursor
             };
@@ -279,43 +388,69 @@ const PixelArtHero: React.FC = () => {
             isHovering = false;
         };
 
-        // Touch event handlers for mobile devices
+        // Touch event handlers for mobile devices with scroll detection
         const handleTouchStart = (e: TouchEvent) => {
-            e.preventDefault(); // Prevent scrolling when touching the canvas
-            isHovering = true;
-            if (e.touches.length > 0 && p5Instance) {
-                const rect = containerRef.current?.getBoundingClientRect();
-                if (rect) {
-                    mouseX = e.touches[0].clientX - rect.left;
-                    mouseY = e.touches[0].clientY - rect.top;
+            if (e.touches.length > 0) {
+                touchStartY = e.touches[0].clientY;
+                touchStartX = e.touches[0].clientX;
+                touchStartTime = Date.now();
+                isScrolling = false;
+
+                if (p5Instance) {
+                    const rect = containerRef.current?.getBoundingClientRect();
+                    if (rect) {
+                        mouseX = e.touches[0].clientX - rect.left;
+                        mouseY = e.touches[0].clientY - rect.top;
+                    }
                 }
+
+                // Only activate hover if not scrolling (wait a bit to determine)
+                setTimeout(() => {
+                    if (!isScrolling) {
+                        isHovering = true;
+                    }
+                }, 100);
             }
         };
 
         const handleTouchMove = (e: TouchEvent) => {
-            e.preventDefault(); // Prevent scrolling when touching the canvas
-            if (e.touches.length > 0 && p5Instance) {
-                const rect = containerRef.current?.getBoundingClientRect();
-                if (rect) {
-                    mouseX = e.touches[0].clientX - rect.left;
-                    mouseY = e.touches[0].clientY - rect.top;
+            if (e.touches.length > 0) {
+                const currentY = e.touches[0].clientY;
+                const currentX = e.touches[0].clientX;
+                const deltaY = Math.abs(currentY - touchStartY);
+                const deltaX = Math.abs(currentX - touchStartX);
+                const timeElapsed = Date.now() - touchStartTime;
+
+                // Detect if this is a scroll gesture (vertical movement > threshold)
+                if (deltaY > 10 && deltaY > deltaX && timeElapsed < 500) {
+                    isScrolling = true;
+                    isHovering = false;
+                } else if (!isScrolling && p5Instance) {
+                    // Only update hover position if we're not scrolling
+                    const rect = containerRef.current?.getBoundingClientRect();
+                    if (rect) {
+                        mouseX = e.touches[0].clientX - rect.left;
+                        mouseY = e.touches[0].clientY - rect.top;
+                    }
                 }
             }
         };
 
         const handleTouchEnd = (e: TouchEvent) => {
-            e.preventDefault();
             isHovering = false;
+            isScrolling = false;
         };
 
         window.addEventListener('resize', handleResize);
         const container = containerRef.current;
+        const overlay = container?.querySelector('div') as HTMLElement; // Get the overlay div
+
         container?.addEventListener('mouseenter', handleMouseEnter);
         container?.addEventListener('mouseleave', handleMouseLeave);
-        // Add touch event listeners for mobile support
-        container?.addEventListener('touchstart', handleTouchStart, { passive: false });
-        container?.addEventListener('touchmove', handleTouchMove, { passive: false });
-        container?.addEventListener('touchend', handleTouchEnd, { passive: false });
+        // Add touch event listeners to the overlay for better scroll performance
+        overlay?.addEventListener('touchstart', handleTouchStart, { passive: true });
+        overlay?.addEventListener('touchmove', handleTouchMove, { passive: true });
+        overlay?.addEventListener('touchend', handleTouchEnd, { passive: true });
 
         return () => {
             clearTimeout(initTimeout);
@@ -323,16 +458,41 @@ const PixelArtHero: React.FC = () => {
             container?.removeEventListener('mouseenter', handleMouseEnter);
             container?.removeEventListener('mouseleave', handleMouseLeave);
             // Remove touch event listeners
-            container?.removeEventListener('touchstart', handleTouchStart);
-            container?.removeEventListener('touchmove', handleTouchMove);
-            container?.removeEventListener('touchend', handleTouchEnd);
+            overlay?.removeEventListener('touchstart', handleTouchStart);
+            overlay?.removeEventListener('touchmove', handleTouchMove);
+            overlay?.removeEventListener('touchend', handleTouchEnd);
             if (p5Instance) {
                 p5Instance.remove();
             }
         };
     }, []);
 
-    return <div ref={containerRef} className="absolute inset-0 overflow-hidden" />;
+    // Render static pattern for low-end devices
+    if (isLowEndDevice) {
+        return (
+            <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+                {staticPattern && (
+                    <div
+                        className="absolute inset-0 bg-center bg-no-repeat"
+                        style={{
+                            backgroundImage: `url(${staticPattern})`,
+                            backgroundSize: 'cover'
+                        }}
+                    />
+                )}
+                {/* Transparent overlay for touch events */}
+                <div className="absolute inset-0 z-10 pointer-events-auto" />
+            </div>
+        );
+    }
+
+    // Render full interactive version for high-end devices
+    return (
+        <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+            {/* Transparent overlay for touch events */}
+            <div className="absolute inset-0 z-10 pointer-events-auto" />
+        </div>
+    );
 };
 
 export default PixelArtHero;

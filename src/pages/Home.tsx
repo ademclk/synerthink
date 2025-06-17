@@ -26,26 +26,21 @@ export function Home() {
                     <div className="flex flex-col items-center justify-center w-full flex-1 pt-32 sm:pt-0">
                         <div className="flex flex-col items-center gap-10">
                             <div className="pointer-events-auto backdrop-blur-3xl bg-foreground/10 rounded-full px-8 sm:px-10 md:px-16 lg:px-20 py-4 sm:py-6 md:py-8 border border-foreground/10 shadow-2xl">
-                                <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-foreground whitespace-normal md:whitespace-nowrap">
+                                <h2 className="text-center text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-foreground whitespace-normal md:whitespace-nowrap">
                                     Create What Matters.
                                 </h2>
-                                <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl font-light text-foreground/80 mt-2 sm:mt-4">
+                                <p className="text-center text-xl sm:text-xl md:text-2xl lg:text-3xl font-light text-foreground/80 mt-2 sm:mt-4">
                                     We handle the rest.
                                 </p>
                             </div>
                             <Link
                                 to="/blog/introducing-dotlanth"
-                                className="group pointer-events-auto inline-flex items-center justify-center bg-primary text-primary-foreground font-bold text-lg rounded-full px-10 py-4 shadow-2xl border border-primary-foreground/20 transform-gpu transition-all duration-300 hover:brightness-110 active:scale-95"
+                                className="group pointer-events-auto inline-flex items-center justify-center bg-primary text-primary-foreground font-bold text-base sm:text-lg rounded-full px-6 py-3 sm:px-10 sm:py-4 shadow-2xl border border-primary-foreground/20 transform-gpu transition-all duration-300 hover:brightness-110 active:scale-95"
                             >
                                 See What's Possible
-                                <ArrowUpRight className="ml-3 h-6 w-6" strokeWidth={2.5} />
+                                <ArrowUpRight className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.5} />
                             </Link>
                         </div>
-                    </div>
-
-                    {/* Scroll Affordance: Does not need pointer events */}
-                    <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2">
-                        <ChevronDown className="h-6 w-6 animate-bounce text-foreground/50" />
                     </div>
                 </div>
             </div>
