@@ -210,7 +210,7 @@ const Step = ({ title, stepNumber, animationType }: StepProps) => {
     return (
         <div ref={stepRef} className="group flex flex-col items-center">
             {/* Pill-shaped container with text and animation */}
-            <div className="relative bg-foreground/10 backdrop-blur-3xl border border-border rounded-full px-12 py-8 min-w-[280px] h-[180px] flex flex-col items-center justify-center transition-all duration-300 group-hover:border-primary/60 group-hover:shadow-lg group-hover:shadow-primary/20 cursor-pointer">
+            <div className="relative bg-foreground/10 backdrop-blur-xl border border-border rounded-full px-12 py-8 min-w-[280px] h-[180px] flex flex-col items-center justify-center transition-all duration-300 group-hover:border-primary/60 group-hover:shadow-lg group-hover:shadow-primary/20 cursor-pointer">
                 {/* Step number */}
                 <div className="text-sm font-medium text-primary/60 mb-2">
                     {stepNumber.toString().padStart(2, '0')}

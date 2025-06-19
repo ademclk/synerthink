@@ -104,7 +104,7 @@ const BlogPost: React.FC = () => {
                     <div className="absolute inset-0">
                         <AnimatedBackground />
                     </div>
-                    <div className="absolute inset-0 mx-2 my-4 md:mx-4 lg:mx-8 xl:mx-12 bg-background/40 backdrop-blur-sm rounded-3xl" style={{ pointerEvents: 'auto' }} />
+                    <div className="absolute inset-0 mx-2 my-4 md:mx-4 lg:mx-8 xl:mx-12 bg-background/40 backdrop-blur-xl rounded-3xl" style={{ pointerEvents: 'auto' }} />
                     <div ref={mainContentRef} className="relative flex flex-col justify-center items-center w-full h-full min-h-[40vh] max-w-4xl mx-auto px-2 sm:px-6 md:px-12 lg:px-20 py-8 sm:py-12 z-10">
                         <div ref={headingRef} className="w-full flex flex-col gap-1 sm:gap-2 items-center">
                             <h1 className="text-center text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground">

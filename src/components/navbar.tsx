@@ -126,7 +126,7 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="sticky top-4 z-[100] flex h-14 items-center justify-end bg-foreground/10 backdrop-blur-3xl px-4 lg:px-6 rounded-full mx-4 lg:mx-6 border border-border/50 shadow-sm">
+            <header className="sticky top-4 z-[100] flex h-14 items-center justify-end bg-foreground/10 backdrop-blur-xl px-4 lg:px-6 rounded-full mx-4 lg:mx-6 border border-border/50 shadow-sm">
                 <div className="mx-auto flex w-full items-center relative">
                     <Link to="/" className="flex items-center text-center gap-2 text-lg font-semibold md:text-base" onClick={closeMenu}>
                         <SynerthinkLogo className="h-6 w-6" />

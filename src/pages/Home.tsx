@@ -25,7 +25,7 @@ export function Home() {
                     {/* Content Wrapper: Centers the content vertically and horizontally */}
                     <div className="flex flex-col items-center justify-center w-full flex-1 pt-32 sm:pt-0">
                         <div className="flex flex-col items-center gap-10">
-                            <div className="pointer-events-auto backdrop-blur-3xl bg-foreground/10 rounded-full px-8 sm:px-10 md:px-16 lg:px-20 py-4 sm:py-6 md:py-8 border border-foreground/10 shadow-2xl">
+                            <div className="pointer-events-auto backdrop-blur-xl bg-foreground/10 rounded-full px-8 sm:px-10 md:px-16 lg:px-20 py-4 sm:py-6 md:py-8 border border-foreground/10 shadow-2xl">
                                 <h2 className="text-center text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-foreground whitespace-normal md:whitespace-nowrap">
                                     Create What Matters.
                                 </h2>
