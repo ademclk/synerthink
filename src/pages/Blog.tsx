@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
 const Blog: React.FC = () => {
     const blogPosts = [
         {
             title: "Introducing Dotlanth",
             description: "Learn about our vision for simplifying software development with Dotlanth, a new foundation for your software projects.",
-            date: "May 2025",
-            slug: "introducing-dotlanth"
+            slug: "introducing-dotlanth",
+            category: "Vision"
         }
         // Add more blog posts here as they are created
     ];
@@ -24,29 +25,53 @@ const Blog: React.FC = () => {
             <meta name="twitter:title" content="Blog | Synerthink" />
             <meta name="twitter:description" content="Explore our latest insights, updates, and thoughts on software development, technology, and innovation at Synerthink." />
 
-            <div className="max-w-4xl mx-auto px-4 py-8 min-h-[calc(100vh-4rem)]">
-                <h1 className="text-4xl font-bold mb-8">Blog</h1>
-                <div className="space-y-8">
-                    {blogPosts.map((post) => (
-                        <article key={post.slug} className="border-b border-gray-200 dark:border-gray-700 pb-8">
+            <div className="min-h-[calc(100vh-4rem)] py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-24">
+                <div className="max-w-4xl mx-auto">
+                    {/* Header */}
+                    <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+                        <div className="inline-block backdrop-blur-xl bg-foreground/10 rounded-full px-6 sm:px-8 md:px-12 lg:px-16 py-3 sm:py-4 md:py-6 border border-foreground/10 shadow-2xl mb-4 sm:mb-6">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">Blog</h1>
+                        </div>
+                        <p className="text-base sm:text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto px-4">
+                            Ideas being built over time. Our thoughts on creating what matters.
+                        </p>
+                    </div>
+
+                    {/* Blog Posts */}
+                    <div className="space-y-4 sm:space-y-6">
+                        {blogPosts.map((post) => (
                             <Link
+                                key={post.slug}
                                 to={`/blog/${post.slug}`}
-                                className="group"
+                                className="group block"
                             >
-                                <h2 className="text-2xl font-semibold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                    {post.title}
-                                </h2>
+                                <article className="backdrop-blur-xl bg-foreground/10 rounded-full border border-foreground/10 shadow-2xl transition-all duration-300 hover:bg-foreground/15 hover:shadow-xl hover:scale-[1.01] transform-gpu overflow-hidden">
+                                    <div className="p-6 sm:p-8 md:p-10 lg:p-12">
+                                        <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                                                    <span className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium bg-primary/20 text-primary border border-primary/20">
+                                                        {post.category}
+                                                    </span>
+                                                </div>
+                                                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-foreground group-hover:text-primary transition-colors leading-tight">
+                                                    {post.title}
+                                                </h2>
+                                                <p className="text-sm sm:text-base md:text-lg text-foreground/80 leading-relaxed">
+                                                    {post.description}
+                                                </p>
+                                            </div>
+                                            <div className="flex-shrink-0">
+                                                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                                                    <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 transform group-hover:translate-x-0.5 transition-transform" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
                             </Link>
-                            <p className="text-gray-600 dark:text-gray-400 mb-2">{post.date}</p>
-                            <p className="text-gray-700 dark:text-gray-300">{post.description}</p>
-                            <Link
-                                to={`/blog/${post.slug}`}
-                                className="inline-block mt-4 text-blue-600 dark:text-blue-400 hover:underline"
-                            >
-                                Read more →
-                            </Link>
-                        </article>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </>

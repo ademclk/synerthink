@@ -1,12 +1,7 @@
-import React, { useEffect, useRef, lazy, Suspense } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { lazy, Suspense } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import AnimatedBackground from '../components/AnimatedBackground';
-
-// Register GSAP plugin only once
-if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
-}
 
 // Lazy load sections
 const TechnicalArchitecture = lazy(() => import('../components/blog/TechnicalArchitecture'));
@@ -15,76 +10,6 @@ const DevelopmentExperience = lazy(() => import('../components/blog/DevelopmentE
 const FutureGoals = lazy(() => import('../components/blog/FutureGoals'));
 
 const BlogPost: React.FC = () => {
-    const mainContentRef = useRef<HTMLDivElement>(null);
-    const headingRef = useRef<HTMLDivElement>(null);
-    const descriptionRef = useRef<HTMLDivElement>(null);
-    const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Initial animations for the hero section with optimized settings
-            gsap.from(headingRef.current, {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: headingRef.current,
-                    start: "top bottom-=100",
-                    end: "top center",
-                    toggleActions: "play none none reverse",
-                    fastScrollEnd: true,
-                    preventOverlaps: true
-                }
-            });
-
-            gsap.from(descriptionRef.current, {
-                y: 50,
-                opacity: 0,
-                duration: 1.2,
-                delay: 0.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: descriptionRef.current,
-                    start: "top bottom-=100",
-                    end: "top center",
-                    toggleActions: "play none none reverse",
-                    fastScrollEnd: true,
-                    preventOverlaps: true
-                }
-            });
-
-            // Animate sections as they come into view with optimized settings
-            sectionRefs.current.forEach((section, index) => {
-                if (section) {
-                    gsap.from(section, {
-                        y: 50,
-                        opacity: 0,
-                        duration: 1.2,
-                        delay: index * 0.1,
-                        ease: "power3.out",
-                        scrollTrigger: {
-                            trigger: section,
-                            start: "top bottom-=100",
-                            end: "top center",
-                            toggleActions: "play none none reverse",
-                            fastScrollEnd: true,
-                            preventOverlaps: true
-                        }
-                    });
-                }
-            });
-        }, mainContentRef);
-
-        return () => {
-            ctx.revert();
-        };
-    }, []);
-
-    const setSectionRef = (index: number) => (el: HTMLDivElement | null) => {
-        sectionRefs.current[index] = el;
-    };
-
     return (
         <>
             <title>Introducing Dotlanth | Synerthink Blog</title>
@@ -100,79 +25,125 @@ const BlogPost: React.FC = () => {
 
             <main className="relative min-h-screen flex flex-col bg-background text-foreground overflow-hidden transition-colors">
                 {/* Hero Section with Animated Background */}
-                <div className="relative w-full flex items-center justify-center min-h-[60vh] px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+                <div className="relative w-full flex items-center justify-center min-h-[60vh] sm:min-h-[70vh] px-3 sm:px-4 md:px-8 lg:px-16 xl:px-24">
                     <div className="absolute inset-0">
                         <AnimatedBackground />
                     </div>
-                    <div className="absolute inset-0 mx-2 my-4 md:mx-4 lg:mx-8 xl:mx-12 bg-background/40 backdrop-blur-xl rounded-3xl" style={{ pointerEvents: 'auto' }} />
-                    <div ref={mainContentRef} className="relative flex flex-col justify-center items-center w-full h-full min-h-[40vh] max-w-4xl mx-auto px-2 sm:px-6 md:px-12 lg:px-20 py-8 sm:py-12 z-10">
-                        <div ref={headingRef} className="w-full flex flex-col gap-1 sm:gap-2 items-center">
-                            <h1 className="text-center text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground">
-                                Introducing Dotlanth
-                            </h1>
+
+                    {/* Navigation - Top Left */}
+                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 md:top-8 md:left-8 z-20">
+                        <Link
+                            to="/blog"
+                            className="inline-flex items-center gap-1 sm:gap-2 backdrop-blur-xl bg-foreground/10 rounded-full px-3 py-2 sm:px-4 sm:py-2 border border-foreground/10 shadow-2xl hover:bg-foreground/15 transition-all duration-300 text-sm sm:text-base"
+                        >
+                            <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+                            <span className="hidden sm:inline">Back to Blog</span>
+                            <span className="sm:hidden">Back</span>
+                        </Link>
+                    </div>
+
+                    <div className="relative flex flex-col justify-center items-center w-full h-full min-h-[40vh] sm:min-h-[50vh] max-w-5xl mx-auto px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 py-6 sm:py-8 md:py-12 z-10">
+                        <div className="w-full flex flex-col gap-3 sm:gap-4 items-center text-center">
+                            <div className="backdrop-blur-xl bg-foreground/10 rounded-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 md:py-6 border border-foreground/10 shadow-2xl">
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold tracking-tight text-foreground leading-tight">
+                                    Introducing Dotlanth
+                                </h1>
+                            </div>
                         </div>
-                        <div ref={descriptionRef} className="w-full max-w-3xl flex flex-col gap-8 sm:gap-8 items-center mt-8">
-                            <p className="text-center text-lg sm:text-xl md:text-2xl font-light text-foreground leading-relaxed">
-                                At Synerthink, we believe building software should be simpler. Much simpler. For a long time, developers have had to wrestle with a lot of complexity that gets in the way of actually creating. We think there's a better way.
-                            </p>
+                        <div className="w-full max-w-4xl flex flex-col gap-6 sm:gap-8 items-center mt-6 sm:mt-8">
+                            <div className="backdrop-blur-xl bg-foreground/5 rounded-full px-4 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6 md:py-8 border border-foreground/10">
+                                <p className="text-center text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light text-foreground/90 leading-relaxed">
+                                    For decades, a wall has stood between a great idea and a working application. A wall built of boilerplate, complex infrastructure, and endless configuration.
+                                </p>
+                                <p className="text-center text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light text-foreground/90 leading-relaxed mt-3 sm:mt-4">
+                                    We started Synerthink to tear down that wall.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Main Content */}
-                <div className="max-w-4xl mx-auto px-4 py-8">
-                    <article className="prose prose-lg dark:prose-invert">
-                        {/* What is Dotlanth Section */}
-                        <div ref={setSectionRef(0)} className="mb-16">
-                            <h2 className="text-3xl font-semibold mb-6">So, what is Dotlanth?</h2>
-                            <p className="mb-6">
-                                Think of it as a new foundation for your software projects. We're taking ideas from how virtual machines work and applying them to everyday software development, but without the blockchain part. Our goal is to let you write your business logic – the actual rules and processes that make your application work – and have it run easily and efficiently.
-                            </p>
-                            <div className="bg-gray-100 dark:bg-neutral-900 p-6 rounded-lg mb-6">
-                                <h3 className="text-xl font-semibold mb-4">What is a Dot?</h3>
-                                <p className="mb-4">
-                                    A Dot is a unit of logic on Dotlanth – lightweight, composable, and infinitely scalable. It's the fundamental building block of your application, representing a single piece of business logic that can be combined with other dots to create complex systems.
-                                </p>
-                                <p>
-                                    Dots come in different variants to serve specific purposes:
-                                </p>
-                                <ul className="list-disc pl-6 space-y-2 mt-4">
-                                    <li><strong>ParaDots</strong> – Parallelizable dots for high-performance computing</li>
-                                    <li><strong>DataDots</strong> – Dots that act as schemas and data sources</li>
-                                    <li><strong>UILinks</strong> – Auto-bound UI components to dots</li>
-                                </ul>
+                <div className="relative z-10 bg-background/90 backdrop-blur-sm">
+                    <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+                        <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none">
+                            {/* What is Dotlanth Section */}
+                            <div className="mb-16">
+                                <div className="backdrop-blur-xl bg-foreground/10 rounded-full p-6 sm:p-8 md:p-12 border border-foreground/10 mb-8">
+                                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-center">The Foundation for Flow</h2>
+                                    <p className="text-base sm:text-lg leading-relaxed text-foreground/80 text-center">
+                                        Dotlanth is our answer. It's not just a new tool; it's a new foundation for creation, designed from the ground up to be simple, powerful, and invisible. It's the platform we've always wanted for ourselves—one that lets us stay in a state of flow and focus only on what matters.
+                                    </p>
+                                </div>
+
+                                {/* Pull Quote */}
+                                <div className="backdrop-blur-xl bg-primary/10 rounded-full p-4 sm:p-6 md:p-8 border border-primary/20 mb-8 text-center">
+                                    <p className="text-lg sm:text-xl md:text-2xl font-medium text-primary italic">
+                                        "A Dot is pure logic, freed from the noise of infrastructure."
+                                    </p>
+                                </div>
+
+                                <div className="backdrop-blur-xl bg-foreground/10 rounded-3xl p-6 sm:p-8 md:p-10 border border-foreground/10">
+                                    <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-primary">What is a Dot?</h3>
+                                    <p className="mb-4 sm:mb-6 text-foreground/80 leading-relaxed">
+                                        Think of a Dot as pure business logic—lightweight, composable, and infinitely scalable. It's your idea distilled to its essence, without the weight of traditional infrastructure holding it back.
+                                    </p>
+                                    <p className="mb-4 sm:mb-6 text-foreground/80">
+                                        Each Dot variant serves a specific purpose in your creative toolkit:
+                                    </p>
+                                    <div className="grid gap-3 sm:gap-4 md:gap-6">
+                                        {[
+                                            { name: 'ParaDots', desc: 'Scale effortlessly across infinite cores' },
+                                            { name: 'DataDots', desc: 'Your data, structured and ready' },
+                                            { name: 'UILinks', desc: 'Interfaces that build themselves' }
+                                        ].map((item, index) => (
+                                            <div key={index} className="backdrop-blur-xl bg-foreground/10 rounded-full px-4 sm:px-6 py-3 sm:py-4 border border-foreground/10">
+                                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                                                    <span className="font-bold text-primary">{item.name}</span>
+                                                    <span className="text-foreground/70 hidden sm:inline">–</span>
+                                                    <span className="text-foreground/80 text-sm sm:text-base">{item.desc}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Lazy loaded sections */}
-                        <Suspense fallback={<div className="min-h-[200px]" />}>
-                            <TechnicalArchitecture ref={setSectionRef(1)} />
-                        </Suspense>
+                            {/* Lazy loaded sections */}
+                            <Suspense fallback={<div className="min-h-[200px] backdrop-blur-xl bg-foreground/5 rounded-3xl animate-pulse" />}>
+                                <TechnicalArchitecture />
+                            </Suspense>
 
-                        <Suspense fallback={<div className="min-h-[200px]" />}>
-                            <DotVariants ref={setSectionRef(2)} />
-                        </Suspense>
+                            <Suspense fallback={<div className="min-h-[200px] backdrop-blur-xl bg-foreground/5 rounded-3xl animate-pulse" />}>
+                                <DotVariants />
+                            </Suspense>
 
-                        <Suspense fallback={<div className="min-h-[200px]" />}>
-                            <DevelopmentExperience ref={setSectionRef(3)} />
-                        </Suspense>
+                            <Suspense fallback={<div className="min-h-[200px] backdrop-blur-xl bg-foreground/5 rounded-3xl animate-pulse" />}>
+                                <DevelopmentExperience />
+                            </Suspense>
 
-                        <Suspense fallback={<div className="min-h-[200px]" />}>
-                            <FutureGoals ref={setSectionRef(4)} />
-                        </Suspense>
+                            <Suspense fallback={<div className="min-h-[200px] backdrop-blur-xl bg-foreground/5 rounded-3xl animate-pulse" />}>
+                                <FutureGoals />
+                            </Suspense>
 
-                        {/* Call to Action */}
-                        <div ref={setSectionRef(5)} className="text-center mt-16">
-                            <h2 className="text-3xl font-semibold mb-6">Join Us in Building the Future</h2>
-                            <p className="mb-8 text-lg">
-                                We're excited to build this future with you. Stay tuned for updates as we continue to develop Dotlanth.
-                            </p>
-                            <p className="text-gray-600 dark:text-gray-400">
-                                Thanks,<br />
-                                The Synerthink Team
-                            </p>
-                        </div>
-                    </article>
+                            {/* Call to Action */}
+                            <div className="text-center mt-16">
+                                <div className="backdrop-blur-xl bg-foreground/10 rounded-full p-8 sm:p-12 border border-foreground/10">
+                                    <h2 className="text-3xl sm:text-4xl font-bold mb-6">Be a Pioneer</h2>
+                                    <p className="mb-6 text-lg text-foreground/80 leading-relaxed">
+                                        Dotlanth is more than a product; it's a movement to restore simplicity and joy to the act of creation. The road ahead is long, and we're just getting started.
+                                    </p>
+                                    <p className="mb-8 text-lg text-foreground/80 leading-relaxed">
+                                        If this vision resonates with you, we invite you to follow our journey. We're building in public, and we believe that together, we can build the future we were all promised.
+                                    </p>
+                                    <div className="text-foreground/60 space-y-2">
+                                        <p className="font-medium">Thanks,</p>
+                                        <p>The Synerthink Team</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
                 </div>
             </main>
         </>
