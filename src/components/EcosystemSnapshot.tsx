@@ -12,9 +12,9 @@ interface EcosystemCardProps {
 
 const EcosystemCard = ({ title, description, colorClass }: EcosystemCardProps) => {
     return (
-        <div className="flex flex-col p-6 rounded-2xl bg-gray-100 dark:bg-neutral-900 shadow-lg">
+        <div className="flex flex-col p-6 sm:p-8 rounded-full bg-foreground/10 backdrop-blur-xl shadow-2xl border border-foreground/10">
             <span className={`font-bold text-xl md:text-2xl ${colorClass}`}>{title}</span>
-            <span className="mt-2 text-sm md:text-base text-gray-700 dark:text-gray-300">
+            <span className="mt-2 text-sm md:text-base text-foreground/80">
                 {description}
             </span>
         </div>
@@ -26,13 +26,15 @@ export default function EcosystemSnapshot() {
         <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32">
             <div className="max-w-7xl mx-auto">
                 <div className="relative">
-                    {/* Background rectangle */}
-                    <div className="absolute inset-0 bg-gray-50 dark:bg-neutral-900/50 rounded-[2.5rem] -mx-6 sm:-mx-10 md:-mx-16 lg:-mx-24 xl:-mx-32" />
+                    {/* Background with backdrop blur */}
+                    <div className="absolute inset-0 sm:-mx-10 md:-mx-16 lg:-mx-24 xl:-mx-32" />
 
                     {/* Content */}
                     <div className="relative z-10 py-12 sm:py-16 md:py-20 px-6 sm:px-8 md:px-12 lg:px-16">
                         <div className="text-center mb-12 sm:mb-16 md:mb-20">
-                            <h2 className="text-4xl md:text-5xl font-bold mb-6">The Dotlanth Ecosystem</h2>
+                            <div className="inline-block px-8 sm:px-12 md:px-16 py-4 sm:py-6 mb-6">
+                                <h2 className="text-4xl md:text-5xl font-bold text-foreground">The Dotlanth Ecosystem</h2>
+                            </div>
                             <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto">
                                 Everything you need seamlessly integrated.
                             </p>
@@ -41,22 +43,22 @@ export default function EcosystemSnapshot() {
                             <EcosystemCard
                                 title="dotVM"
                                 description="A parallel, multi-architecture virtual machine built for speed and security."
-                                colorClass="text-cyan-400"
+                                colorClass="text-primary"
                             />
                             <EcosystemCard
                                 title="dotDB"
                                 description="A custom state database optimized for SSD storage and MVCC, reducing node requirements."
-                                colorClass="text-orange-400"
+                                colorClass="text-primary"
                             />
                             <EcosystemCard
                                 title="dotUX"
                                 description="Auto-generated front-ends and AI-driven tooling from your contract's I/O spec."
-                                colorClass="text-pink-400"
+                                colorClass="text-primary"
                             />
                             <EcosystemCard
                                 title="dotCloud"
                                 description="Global hosting and zero-ops deployment through our Microsoft Azure partnership."
-                                colorClass="text-blue-400"
+                                colorClass="text-primary"
                             />
                         </div>
                     </div>
