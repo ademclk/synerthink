@@ -1,10 +1,6 @@
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const footerLinks = {
     products: [
@@ -19,7 +15,7 @@ const footerLinks = {
     ],
     developer: [
         { label: "Documentation", href: "/" },
-        { label: "API Reference", href: "" },
+        { label: "API Reference", href: "/" },
         { label: "SDK", href: "/" }
     ],
     research: [
@@ -54,26 +50,35 @@ export function Footer() {
     const sectionsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.from(sectionsRef.current?.children || [], {
-                y: 50,
-                opacity: 0,
-                duration: 1,
-                stagger: 0.1,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: footerRef.current,
-                    start: "top bottom-=100",
-                    end: "top center",
-                    toggleActions: "play none none none"
-                }
-            });
-        }, footerRef);
+        let ctx: gsap.Context | undefined;
 
-        return () => ctx.revert();
+        (async () => {
+            const { default: gsapRuntime } = await import("gsap");
+            const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+
+            gsapRuntime.registerPlugin(ScrollTrigger);
+
+            ctx = gsapRuntime.context(() => {
+                gsapRuntime.from(sectionsRef.current?.children || [], {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    stagger: 0.1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: footerRef.current,
+                        start: "top bottom-=100",
+                        end: "top center",
+                        toggleActions: "play none none none"
+                    }
+                });
+            }, footerRef);
+        })();
+
+        return () => ctx?.revert?.();
     }, []);
 
-    const renderFooterSection = (section: string, title: string, items: typeof footerLinks.products) => (
+    const renderFooterSection = (title: string, items: typeof footerLinks.products) => (
         <div>
             <h3 className="text-xs font-semibold leading-6 text-gray-800 dark:text-gray-200">{title}</h3>
             <ul role="list" className="space-y-1">
@@ -91,7 +96,7 @@ export function Footer() {
         </div>
     );
 
-    const renderFooterLinks = (section: string, items: typeof footerLinks.products) => (
+    const renderFooterLinks = (items: typeof footerLinks.products) => (
         <ul role="list" className="space-y-1">
             {items.map((item, index) => (
                 <li key={index}>
@@ -123,20 +128,20 @@ export function Footer() {
 
                 <div className="hidden md:grid md:grid-cols-2 gap-8 mt-16 xl:col-span-2 xl:mt-0">
                     <div className="md:grid md:grid-cols-2 md:gap-8">
-                        {renderFooterSection("products", "Products", footerLinks.products)}
-                        {renderFooterSection("solutions", "Solutions", footerLinks.solutions)}
+                        {renderFooterSection("Products", footerLinks.products)}
+                        {renderFooterSection("Solutions", footerLinks.solutions)}
                     </div>
                     <div className="md:grid md:grid-cols-2 md:gap-8">
-                        {renderFooterSection("developer", "Developer", footerLinks.developer)}
-                        {renderFooterSection("research", "Research", footerLinks.research)}
+                        {renderFooterSection("Developer", footerLinks.developer)}
+                        {renderFooterSection("Research", footerLinks.research)}
                     </div>
                     <div className="md:grid md:grid-cols-2 md:gap-8">
-                        {renderFooterSection("about", "About", footerLinks.about)}
-                        {renderFooterSection("contact", "Contact", footerLinks.contact)}
+                        {renderFooterSection("About", footerLinks.about)}
+                        {renderFooterSection("Contact", footerLinks.contact)}
                     </div>
                     <div className="md:grid md:grid-cols-2 md:gap-8">
-                        {renderFooterSection("training", "Training", footerLinks.training)}
-                        {renderFooterSection("investor", "Investor", footerLinks.investor)}
+                        {renderFooterSection("Training", footerLinks.training)}
+                        {renderFooterSection("Investor", footerLinks.investor)}
                     </div>
                 </div>
 
@@ -145,49 +150,49 @@ export function Footer() {
                         <AccordionItem value="products">
                             <AccordionTrigger className="text-sm">Products</AccordionTrigger>
                             <AccordionContent>
-                                {renderFooterLinks("products", footerLinks.products)}
+                                {renderFooterLinks(footerLinks.products)}
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="solutions">
                             <AccordionTrigger className="text-sm">Solutions</AccordionTrigger>
                             <AccordionContent>
-                                {renderFooterLinks("solutions", footerLinks.solutions)}
+                                {renderFooterLinks(footerLinks.solutions)}
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="developer">
                             <AccordionTrigger className="text-sm">Developer</AccordionTrigger>
                             <AccordionContent>
-                                {renderFooterLinks("developer", footerLinks.developer)}
+                                {renderFooterLinks(footerLinks.developer)}
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="research">
                             <AccordionTrigger className="text-sm">Research</AccordionTrigger>
                             <AccordionContent>
-                                {renderFooterLinks("research", footerLinks.research)}
+                                {renderFooterLinks(footerLinks.research)}
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="about">
                             <AccordionTrigger className="text-sm">About</AccordionTrigger>
                             <AccordionContent>
-                                {renderFooterLinks("about", footerLinks.about)}
+                                {renderFooterLinks(footerLinks.about)}
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="contact">
                             <AccordionTrigger className="text-sm">Contact</AccordionTrigger>
                             <AccordionContent>
-                                {renderFooterLinks("contact", footerLinks.contact)}
+                                {renderFooterLinks(footerLinks.contact)}
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="training">
                             <AccordionTrigger className="text-sm">Training</AccordionTrigger>
                             <AccordionContent>
-                                {renderFooterLinks("training", footerLinks.training)}
+                                {renderFooterLinks(footerLinks.training)}
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="investor">
                             <AccordionTrigger className="text-sm">Investor</AccordionTrigger>
                             <AccordionContent>
-                                {renderFooterLinks("investor", footerLinks.investor)}
+                                {renderFooterLinks(footerLinks.investor)}
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>

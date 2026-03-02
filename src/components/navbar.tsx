@@ -1,9 +1,7 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import SynerthinkLogo from "./synerthink-logo";
-import gsap from "gsap";
 import { ModeToggle } from './mode-toggle';
-import { Button } from './ui/button';
 
 const NAV_LINKS = [
     { name: "About", href: "/about" },
@@ -28,7 +26,6 @@ function useBodyScrollLock(isLocked: boolean) {
 export default function Navbar() {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
-    const location = useLocation();
     const menuButtonRef = useRef<HTMLButtonElement>(null);
     const menuOverlayRef = useRef<HTMLDivElement>(null);
     const topLineRef = useRef<SVGPolylineElement>(null);
@@ -38,83 +35,94 @@ export default function Navbar() {
 
     useEffect(() => {
         if (topLineRef.current && middleLineRef.current && bottomLineRef.current) {
+            let cancelled = false;
+
             const topLine = topLineRef.current;
             const middleLine = middleLineRef.current;
             const bottomLine = bottomLineRef.current;
 
-            if (isMenuOpen) {
-                setIsAnimating(true);
-                // Animate to X
-                gsap.to(topLine, {
-                    attr: { points: "3.5 3.5, 15 15" },
-                    duration: 0.24,
-                    ease: "power2.inOut"
-                });
-                gsap.to(middleLine, {
-                    opacity: 0,
-                    duration: 0.2
-                });
-                gsap.to(bottomLine, {
-                    attr: { points: "3.5 15, 15 3.5" },
-                    duration: 0.24,
-                    ease: "power2.inOut"
-                });
+            (async () => {
+                const { default: gsapRuntime } = await import("gsap");
+                if (cancelled) return;
 
-                // Animate menu overlay
-                if (menuOverlayRef.current) {
-                    menuOverlayRef.current.style.display = 'flex';
-                    gsap.fromTo(menuOverlayRef.current,
-                        {
+                if (isMenuOpen) {
+                    setIsAnimating(true);
+                    // Animate to X
+                    gsapRuntime.to(topLine, {
+                        attr: { points: "3.5 3.5, 15 15" },
+                        duration: 0.24,
+                        ease: "power2.inOut"
+                    });
+                    gsapRuntime.to(middleLine, {
+                        opacity: 0,
+                        duration: 0.2
+                    });
+                    gsapRuntime.to(bottomLine, {
+                        attr: { points: "3.5 15, 15 3.5" },
+                        duration: 0.24,
+                        ease: "power2.inOut"
+                    });
+
+                    // Animate menu overlay
+                    if (menuOverlayRef.current) {
+                        menuOverlayRef.current.style.display = 'flex';
+                        gsapRuntime.fromTo(menuOverlayRef.current,
+                            {
+                                opacity: 0,
+                                y: -20,
+                                scale: 0.98
+                            },
+                            {
+                                opacity: 1,
+                                y: 0,
+                                scale: 1,
+                                duration: 0.4,
+                                ease: "power2.out",
+                                onComplete: () => setIsAnimating(false)
+                            }
+                        );
+                    }
+                } else {
+                    setIsAnimating(true);
+                    // Animate back to hamburger
+                    gsapRuntime.to(topLine, {
+                        attr: { points: "2 5, 16 5" },
+                        duration: 0.24,
+                        ease: "power2.inOut"
+                    });
+                    gsapRuntime.to(middleLine, {
+                        opacity: 1,
+                        duration: 0.2,
+                        delay: 0.1
+                    });
+                    gsapRuntime.to(bottomLine, {
+                        attr: { points: "2 15, 16 15" },
+                        duration: 0.24,
+                        ease: "power2.inOut"
+                    });
+
+                    // Animate menu overlay out
+                    if (menuOverlayRef.current) {
+                        gsapRuntime.to(menuOverlayRef.current, {
                             opacity: 0,
                             y: -20,
-                            scale: 0.98
-                        },
-                        {
-                            opacity: 1,
-                            y: 0,
-                            scale: 1,
+                            scale: 0.98,
                             duration: 0.4,
-                            ease: "power2.out",
-                            onComplete: () => setIsAnimating(false)
-                        }
-                    );
-                }
-            } else {
-                setIsAnimating(true);
-                // Animate back to hamburger
-                gsap.to(topLine, {
-                    attr: { points: "2 5, 16 5" },
-                    duration: 0.24,
-                    ease: "power2.inOut"
-                });
-                gsap.to(middleLine, {
-                    opacity: 1,
-                    duration: 0.2,
-                    delay: 0.1
-                });
-                gsap.to(bottomLine, {
-                    attr: { points: "2 15, 16 15" },
-                    duration: 0.24,
-                    ease: "power2.inOut"
-                });
-
-                // Animate menu overlay out
-                if (menuOverlayRef.current) {
-                    gsap.to(menuOverlayRef.current, {
-                        opacity: 0,
-                        y: -20,
-                        scale: 0.98,
-                        duration: 0.4,
-                        ease: "power2.in",
-                        onComplete: () => {
-                            if (menuOverlayRef.current) {
-                                menuOverlayRef.current.style.display = 'none';
-                                setIsAnimating(false);
+                            ease: "power2.in",
+                            onComplete: () => {
+                                if (menuOverlayRef.current) {
+                                    menuOverlayRef.current.style.display = 'none';
+                                    setIsAnimating(false);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
+            })();
+
+            return () => {
+                cancelled = true;
+            };
         }
     }, [isMenuOpen]);
 
@@ -139,7 +147,10 @@ export default function Navbar() {
                             </Link>
                         ))}
                     </nav>
-                    <div className="relative z-[101] ml-auto">
+                    <div className="relative z-[101] ml-auto flex items-center gap-2">
+                        <div className="hidden md:block">
+                            <ModeToggle />
+                        </div>
                         <button
                             ref={menuButtonRef}
                             className="md:hidden lg:order-3 p-2"
@@ -194,22 +205,22 @@ export default function Navbar() {
             >
                 <nav className="mt-24 space-y-8 flex flex-col">
                     {NAV_LINKS.map(({ name, href }) => (
-                        <Link
-                            key={name}
-                            to={href}
-                            className="group text-2xl font-semibold text-gray-800 dark:text-gray-100 block px-0 transition relative"
-                            style={{ paddingRight: "2.5rem" }}
-                            onClick={closeMenu}
-                        >
-                            <span className="cursor-pointer">{name}</span>
-                            <span className="opacity-0 group-hover:opacity-100 absolute right-0 top-1/2 -translate-y-1/2 transition-opacity">
-                                <svg className="inline h-6 w-6 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </span>
-                        </Link>
-                    ))}
-                </nav>
+                    <Link
+                        key={name}
+                        to={href}
+                        className="group text-2xl font-semibold text-gray-800 dark:text-gray-100 block px-0 transition relative"
+                        style={{ paddingRight: "2.5rem" }}
+                        onClick={closeMenu}
+                    >
+                        <span className="cursor-pointer">{name}</span>
+                        <span className="opacity-0 group-hover:opacity-100 absolute right-0 top-1/2 -translate-y-1/2 transition-opacity">
+                            <svg className="inline h-6 w-6 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </span>
+                    </Link>
+                ))}
+            </nav>
             </div>
         </>
     );

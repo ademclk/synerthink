@@ -1,5 +1,10 @@
+@import '@fontsource-variable/hanken-grotesk';
 @import 'tailwindcss';
 @import 'tw-animate-css';
+
+@theme {
+	--font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+}
 
 :root {
 	--radius-sm: 0.5rem;
@@ -184,6 +189,7 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+		font-family: var(--font-sans);
 	}
 }
 

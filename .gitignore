@@ -11,6 +11,11 @@ node_modules
 dist
 dist-ssr
 *.local
+.output
+.nitro
+.tanstack
+staticwebapp.config.json
+.codex
 
 # Editor directories and files
 .vscode/*

@@ -1,22 +1,27 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import type { ReactNode } from "react";
+import { Cloud, Cpu, Database, Sparkle } from "@phosphor-icons/react";
 
 interface EcosystemCardProps {
     title: string;
     description: string;
     colorClass: string;
+    icon: ReactNode;
 }
 
-const EcosystemCard = ({ title, description, colorClass }: EcosystemCardProps) => {
+const EcosystemCard = ({ title, description, colorClass, icon }: EcosystemCardProps) => {
     return (
         <div className="flex flex-col p-6 sm:p-8 rounded-full bg-foreground/10 backdrop-blur-xl shadow-2xl border border-foreground/10">
-            <span className={`font-bold text-xl md:text-2xl ${colorClass}`}>{title}</span>
-            <span className="mt-2 text-sm md:text-base text-foreground/80">
-                {description}
-            </span>
+            <div className="flex items-start gap-4">
+                <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                    {icon}
+                </div>
+                <div className="min-w-0">
+                    <span className={`font-bold text-xl md:text-2xl ${colorClass}`}>{title}</span>
+                    <p className="mt-2 text-sm md:text-base text-foreground/80">
+                        {description}
+                    </p>
+                </div>
+            </div>
         </div>
     );
 };
@@ -42,23 +47,27 @@ export default function EcosystemSnapshot() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                             <EcosystemCard
                                 title="dotVM"
-                                description="A parallel, multi-architecture virtual machine built for speed and security."
+                                description="Parallel, multi-architecture VM built for speed and security."
                                 colorClass="text-primary"
+                                icon={<Cpu className="h-5 w-5 text-primary" weight="bold" />}
                             />
                             <EcosystemCard
                                 title="dotDB"
-                                description="A custom state database optimized for SSD storage and MVCC, reducing node requirements."
+                                description="State database optimized for SSD + MVCC to reduce node requirements."
                                 colorClass="text-primary"
+                                icon={<Database className="h-5 w-5 text-primary" weight="bold" />}
                             />
                             <EcosystemCard
                                 title="dotUX"
-                                description="Auto-generated front-ends and AI-driven tooling from your contract's I/O spec."
+                                description="Auto-generated front-ends + AI tooling from your contract’s I/O."
                                 colorClass="text-primary"
+                                icon={<Sparkle className="h-5 w-5 text-primary" weight="bold" />}
                             />
                             <EcosystemCard
                                 title="dotCloud"
-                                description="Global hosting and zero-ops deployment through our Microsoft Azure partnership."
+                                description="Global hosting and zero-ops deployment through our Azure partnership."
                                 colorClass="text-primary"
+                                icon={<Cloud className="h-5 w-5 text-primary" weight="bold" />}
                             />
                         </div>
                     </div>

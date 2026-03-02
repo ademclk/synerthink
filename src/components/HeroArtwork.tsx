@@ -1,5 +1,16 @@
 import React, { useRef, useEffect } from 'react';
-import p5 from 'p5';
+import type p5 from 'p5';
+
+type Pixel = {
+    originalX: number;
+    originalY: number;
+    x: number;
+    y: number;
+    size: number;
+    opacity: number;
+    targetOpacity: number;
+    phase: number;
+};
 
 const HeroArtwork: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -8,13 +19,12 @@ const HeroArtwork: React.FC = () => {
         let mouseX = 0;
         let mouseY = 0;
         let isHovered = false;
-        let pixels: any[] = [];
+        let pixels: Pixel[] = [];
 
-        const sketch = (p: any) => {
+        const sketch = (p: p5) => {
             const pixelSize = 4;
             const spacing = 8;
             const waveRadius = 80;
-            const waveStrength = 0.3;
 
             // Dithering pattern - creates classic pixel art look
             const ditherPattern = [
@@ -77,7 +87,7 @@ const HeroArtwork: React.FC = () => {
                 const time = p.millis() * 0.001;
 
                 // Update pixel properties
-                pixels.forEach((pixel, index) => {
+                pixels.forEach((pixel) => {
                     if (isHovered) {
                         const dist = p.dist(mouseX, mouseY, pixel.originalX, pixel.originalY);
 
@@ -141,8 +151,15 @@ const HeroArtwork: React.FC = () => {
             };
         };
 
+        let isCancelled = false;
+        let p5Instance: p5 | undefined;
+
         // Initialize p5
-        const p5Instance = new p5(sketch, containerRef.current!);
+        (async () => {
+            const { default: P5 } = await import('p5');
+            if (isCancelled || !containerRef.current) return;
+            p5Instance = new P5(sketch, containerRef.current);
+        })();
 
         // Mouse tracking and hover handlers
         const handleMouseMove = (e: MouseEvent) => {
@@ -167,10 +184,11 @@ const HeroArtwork: React.FC = () => {
         container?.addEventListener('mouseleave', handleMouseLeave);
 
         return () => {
+            isCancelled = true;
             container?.removeEventListener('mousemove', handleMouseMove);
             container?.removeEventListener('mouseenter', handleMouseEnter);
             container?.removeEventListener('mouseleave', handleMouseLeave);
-            p5Instance.remove();
+            if (p5Instance) p5Instance.remove();
         };
     }, []);
 

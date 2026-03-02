@@ -1,5 +1,32 @@
-import React, { useRef, useEffect, useState } from 'react';
-import p5 from 'p5';
+import { useRef, useEffect, useState } from 'react';
+import type p5 from 'p5';
+
+type NavigatorWithExtras = Navigator & {
+    deviceMemory?: number;
+    connection?: {
+        effectiveType?: string;
+    };
+};
+
+type RGB = [number, number, number];
+
+type Pixel = {
+    x: number;
+    y: number;
+    originalColorIndex: number;
+    currentColorIndex: number;
+    targetColorIndex: number;
+    colorTransition: number;
+    transitionSpeed: number;
+    nextTransitionTime: number;
+    lastTransitionTime: number;
+    opacity: number;
+    isHovered: boolean;
+    hoverTransition: number;
+    hoverSpeed: number;
+    needsUpdate: boolean;
+    cachedFinalColor: RGB;
+};
 
 // Device performance detection utility
 const detectLowEndDevice = (): boolean => {
@@ -7,7 +34,8 @@ const detectLowEndDevice = (): boolean => {
     const cores = navigator.hardwareConcurrency || 1;
 
     // Check memory (if available)
-    const memory = (navigator as any).deviceMemory;
+    const navigatorWithExtras = navigator as NavigatorWithExtras;
+    const memory = navigatorWithExtras.deviceMemory;
 
     // Check user agent for old devices
     const ua = navigator.userAgent;
@@ -19,8 +47,9 @@ const detectLowEndDevice = (): boolean => {
     // - Less than 4GB RAM (if available)
     // - Old Android/iOS versions
     // - Connection speed (if available)
-    const connection = (navigator as any).connection;
-    const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+    const connection = navigatorWithExtras.connection;
+    const effectiveType = connection?.effectiveType;
+    const isSlowConnection = effectiveType === 'slow-2g' || effectiveType === '2g';
 
     return cores < 4 ||
         (memory && memory < 4) ||
@@ -30,7 +59,7 @@ const detectLowEndDevice = (): boolean => {
         false; // Default to false for unknown devices
 };
 
-const PixelArtHero: React.FC = () => {
+const PixelArtHero = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [isLowEndDevice, setIsLowEndDevice] = useState<boolean>(false);
     const [staticPattern, setStaticPattern] = useState<string>('');
@@ -108,12 +137,11 @@ const PixelArtHero: React.FC = () => {
             };
         }
 
-        let pixels: any[] = [];
+        let pixels: Pixel[] = [];
         let mouseX = 0;
         let mouseY = 0;
         let isHovering = false;
-        let lastThemeCheck = 0;
-        let cachedColors: number[][] = [];
+        let cachedColors: RGB[] = [];
 
         // Touch tracking for scroll detection
         let touchStartY = 0;
@@ -121,7 +149,7 @@ const PixelArtHero: React.FC = () => {
         let touchStartTime = 0;
         let isScrolling = false;
 
-        const sketch = (p: any) => {
+        const sketch = (p: p5) => {
             const pixelSize = 12; // Perfect square size
             const spacing = 16; // Spacing between pixels
             const hoverRadius = 60; // Radius of hover effect
@@ -137,7 +165,7 @@ const PixelArtHero: React.FC = () => {
                     isDark ? [50, 50, 50] : [100, 100, 100], // Gray - lighter in dark mode for better contrast
                     isDark ? [0, 0, 0] : [255, 255, 255], // Background blend - matches CSS background exactly
                     isDark ? [0, 0, 0] : [255, 255, 255] // Background for hover - same as background blend
-                ];
+                ] as RGB[];
             };
 
             const getRandomColorIndex = () => {
@@ -270,7 +298,6 @@ const PixelArtHero: React.FC = () => {
                     const dx = mouseX - pixel.x;
                     const dy = mouseY - pixel.y;
                     const distanceSquared = dx * dx + dy * dy;
-                    const wasHovered = pixel.isHovered;
                     pixel.isHovered = isHovering && distanceSquared < hoverRadiusSquared;
 
                     let hasChanged = false;
@@ -364,12 +391,20 @@ const PixelArtHero: React.FC = () => {
         };
 
         // Defer p5 initialization to avoid blocking main thread
-        let p5Instance: any = null;
-        const initTimeout = setTimeout(() => {
-            if (containerRef.current) {
-                p5Instance = new p5(sketch, containerRef.current);
-            }
-        }, 100); // Small delay to let main content render first
+        let isCancelled = false;
+        let p5Instance: p5 | null = null;
+        let initTimeout: ReturnType<typeof setTimeout> | undefined;
+
+        (async () => {
+            const { default: P5 } = await import('p5');
+            if (isCancelled) return;
+
+            initTimeout = window.setTimeout(() => {
+                if (containerRef.current) {
+                    p5Instance = new P5(sketch, containerRef.current);
+                }
+            }, 100); // Small delay to let main content render first
+        })();
 
         // Handle window resize to ensure canvas stays in sync
         const handleResize = () => {
@@ -436,7 +471,7 @@ const PixelArtHero: React.FC = () => {
             }
         };
 
-        const handleTouchEnd = (e: TouchEvent) => {
+        const handleTouchEnd = () => {
             isHovering = false;
             isScrolling = false;
         };
@@ -453,7 +488,8 @@ const PixelArtHero: React.FC = () => {
         overlay?.addEventListener('touchend', handleTouchEnd, { passive: true });
 
         return () => {
-            clearTimeout(initTimeout);
+            isCancelled = true;
+            if (initTimeout) clearTimeout(initTimeout);
             window.removeEventListener('resize', handleResize);
             container?.removeEventListener('mouseenter', handleMouseEnter);
             container?.removeEventListener('mouseleave', handleMouseLeave);

@@ -1,9 +1,11 @@
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import p5 from 'p5';
+import type p5 from "p5";
 
-gsap.registerPlugin(ScrollTrigger);
+type StepColors = {
+    primary: [number, number, number];
+    background: [number, number, number];
+    muted: [number, number, number];
+};
 
 interface StepProps {
     title: string;
@@ -18,9 +20,10 @@ const Step = ({ title, stepNumber, animationType }: StepProps) => {
     useEffect(() => {
         if (!canvasRef.current) return;
 
-        let p5Instance: any = null;
+        let isCancelled = false;
+        let p5Instance: p5 | null = null;
 
-        const sketch = (p: any) => {
+        const sketch = (p: p5) => {
             let animationTime = 0;
             const pixelSize = 8;
             let isDarkMode = false;
@@ -44,7 +47,7 @@ const Step = ({ title, stepNumber, animationType }: StepProps) => {
                     primary: isDarkMode ? [6, 182, 212] : [8, 145, 178], // cyan-500 / cyan-600
                     background: isDarkMode ? [3, 7, 18] : [248, 250, 252], // gray-950 / gray-50
                     muted: isDarkMode ? [100, 116, 139] : [148, 163, 184] // slate-500 / slate-400
-                };
+                } satisfies StepColors;
             };
 
             p.draw = () => {
@@ -64,7 +67,7 @@ const Step = ({ title, stepNumber, animationType }: StepProps) => {
                 }
             };
 
-            const drawWriteAnimation = (colors: any) => {
+            const drawWriteAnimation = (colors: StepColors) => {
                 // Continuous typing animation with 3 dots appearing and fading
                 const cycleTime = 3; // 3 second cycle
                 const progress = (animationTime % cycleTime) / cycleTime;
@@ -101,7 +104,7 @@ const Step = ({ title, stepNumber, animationType }: StepProps) => {
                 }
             };
 
-            const drawDeployAnimation = (colors: any) => {
+            const drawDeployAnimation = (colors: StepColors) => {
                 // Continuous left-to-right movement
                 const cycleTime = 2.5; // 2.5 second cycle
                 const progress = (animationTime % cycleTime) / cycleTime;
@@ -123,7 +126,7 @@ const Step = ({ title, stepNumber, animationType }: StepProps) => {
                 }
             };
 
-            const drawScaleAnimation = (colors: any) => {
+            const drawScaleAnimation = (colors: StepColors) => {
                 // Continuous scaling: dot comes from left, scales up, scales down, goes right
                 const cycleTime = 4; // 4 second cycle
                 const progress = (animationTime % cycleTime) / cycleTime;
@@ -198,12 +201,15 @@ const Step = ({ title, stepNumber, animationType }: StepProps) => {
             };
         };
 
-        p5Instance = new p5(sketch, canvasRef.current);
+        (async () => {
+            const { default: P5 } = await import("p5");
+            if (isCancelled || !canvasRef.current) return;
+            p5Instance = new P5(sketch, canvasRef.current);
+        })();
 
         return () => {
-            if (p5Instance) {
-                p5Instance.remove();
-            }
+            isCancelled = true;
+            if (p5Instance) p5Instance.remove();
         };
     }, [animationType]);
 
@@ -238,20 +244,35 @@ export default function HowItWorks() {
         const element = sectionRef.current;
         if (!element) return;
 
-        gsap.fromTo(element.querySelector('.section-header'),
-            { opacity: 0, y: 40 },
-            {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: element,
-                    start: "top 70%",
-                    toggleActions: "play none none reverse"
-                }
-            }
-        );
+        let ctx: gsap.Context | undefined;
+
+        (async () => {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+            const { default: gsapRuntime } = await import("gsap");
+            const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+
+            gsapRuntime.registerPlugin(ScrollTrigger);
+
+            ctx = gsapRuntime.context(() => {
+                gsapRuntime.fromTo(element.querySelector('.section-header'),
+                    { opacity: 0, y: 40 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: element,
+                            start: "top 70%",
+                            toggleActions: "play none none reverse"
+                        }
+                    }
+                );
+            }, element);
+        })();
+
+        return () => ctx?.revert?.();
     }, []);
 
     return (

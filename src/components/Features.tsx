@@ -1,69 +1,19 @@
-import { useEffect, useRef } from "react";
-import p5 from "p5";
+import { useEffect, useRef, type ReactNode } from "react";
+import type p5 from "p5";
 
-// Instant Scale Animation with p5.js
-function InstantScaleAnimation() {
-    const canvasRef = useRef<HTMLDivElement>(null);
+type Star = {
+    x: number;
+    y: number;
+    z: number;
+    pz: number;
+};
 
-    useEffect(() => {
-        if (!canvasRef.current) return;
-
-        let p5Instance: p5;
-
-        const sketch = (p: any) => {
-            let animationTime = 0;
-            const pixelSize = 6;
-
-            p.setup = () => {
-                const canvas = p.createCanvas(320, 180);
-                canvas.parent(canvasRef.current);
-                p.background(0, 0);
-                p.noStroke();
-            };
-
-            p.draw = () => {
-                animationTime += p.deltaTime / 1000;
-                p.clear();
-
-                const isDark = document.documentElement.classList.contains('dark');
-                const primaryColor = isDark ? [52, 211, 153] : [16, 185, 129]; // green-400/500
-
-                // Spiral animation similar to original
-                const cycleTime = 4;
-                const progress = (animationTime % cycleTime) / cycleTime;
-                const centerX = p.width / 2;
-                const centerY = p.height / 2;
-                const maxRadius = 80;
-
-                const numDots = 40;
-                for (let i = 0; i < numDots; i++) {
-                    const dotProgress = (progress + i / numDots) % 1;
-                    const angle = dotProgress * Math.PI * 8; // 4 rotations
-                    const radius = dotProgress * maxRadius;
-
-                    const x = centerX + Math.cos(angle) * radius;
-                    const y = centerY + Math.sin(angle) * radius;
-
-                    const alpha = Math.sin(dotProgress * Math.PI) * 255;
-                    const size = pixelSize * (0.5 + dotProgress * 0.5);
-
-                    p.fill(primaryColor[0], primaryColor[1], primaryColor[2], alpha);
-                    p.rect(x - size / 2, y - size / 2, size, size);
-                }
-            };
-        };
-
-        p5Instance = new p5(sketch, canvasRef.current);
-
-        return () => {
-            if (p5Instance) {
-                p5Instance.remove();
-            }
-        };
-    }, []);
-
-    return <div ref={canvasRef} className="w-full h-full" />;
-}
+type Dot = {
+    x: number;
+    y: number;
+    baseSize: number;
+    phase: number;
+};
 
 // Warp Speed Animation with p5.js
 function WarpSpeedAnimation() {
@@ -73,7 +23,8 @@ function WarpSpeedAnimation() {
     useEffect(() => {
         if (!canvasRef.current || !containerRef.current) return;
 
-        let p5Instance: p5;
+        let isCancelled = false;
+        let p5Instance: p5 | null = null;
         let isVisible = false;
 
         // Intersection Observer to pause animation when not visible
@@ -95,8 +46,8 @@ function WarpSpeedAnimation() {
 
         observer.observe(containerRef.current);
 
-        const sketch = (p: any) => {
-            let stars: any[] = [];
+        const sketch = (p: p5) => {
+            let stars: Star[] = [];
             const numStars = 40; // Reduced number of stars
             let lastTime = 0;
 
@@ -140,7 +91,7 @@ function WarpSpeedAnimation() {
 
                 const speed = 6; // Reduced speed
 
-                for (let star of stars) {
+                for (const star of stars) {
                     star.pz = star.z;
                     star.z -= speed;
 
@@ -173,9 +124,14 @@ function WarpSpeedAnimation() {
             };
         };
 
-        p5Instance = new p5(sketch, canvasRef.current);
+        (async () => {
+            const { default: P5 } = await import("p5");
+            if (isCancelled || !canvasRef.current) return;
+            p5Instance = new P5(sketch, canvasRef.current);
+        })();
 
         return () => {
+            isCancelled = true;
             observer.disconnect();
             if (p5Instance) {
                 p5Instance.remove();
@@ -198,7 +154,8 @@ function ModularAPIsAnimation() {
     useEffect(() => {
         if (!canvasRef.current || !containerRef.current) return;
 
-        let p5Instance: p5;
+        let isCancelled = false;
+        let p5Instance: p5 | null = null;
         let isVisible = false;
 
         // Intersection Observer to pause animation when not visible
@@ -220,8 +177,8 @@ function ModularAPIsAnimation() {
 
         observer.observe(containerRef.current);
 
-        const sketch = (p: any) => {
-            let dots: any[] = [];
+        const sketch = (p: p5) => {
+            let dots: Dot[] = [];
             let animationTime = 0;
             let lastTime = 0;
 
@@ -274,7 +231,7 @@ function ModularAPIsAnimation() {
 
                 const isDark = document.documentElement.classList.contains('dark');
 
-                for (let dot of dots) {
+                for (const dot of dots) {
                     const wave = Math.sin(animationTime * 2 + dot.phase);
                     const size = dot.baseSize + wave * 2;
                     const alpha = 120 + wave * 80;
@@ -298,9 +255,14 @@ function ModularAPIsAnimation() {
             };
         };
 
-        p5Instance = new p5(sketch, canvasRef.current);
+        (async () => {
+            const { default: P5 } = await import("p5");
+            if (isCancelled || !canvasRef.current) return;
+            p5Instance = new P5(sketch, canvasRef.current);
+        })();
 
         return () => {
+            isCancelled = true;
             observer.disconnect();
             if (p5Instance) {
                 p5Instance.remove();
@@ -320,7 +282,7 @@ interface FeatureCardProps {
     colorClass: string;
     bgClass: string;
     span?: string;
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
 const FeatureCard = ({ title, colorClass, bgClass, span = "", children }: FeatureCardProps) => {

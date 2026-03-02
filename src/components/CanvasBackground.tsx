@@ -1,10 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+
+type Cube = {
+    x: number;
+    y: number;
+    z: number;
+    scale: number;
+    img2_opacity: number;
+    draw: () => void;
+};
 
 export const CanvasBackground = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
-    const cubesRef = useRef<any[]>([]);
+    const cubesRef = useRef<Cube[]>([]);
     const cwRef = useRef(0);
     const chRef = useRef(0);
     const hueRef = useRef(180);
@@ -16,17 +24,24 @@ export const CanvasBackground = () => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
+        let cleanup: (() => void) | undefined;
+        let cancelled = false;
 
-        ctxRef.current = ctx;
-        const img = new Image();
-        const img2 = new Image();
+        (async () => {
+            const { default: gsapRuntime } = await import("gsap");
+            if (cancelled) return;
 
-        img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADIBAMAAADsElnyAAAAJFBMVEVHcEw+Pj5aWloQEBAZGRleXl6AgIDAwMBwcHCampq7u7tzc3M0sGdFAAAABXRSTlMAp/UwQ5FLsO8AAADxSURBVHgB7c9HcQRhDITRn8NgMABDWAjO6ewMYLgsWef8akelk1Pr/upTj023mkZxiK3dqSsODnpmdXBwUBlEaRCYckdtEKVBYModmKbQKDrGHZpaaPyqZxQaRc8oNPVyTaehUVRGURhFYerlmu2D5k3jqimO1+MCU4h5XFzc9sQjaXTO1vMTobMkXgmdBfFKNnTY8UroLIp3YkfxldBhB4QOAkIHAaHDDggdBIQOX0HoICB0EBA6CAgdlkPoICB0+ApCBwGhw1cQOggIBgHh5pCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQH0XuAS5hV4q0a3iHAAAAAElFTkSuQmCC';
-        img2.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADIBAMAAADsElnyAAAAJFBMVEVHcEylpaXv7+/Gxsa+vr7m5uahoaE/Pz9/f3+Ojo5lZWWCgoKkaSxxAAAABnRSTlMA9TCcskPTdr2ZAAAA40lEQVR4Ae3POW0EQQBE0UZhBEawWBaAzz0QDIVhYgxmZ3X6pFZpIl/18xf8sep8GinFwzMmi8sFk8TlctFkockiGz80WWiyyMYPTRbZKLLxIxtFMIoVwCCSUQSTRDaeZ3POAKPIRpGNIhvPs3m8HOw0Pg+K+8fYo0FsY48GMUkyiEmSQUySDGKSZBCTJIOYZG0QkIVBQDQKydogIBqFRKOQaBSQYBAQDAKCQQSCUUg0CAhmLSAYhUSDgCwMIpFpFJnsW0lJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUnJjyJfg4PNmR1hT+AAAAAASUVORK5CYII=';
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
 
-        class Cube {
+            ctxRef.current = ctx;
+            const img = new Image();
+            const img2 = new Image();
+
+            img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADIBAMAAADsElnyAAAAJFBMVEVHcEw+Pj5aWloQEBAZGRleXl6AgIDAwMBwcHCampq7u7tzc3M0sGdFAAAABXRSTlMAp/UwQ5FLsO8AAADxSURBVHgB7c9HcQRhDITRn8NgMABDWAjO6ewMYLgsWef8akelk1Pr/upTj023mkZxiK3dqSsODnpmdXBwUBlEaRCYckdtEKVBYModmKbQKDrGHZpaaPyqZxQaRc8oNPVyTaehUVRGURhFYerlmu2D5k3jqimO1+MCU4h5XFzc9sQjaXTO1vMTobMkXgmdBfFKNnTY8UroLIp3YkfxldBhB4QOAkIHAaHDDggdBIQOX0HoICB0EBA6CAgdlkPoICB0+ApCBwGhw1cQOggIBgHh5pCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQH0XuAS5hV4q0a3iHAAAAAElFTkSuQmCC';
+            img2.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADIBAMAAADsElnyAAAAJFBMVEVHcEylpaXv7+/Gxsa+vr7m5uahoaE/Pz9/f3+Ojo5lZWWCgoKkaSxxAAAABnRSTlMA9TCcskPTdr2ZAAAA40lEQVR4Ae3POW0EQQBE0UZhBEawWBaAzz0QDIVhYgxmZ3X6pFZpIl/18xf8sep8GinFwzMmi8sFk8TlctFkockiGz80WWiyyMYPTRbZKLLxIxtFMIoVwCCSUQSTRDaeZ3POAKPIRpGNIhvPs3m8HOw0Pg+K+8fYo0FsY48GMUkyiEmSQUySDGKSZBCTJIOYZG0QkIVBQDQKydogIBqFRKOQaBSQYBAQDAKCQQSCUUg0CAhmLSAYhUSDgCwMIpFpFJnsW0lJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUnJjyJfg4PNmR1hT+AAAAAASUVORK5CYII=';
+
+        class CubeItem {
             img: HTMLImageElement;
             img2: HTMLImageElement;
             scale: number;
@@ -71,9 +86,9 @@ export const CanvasBackground = () => {
             for (let i = 0, _y = 0; _y < chRef.current; _y++) {
                 for (let _x = 0; _x < cwRef.current; _x++) {
                     if (_y % 2 === 0) {
-                        cubesRef.current.push(new Cube(i, -25 + _x * 100, -75 + _y * 25, 0.9));
+                        cubesRef.current.push(new CubeItem(i, -25 + _x * 100, -75 + _y * 25, 0.9));
                     } else {
-                        cubesRef.current.push(new Cube(i, 25 + _x * 100, -75 + _y * 25, 0.9));
+                        cubesRef.current.push(new CubeItem(i, 25 + _x * 100, -75 + _y * 25, 0.9));
                     }
                     i++;
                 }
@@ -87,7 +102,7 @@ export const CanvasBackground = () => {
                 staggerAnimRef.current.kill();
             }
 
-            return gsap.timeline()
+            return gsapRuntime.timeline()
                 .to(cubesRef.current, {
                     duration: 1.5,
                     z: 125,
@@ -99,7 +114,7 @@ export const CanvasBackground = () => {
                         overwrite: 'auto',
                         from: from,
                         onComplete: function () {
-                            gsap.to(this.targets(), {
+                            gsapRuntime.to(this.targets(), {
                                 duration: 1.5,
                                 z: 0,
                                 ease: 'back.out(3)'
@@ -117,7 +132,7 @@ export const CanvasBackground = () => {
                         overwrite: 'auto',
                         from: from,
                         onComplete: function () {
-                            gsap.to(this.targets(), {
+                            gsapRuntime.to(this.targets(), {
                                 duration: 1,
                                 img2_opacity: 0
                             });
@@ -147,9 +162,9 @@ export const CanvasBackground = () => {
         };
 
         const anim = () => {
-            staggerAnimRef.current = gsap.timeline({
+            staggerAnimRef.current = gsapRuntime.timeline({
                 onComplete: () => {
-                    gsap.delayedCall(2, anim);
+                    gsapRuntime.delayedCall(2, anim);
                 }
             })
                 .add(staggerFrom(Math.floor(Math.random() * nCubesRef.current)));
@@ -158,13 +173,13 @@ export const CanvasBackground = () => {
         img.onload = () => {
             setGrid();
             canvas.addEventListener('click', handleClick);
-            gsap.delayedCall(0.2, anim);
+            gsapRuntime.delayedCall(0.2, anim);
             setIsLoaded(true);
         };
 
         window.addEventListener('resize', setGrid);
 
-        const ticker = gsap.ticker.add(() => {
+        const ticker = gsapRuntime.ticker.add(() => {
             if (!canvas || !ctx) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -180,13 +195,19 @@ export const CanvasBackground = () => {
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         });
 
+            cleanup = () => {
+                window.removeEventListener('resize', setGrid);
+                canvas.removeEventListener('click', handleClick);
+                gsapRuntime.ticker.remove(ticker);
+                if (staggerAnimRef.current) {
+                    staggerAnimRef.current.kill();
+                }
+            };
+        })();
+
         return () => {
-            window.removeEventListener('resize', setGrid);
-            canvas.removeEventListener('click', handleClick);
-            gsap.ticker.remove(ticker);
-            if (staggerAnimRef.current) {
-                staggerAnimRef.current.kill();
-            }
+            cancelled = true;
+            cleanup?.();
         };
     }, []);
 
