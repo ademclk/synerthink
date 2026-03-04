@@ -81,12 +81,16 @@
       "statusCode": 301
     },
     {
+      "route": "/_serverFn/*",
+      "rewrite": "/api/server"
+    },
+    {
       "route": "/",
       "rewrite": "/api/server"
     }
   ],
   "platform": {
-    "apiRuntime": "node:22"
+    "apiRuntime": "node:20"
   },
   "navigationFallback": {
     "rewrite": "/api/server"
