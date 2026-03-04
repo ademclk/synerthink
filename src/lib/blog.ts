@@ -31,6 +31,7 @@ const posts: BlogPost[] = [
       tags: ['release'],
       status: 'published',
       description: 'A foundational milestone for autonomous execution. Built seamlessly from the ground up for absolute trust and immediate inspectability.',
+      image: '/dotlanth-v2610alpha.svg',
       slug: 'dotlanth-v26-1-0-alpha',
     },
     component: React.lazy(() => import('@/components/blog/posts/V26AlphaPost')),

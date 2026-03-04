@@ -44,17 +44,17 @@ function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/10 to-background dark:via-background/15" />
 
         <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col px-4 pb-14 pt-36 sm:px-8 sm:pb-16 lg:px-12">
-          <div className="mx-auto mt-12 w-full max-w-3xl text-center sm:mt-14">
-            <h1 className="text-balance text-[clamp(2.7rem,5.2vw,4.25rem)] font-semibold tracking-tight leading-[1.03]">
+          <div className="mx-auto mt-12 w-full max-w-4xl text-center sm:mt-14">
+            <h1 className="text-balance text-[clamp(3.5rem,10.4vw,4rem)] font-semibold tracking-tight leading-[1.03]">
               Building foundational computing products for the AI era.
             </h1>
 
-            <p className="mt-8 text-pretty text-lg text-foreground/75 sm:text-xl">
+            <p className="mt-32 text-pretty text-lg text-foreground/75 sm:text-xl">
               We remove complexity by designing systems that are simple to use, predictable to
               operate, and built for real-world autonomy.
             </p>
 
-            <div className="mt-12 flex flex-nowrap items-center justify-center gap-8 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-10">
+            <div className="mt-12 flex flex-nowrap items-center justify-center gap-32 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-10">
               <Link
                 to="/blog/$slug"
                 params={{ slug: 'dotlanth-v26-1-0-alpha' }}

@@ -143,14 +143,14 @@ function ArrowLink({
     : { to: to || '/' }
   const Comp = href ? 'a' : Link
 
-	  return (
-	    <Comp
-	      {...(props as React.ComponentProps<typeof Link>)}
-	      className={cn(
-	        'group inline-flex items-center gap-2 text-base font-medium text-foreground/80 transition-colors hover:text-foreground rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25',
-	        className,
-	      )}
-	    >
+  return (
+    <Comp
+      {...(props as React.ComponentProps<typeof Link>)}
+      className={cn(
+        'group inline-flex items-center gap-2 text-base font-medium text-foreground/80 transition-colors hover:text-foreground rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25',
+        className,
+      )}
+    >
       <span className="relative">
         {children}
         <span
@@ -184,31 +184,31 @@ function TransitionSection() {
             </SectionBody>
           </div>
 
-	          {/* Visual Container (Right) */}
-	          <div className="relative order-1 lg:order-2 h-[50vh] lg:h-[75vh] w-full rounded-[2.5rem] overflow-hidden shadow-2xl flex outline outline-1 outline-foreground/5 dark:outline-white/10 group">
-                <picture className="absolute inset-0 block">
-                  <source
-                    type="image/avif"
-                    srcSet="/hero-core-320.avif 320w, /hero-core.avif 640w"
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                  />
-                  <source
-                    type="image/webp"
-                    srcSet="/hero-core-320.webp 320w, /hero-core.webp 640w"
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                  />
-                  <img
-                    src="/hero-core.png"
-                    alt=""
-                    aria-hidden="true"
-                    width={640}
-                    height={640}
-                    loading="lazy"
-                    decoding="async"
-                    fetchPriority="low"
-                    className="h-full w-full object-cover object-bottom transition-transform duration-1000 group-hover:scale-105"
-                  />
-                </picture>
+          {/* Visual Container (Right) */}
+          <div className="relative order-1 lg:order-2 h-[50vh] lg:h-[75vh] w-full rounded-[2.5rem] overflow-hidden shadow-2xl flex outline outline-1 outline-foreground/5 dark:outline-white/10 group">
+            <picture className="absolute inset-0 block">
+              <source
+                type="image/avif"
+                srcSet="/hero-core-320.avif 320w, /hero-core.avif 640w"
+                sizes="(min-width: 1024px) 50vw, 100vw"
+              />
+              <source
+                type="image/webp"
+                srcSet="/hero-core-320.webp 320w, /hero-core.webp 640w"
+                sizes="(min-width: 1024px) 50vw, 100vw"
+              />
+              <img
+                src="/hero-core.png"
+                alt=""
+                aria-hidden="true"
+                width={640}
+                height={640}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+                className="h-full w-full object-cover object-bottom transition-transform duration-1000 group-hover:scale-105"
+              />
+            </picture>
             {/* Subtle overlay gradient to ensure the CTA stands out */}
             {/* Progressive blur bottom bar CTA */}
             <div className="absolute inset-x-0 bottom-0 pointer-events-none">
@@ -342,7 +342,7 @@ function DotDBSection() {
       <Container>
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-24 lg:items-center">
           {/* Left: Focus Graphic */}
-          <div className="relative order-2 lg:order-1">
+          <div className="relative order-2 lg:order-1 overflow-hidden">
             <div className="absolute -inset-24 bg-gradient-to-tr from-foreground/5 via-foreground/0 to-transparent blur-3xl rounded-full" />
             <Card variant="dark" className="relative p-12 aspect-square flex flex-col items-center justify-center shadow-2xl">
               <Database className="h-24 w-24 text-foreground/20 " weight="duotone" />
@@ -483,16 +483,16 @@ function FinalCTASection() {
   return (
     <section className="relative overflow-hidden bg-background border-t border-foreground/[0.06]">
       {/* Ambient cyan glow */}
-      <div className="pointer-events-none absolute inset-0">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[900px] rounded-full"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[min(900px,200vw)] rounded-full"
           style={{
             background: 'radial-gradient(ellipse at center, rgba(0,166,174,0.10) 0%, transparent 70%)',
             filter: 'blur(60px)',
           }}
         />
         <div
-          className="absolute left-1/4 bottom-0 h-[300px] w-[400px] rounded-full"
+          className="absolute left-1/4 bottom-0 h-[300px] w-[min(400px,100vw)] rounded-full"
           style={{
             background: 'radial-gradient(ellipse at center, rgba(0,166,174,0.06) 0%, transparent 70%)',
             filter: 'blur(80px)',

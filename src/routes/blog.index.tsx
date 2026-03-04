@@ -66,10 +66,16 @@ function BlogIndex() {
                 <article className="flex w-full flex-col gap-4">
                   {/* Gradient card: square */}
                   <div
-                    className="@container relative w-full overflow-hidden rounded-[1.5rem] bg-foreground/5 transition-transform duration-500 will-change-transform group-hover:scale-[1.02]"
+                    className="@container relative w-full overflow-hidden rounded-[1rem] bg-foreground/5 transition-transform duration-500 will-change-transform group-hover:scale-[1.02]"
                     style={{ aspectRatio: '1/1' }}
                   >
-                    {post.kind === 'releases' ? (
+                    {post.slug === 'dotlanth-v26-1-0-alpha' ? (
+                      <img
+                        src="/dotlanth-v2610alpha.svg"
+                        alt="Dotlanth v26.1.0-alpha preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : post.kind === 'releases' ? (
                       <ScalableGradientBlur
                         seed={post.slug}
                         versionLabel="v26.1.0-alpha"

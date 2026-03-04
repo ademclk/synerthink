@@ -77,10 +77,10 @@ export function Footer() {
 
                 {/* Bottom bar */}
                 <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <p className="text-xs text-foreground/60">
+                    <p className="text-sm text-foreground/60">
                         &copy; 2026 Synerthink. All rights reserved.
                     </p>
-                    <p className="text-xs text-foreground/60">
+                    <p className="text-sm text-foreground/60">
                         Building foundational computing products for the AI era.
                     </p>
                 </div>
@@ -99,7 +99,7 @@ export function Footer() {
                     decoding="async"
                     className="opacity-[0.08] dark:invert"
                     style={{
-                        height: 'clamp(3rem, 16vw, 16rem)',
+                        height: 'clamp(5rem, 22vw, 20rem)',
                         paddingInline: '1.5rem',
                         paddingBlock: '1.5rem',
                     }}

@@ -101,7 +101,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased overflow-x-hidden">
         <a
           href="#content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 z-[200] rounded-md bg-background px-3 py-2 text-sm font-semibold text-foreground shadow-lg ring-1 ring-foreground/20 focus:outline-none focus:ring-2 focus:ring-foreground/30"
