@@ -130,7 +130,7 @@ function AsciiLinkRow({ item, index }: { item: AsciiLinkItem; index: number }) {
         <a
           href={item.href}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className={baseClassName}
         >
           {contents}
@@ -220,6 +220,7 @@ export default function AsciiFeatureLinksSection({
   )
 
   useEffect(() => {
+    if (import.meta.env.SSR) return
     if (prefersReducedMotion) return
     let ctx: gsap.Context | undefined
 

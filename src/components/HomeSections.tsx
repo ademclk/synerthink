@@ -143,14 +143,14 @@ function ArrowLink({
     : { to: to || '/' }
   const Comp = href ? 'a' : Link
 
-  return (
-    <Comp
-      {...(props as React.ComponentProps<typeof Link>)}
-      className={cn(
-        'group inline-flex items-center gap-2 text-base font-medium text-foreground/80 transition-colors hover:text-foreground',
-        className,
-      )}
-    >
+	  return (
+	    <Comp
+	      {...(props as React.ComponentProps<typeof Link>)}
+	      className={cn(
+	        'group inline-flex items-center gap-2 text-base font-medium text-foreground/80 transition-colors hover:text-foreground rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25',
+	        className,
+	      )}
+	    >
       <span className="relative">
         {children}
         <span
@@ -167,7 +167,7 @@ function ArrowLink({
 }
 
 // ============================================================================
-// SECTION 1 — THE TRANSITION
+// SECTION 1: THE TRANSITION
 // ============================================================================
 function TransitionSection() {
   return (
@@ -184,13 +184,31 @@ function TransitionSection() {
             </SectionBody>
           </div>
 
-          {/* Visual Container (Right) */}
-          <div className="relative order-1 lg:order-2 h-[50vh] lg:h-[75vh] w-full rounded-[2.5rem] overflow-hidden shadow-2xl flex outline outline-1 outline-foreground/5 dark:outline-white/10 group">
-            <img
-              src="/hero-core.png"
-              alt="Dotlanth Foundation"
-              className="absolute inset-0 w-full h-full object-cover object-bottom transition-transform duration-1000 group-hover:scale-105"
-            />
+	          {/* Visual Container (Right) */}
+	          <div className="relative order-1 lg:order-2 h-[50vh] lg:h-[75vh] w-full rounded-[2.5rem] overflow-hidden shadow-2xl flex outline outline-1 outline-foreground/5 dark:outline-white/10 group">
+                <picture className="absolute inset-0 block">
+                  <source
+                    type="image/avif"
+                    srcSet="/hero-core-320.avif 320w, /hero-core.avif 640w"
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                  />
+                  <source
+                    type="image/webp"
+                    srcSet="/hero-core-320.webp 320w, /hero-core.webp 640w"
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                  />
+                  <img
+                    src="/hero-core.png"
+                    alt=""
+                    aria-hidden="true"
+                    width={640}
+                    height={640}
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
+                    className="h-full w-full object-cover object-bottom transition-transform duration-1000 group-hover:scale-105"
+                  />
+                </picture>
             {/* Subtle overlay gradient to ensure the CTA stands out */}
             {/* Progressive blur bottom bar CTA */}
             <div className="absolute inset-x-0 bottom-0 pointer-events-none">
@@ -217,7 +235,7 @@ function TransitionSection() {
 }
 
 // ============================================================================
-// SECTION 2 — DOTLANTH IDENTITY
+// SECTION 2: DOTLANTH IDENTITY
 // ============================================================================
 function DotlanthIdentitySection() {
   return (
@@ -230,7 +248,7 @@ function DotlanthIdentitySection() {
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/5 inner-shadow">
                 <Lightning className="h-6 w-6 text-foreground/80" weight="fill" />
               </div>
-              <span className="font-mono text-sm font-medium text-foreground/40">v26.1.0-alpha</span>
+              <span className="font-mono text-sm font-medium text-foreground/60">v26.1.0-alpha</span>
             </div>
 
             <h2 className="mt-10 text-balance text-[clamp(2.5vw,5vw,4rem)] font-semibold tracking-tight leading-[1.05]">
@@ -268,7 +286,7 @@ function DotlanthIdentitySection() {
 }
 
 // ============================================================================
-// SECTION 3 — THE THREE PILLARS
+// SECTION 3: THE THREE PILLARS
 // ============================================================================
 function PillarsSection() {
   const pillars = [
@@ -316,7 +334,7 @@ function PillarsSection() {
 }
 
 // ============================================================================
-// SECTION 4 — DOTDB
+// SECTION 4: DOTDB
 // ============================================================================
 function DotDBSection() {
   return (
@@ -366,7 +384,7 @@ function DotDBSection() {
 }
 
 // ============================================================================
-// SECTION 5 — ROADMAP
+// SECTION 5: ROADMAP
 // ============================================================================
 function RoadmapSection() {
   const phases = [
@@ -431,7 +449,7 @@ function RoadmapSection() {
 
                   <div className="min-w-0 pl-5 md:pl-0">
                     <div className="flex items-center gap-4 flex-wrap min-w-0">
-                      <span className="font-mono text-sm tracking-widest text-foreground/40 uppercase shrink-0">{phase.phase}</span>
+                      <span className="font-mono text-sm tracking-widest text-foreground/60 uppercase shrink-0">{phase.phase}</span>
                       {phase.status === 'current' && (
                         <span className="rounded-full bg-foreground px-2.5 py-0.5 text-xs font-medium text-background shrink-0">
                           In progress
@@ -459,7 +477,7 @@ function RoadmapSection() {
 }
 
 // ============================================================================
-// SECTION 6 — FINAL CTA
+// SECTION 6: FINAL CTA
 // ============================================================================
 function FinalCTASection() {
   return (
@@ -485,7 +503,7 @@ function FinalCTASection() {
       {/* Main content */}
       <div className="relative z-10 mx-auto max-w-6xl px-6 sm:px-10 lg:px-16 pt-32 pb-24">
         {/* Overline */}
-        <p className="text-xs font-semibold tracking-[0.25em] uppercase text-foreground/30 mb-8">Start building</p>
+        <p className="text-xs font-semibold tracking-[0.25em] uppercase text-foreground/60 mb-8">Start building</p>
 
         {/* Giant headline */}
         <h2 className="text-[clamp(3rem,9vw,7.5rem)] font-semibold tracking-tight leading-[0.95] text-foreground max-w-4xl">
@@ -505,21 +523,21 @@ function FinalCTASection() {
 
         {/* Subtext + CTAs row */}
         <div className="mt-16 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-10">
-          <p className="text-lg text-foreground/45 max-w-sm leading-relaxed">
+          <p className="text-lg text-foreground/70 max-w-sm leading-relaxed">
             Explore Dotlanth, our first product. Simple to use, predictable to operate.
           </p>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <Link
               to="/products/dotlanth"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-foreground px-7 py-3.5 text-base font-semibold text-background transition-all hover:opacity-90 hover:scale-[1.02] active:scale-95"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-foreground px-7 py-3.5 text-base font-semibold text-background transition-all hover:opacity-90 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
             >
               Explore Dotlanth
             </Link>
             <Link
               to="/blog/$slug"
               params={{ slug: 'dotlanth-v26-1-0-alpha' }}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-foreground/15 px-7 py-3.5 text-base font-semibold text-foreground/70 transition-all hover:border-foreground/35 hover:text-foreground active:scale-95"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-foreground/15 px-7 py-3.5 text-base font-semibold text-foreground/70 transition-all hover:border-foreground/35 hover:text-foreground active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
             >
               Read v26.1.0-alpha
             </Link>
@@ -538,8 +556,10 @@ export default function HomeSections({ className }: HomeSectionsProps) {
   const containerRef = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
+    if (import.meta.env.SSR) return
     if (prefersReducedMotion) return
     if (!containerRef.current) return
+    if (window.matchMedia('(max-width: 768px)').matches) return
 
     let ctx: gsap.Context | undefined
 

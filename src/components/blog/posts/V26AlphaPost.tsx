@@ -4,7 +4,7 @@ export default function V26AlphaPost() {
 
             {/* Opening statement */}
             <p className="mb-8 text-xl leading-relaxed text-foreground/90 sm:text-2xl">
-                Software should be legible. You should be able to look at a running system and know — with confidence — what it did, what it was allowed to do, and what happened when something went wrong.
+                Software should be legible. You should be able to look at a running system and know, with confidence, what it did, what it was allowed to do, and what happened when something went wrong.
             </p>
 
             <p className="mb-16 text-lg leading-relaxed">
@@ -24,11 +24,11 @@ export default function V26AlphaPost() {
             </p>
 
             <p className="mb-6 text-lg leading-relaxed">
-                You describe what you want to build in a plain-language file called a <code className="rounded-md bg-foreground/8 px-2 py-0.5 text-sm font-mono text-foreground">dot</code> file. Not JSON, not YAML, not a configuration format masquerading as a programming language. Something closer to pseudocode — readable on the first pass, writable without a manual.
+                You describe what you want to build in a plain-language file called a <code className="rounded-md bg-foreground/8 px-2 py-0.5 text-sm font-mono text-foreground">dot</code> file. Not JSON, not YAML, not a configuration format masquerading as a programming language. Something closer to pseudocode: readable on the first pass, writable without a manual.
             </p>
 
             <div className="my-10 rounded-2xl border border-foreground/10 bg-foreground/4 px-7 py-6">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-foreground/40">A dotDSL file — the entire definition of an HTTP API</p>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-foreground/60">A dotDSL file: the entire definition of an HTTP API</p>
                 <pre className="overflow-x-auto text-sm leading-relaxed text-foreground/70">
                     {`dot 0.1
 
@@ -63,7 +63,7 @@ end`}
             </p>
 
             <p className="mb-6 text-lg leading-relaxed">
-                That call-out — the <em className="text-foreground">syscall</em> — is where everything interesting happens. Writing a log? Syscall. Starting an HTTP server? Syscall. Every side effect is routed through a single, centralized boundary. This is not an implementation detail. It is the architecture.
+                That call-out, the <em className="text-foreground">syscall</em>, is where everything interesting happens. Writing a log? Syscall. Starting an HTTP server? Syscall. Every side effect is routed through a single, centralized boundary. This is not an implementation detail. It is the architecture.
             </p>
 
             {/* Callout block */}
@@ -73,9 +73,9 @@ end`}
                 </p>
             </div>
 
-            <p className="mb-16 text-lg leading-relaxed">
-                The capability model is deny-by-default. If you haven't explicitly declared to allow http listen in your <code className="rounded-md bg-foreground/8 px-2 py-0.5 text-sm font-mono text-foreground">dot</code> file, your process cannot listen on a socket. Full stop. Security is not a setting you can forget to enable. It is the starting state.
-            </p>
+	            <p className="mb-16 text-lg leading-relaxed">
+	                The capability model is deny-by-default. If you haven’t declared <code className="rounded-md bg-foreground/8 px-2 py-0.5 text-sm font-mono text-foreground">allow net.http.listen</code> in your <code className="rounded-md bg-foreground/8 px-2 py-0.5 text-sm font-mono text-foreground">dot</code> file, your process cannot listen on a socket. Full stop. Security is not a setting you can forget to enable. It is the starting state.
+	            </p>
 
             <div className="mb-16 h-px w-full bg-foreground/8" />
 
@@ -85,11 +85,11 @@ end`}
             </h2>
 
             <p className="mb-6 text-lg leading-relaxed">
-                From the moment a program begins executing, Dotlanth is recording. Run metadata, structured log events, server start times, incoming requests, outgoing responses — all of it flows through the syscall boundary and into a local database called DotDB.
+                From the moment a program begins executing, Dotlanth is recording. Run metadata, structured log events, server start times, incoming requests, and outgoing responses. All of it flows through the syscall boundary and into a local database called DotDB.
             </p>
 
             <p className="mb-6 text-lg leading-relaxed">
-                This is what we call <strong className="text-foreground">record-first</strong>. Observability is not a plugin. It is the default mode of execution. You do not opt in to having a run history. You would have to actively opt out — and we do not give you a way to do that in v26.1.
+                This is what we call <strong className="text-foreground">record-first</strong>. Observability is not a plugin. It is the default mode of execution. You do not opt in to having a run history. You would have to actively opt out. We do not give you a way to do that in v26.1.
             </p>
 
             <p className="mb-10 text-lg leading-relaxed">
@@ -100,7 +100,7 @@ end`}
             <div className="mb-16 grid grid-cols-1 gap-6 sm:grid-cols-3">
                 {[
                     { label: "One File", desc: "Your entire API lives in a single dot file. The runtime derives everything from it." },
-                    { label: "One Boundary", desc: "All side effects — logs, network, state — route through a single capability-gated syscall layer." },
+                    { label: "One Boundary", desc: "All side effects (logs, network, state) route through a single capability-gated syscall layer." },
                     { label: "One Record", desc: "Every run is automatically persisted. You always know what your software did." },
                 ].map(({ label, desc }) => (
                     <div key={label} className="rounded-2xl border border-foreground/10 bg-foreground/4 px-6 py-6">
@@ -129,7 +129,7 @@ end`}
             </p>
 
             <p className="text-lg leading-relaxed">
-                That is what we are building. v26.1.0-alpha is the first brick in that wall. If you are a builder who cares about runtime transparency, security by design, and execution you can actually reason about — we would love for you to try it.
+                That is what we are building. v26.1.0-alpha is the first brick in that wall. If you are a builder who cares about runtime transparency, security by design, and execution you can actually reason about, we’d love for you to try it.
             </p>
         </div>
     )

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { getBlogPostBySlug } from '@/lib/blog'
+import { absoluteUrl, DEFAULT_OG_IMAGE_PATH, getSiteUrl } from '@/lib/seo'
 
 const INCLUDE_DRAFTS = import.meta.env.DEV
 
@@ -18,7 +19,10 @@ export const Route = createFileRoute('/blog/$slug')({
     const post = getBlogPostBySlug(params.slug, { includeDrafts: INCLUDE_DRAFTS })
     const title = post ? `${post.frontmatter.title} | Synerthink Blog` : 'Blog | Synerthink'
     const description = post?.frontmatter.description ?? 'Synerthink blog.'
-    const image = post?.frontmatter.image
+    const url = absoluteUrl(`/blog/${params.slug}`)
+    const image = absoluteUrl(post?.frontmatter.image ?? DEFAULT_OG_IMAGE_PATH)
+    const siteUrl = getSiteUrl()
+    const organizationId = `${siteUrl}/#organization`
 
     return {
       meta: [
@@ -28,7 +32,8 @@ export const Route = createFileRoute('/blog/$slug')({
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:type', content: 'article' },
-        ...(image ? [{ property: 'og:image', content: image }] : []),
+        { property: 'og:url', content: url },
+        { property: 'og:image', content: image },
         ...(post?.frontmatter.date
           ? [
             {
@@ -37,11 +42,45 @@ export const Route = createFileRoute('/blog/$slug')({
             },
           ]
           : []),
-        { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
-        ...(image ? [{ name: 'twitter:image', content: image }] : []),
+        { name: 'twitter:image', content: image },
+        ...(post
+          ? [
+            {
+              'script:ld+json': {
+                '@context': 'https://schema.org',
+                '@type': 'BlogPosting',
+                headline: post.frontmatter.title,
+                description,
+                url,
+                mainEntityOfPage: {
+                  '@type': 'WebPage',
+                  '@id': url,
+                },
+                image: [image],
+                datePublished: post.frontmatter.date,
+                dateModified: post.frontmatter.date,
+                author: {
+                  '@type': 'Organization',
+                  '@id': organizationId,
+                  name: 'Synerthink',
+                },
+                publisher: {
+                  '@type': 'Organization',
+                  '@id': organizationId,
+                  name: 'Synerthink',
+                  logo: {
+                    '@type': 'ImageObject',
+                    url: absoluteUrl('/android-chrome-512x512.png'),
+                  },
+                },
+              },
+            },
+          ]
+          : []),
       ],
+      links: [{ rel: 'canonical', href: url }],
     }
   },
   component: BlogPostRoute,
@@ -53,6 +92,11 @@ function BlogPostRoute() {
 
   // This shouldn't happen because we check in the loader, but TS needs it
   if (!post) return null
+
+  const displayTitle =
+    post.kind === 'releases'
+      ? `Introducing ${post.frontmatter.title}`
+      : post.frontmatter.title
 
   return (
     <main className="relative flex min-h-screen flex-col bg-background text-foreground transition-colors">
@@ -76,8 +120,7 @@ function BlogPostRoute() {
 
         {/* Title */}
         <h1 className="text-balance text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl leading-[1.15] mb-12">
-          Introducing <br className="hidden sm:block" />
-          Dotlanth v26.1.0-alpha
+          {displayTitle}
         </h1>
 
         {/* Call to Action Button */}
@@ -86,7 +129,7 @@ function BlogPostRoute() {
             href="https://github.com/ademclk/dotlanth/releases/tag/v26.1.0-alpha"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-8 py-3.5 text-sm font-semibold shadow-sm transition-transform hover:scale-105"
+            className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-8 py-3.5 text-sm font-semibold shadow-sm transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Try it on GitHub
           </a>

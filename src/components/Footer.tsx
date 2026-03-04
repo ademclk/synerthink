@@ -20,7 +20,7 @@ const footerLinks = [
         heading: "Developers",
         links: [
             { label: "GitHub", href: "https://github.com/synerthink", external: true },
-            { label: "Documentation", href: "/" },
+            { label: "Documentation", href: "https://github.com/ademclk/dotlanth", external: true },
         ],
     },
     {
@@ -40,9 +40,9 @@ export function Footer() {
                 <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:gap-16">
                     {footerLinks.map((group) => (
                         <div key={group.heading}>
-                            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/35 mb-5">
+                            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/60 mb-5">
                                 {group.heading}
-                            </h3>
+                            </h2>
                             <ul className="space-y-3">
                                 {group.links.map((link) =>
                                     link.external ? (
@@ -77,23 +77,33 @@ export function Footer() {
 
                 {/* Bottom bar */}
                 <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <p className="text-xs text-foreground/30">
-                        &copy; 2023 Synerthink. All rights reserved.
+                    <p className="text-xs text-foreground/60">
+                        &copy; 2026 Synerthink. All rights reserved.
                     </p>
-                    <p className="text-xs text-foreground/30">
+                    <p className="text-xs text-foreground/60">
                         Building foundational computing products for the AI era.
                     </p>
                 </div>
             </div>
 
             {/* Giant SYNERTHINK wordmark */}
-            <div className="w-full overflow-clip select-none pointer-events-none flex justify-center items-center" aria-hidden="true">
-                <p
-                    className="whitespace-nowrap font-semibold leading-none tracking-[-0.04em] text-foreground/[0.04]"
-                    style={{ fontSize: 'clamp(3rem, 16vw, 16rem)', paddingInline: '1.5rem', paddingBlock: '1.5rem' }}
-                >
-                    SYNERTHINK
-                </p>
+            <div
+                className="w-full overflow-clip select-none pointer-events-none flex justify-center items-center"
+                aria-hidden="true"
+            >
+                <img
+                    src="/wordmark-synerthink.svg"
+                    alt=""
+                    width={1200}
+                    height={220}
+                    decoding="async"
+                    className="opacity-[0.08] dark:invert"
+                    style={{
+                        height: 'clamp(3rem, 16vw, 16rem)',
+                        paddingInline: '1.5rem',
+                        paddingBlock: '1.5rem',
+                    }}
+                />
             </div>
         </footer>
     );

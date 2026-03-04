@@ -31,7 +31,7 @@ function KeynoteCtaLink({ cta }: { cta: KeynoteCta }) {
         className={className}
         href={cta.href}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
       >
         <span className="relative">
           {cta.label}
@@ -89,14 +89,14 @@ export default function HomeKeynoteFlow({ className }: HomeKeynoteFlowProps) {
           '\n',
         ),
         ctas: [
-          { kind: 'route', label: 'read the vision', to: '/blog/' },
+          { kind: 'route', label: 'read the vision', to: '/blog' },
         ],
       },
       {
         id: 'substrate',
         kicker: '02 / substrate',
         title: 'Execution · state · control.',
-        body: 'The layers beneath the app. Make them legible, and the rest becomes engineering — not folklore.',
+        body: 'The layers beneath the app. Make them legible, and the rest becomes engineering, not folklore.',
         bullets: ['Execution paths stay narrow', 'State stays inspectable', 'Control stays explicit'],
         ascii: [
           'state ───────┼────── control',
@@ -140,6 +140,7 @@ export default function HomeKeynoteFlow({ className }: HomeKeynoteFlowProps) {
   )
 
   React.useEffect(() => {
+    if (import.meta.env.SSR) return
     let ctx: gsap.Context | undefined
 
     if (prefersReducedMotion) return
@@ -260,7 +261,7 @@ export default function HomeKeynoteFlow({ className }: HomeKeynoteFlowProps) {
                   <div className="relative">
                     <div className="home-keynote-meta flex items-center justify-between gap-6 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/55">
                       <span>{slide.kicker}</span>
-                      <span aria-hidden="true" className="text-foreground/35">
+                      <span aria-hidden="true" className="text-foreground/60">
                         {position}/{String(slides.length).padStart(2, '0')}
                       </span>
                     </div>
@@ -282,7 +283,7 @@ export default function HomeKeynoteFlow({ className }: HomeKeynoteFlowProps) {
                           <li key={bullet} className="flex gap-3">
                             <span
                               aria-hidden="true"
-                              className="mt-1 font-mono text-xs text-foreground/35"
+                              className="mt-1 font-mono text-xs text-foreground/60"
                             >
                               +
                             </span>
@@ -294,7 +295,7 @@ export default function HomeKeynoteFlow({ className }: HomeKeynoteFlowProps) {
                       <div className="flex flex-col justify-between gap-5">
                         <pre
                           aria-hidden="true"
-                          className="home-keynote-ascii select-none whitespace-pre rounded-2xl border border-foreground/10 bg-background/30 px-5 py-4 font-mono text-[12px] leading-4 text-foreground/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+                          className="home-keynote-ascii select-none whitespace-pre rounded-2xl border border-foreground/10 bg-background/30 px-5 py-4 font-mono text-[12px] leading-4 text-foreground/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
                         >
                           {slide.ascii}
                         </pre>

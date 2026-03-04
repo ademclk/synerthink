@@ -52,14 +52,14 @@ const COLORS = [
   [74, 222, 128],  // Green 400
   [22, 101, 52],   // Green 800
   [20, 83, 45],    // Green 900
-  [167, 243, 208], // Emerald 200 — bright accent
-  [190, 242, 100], // Lime 400 — yellow-green pop
+  [167, 243, 208], // Emerald 200: bright accent
+  [190, 242, 100], // Lime 400: yellow-green pop
 ];
 
 /**
  * Render vivid gradient blobs to an offscreen canvas.
- * The blobs are drawn at full sharpness — the frosted-glass blur
- * is handled by a CSS backdrop-filter overlay in the component.
+ * The blobs are drawn at full sharpness. The frosted-glass blur is handled by a
+ * CSS backdrop-filter overlay in the component.
  */
 function renderBlobsToDataURL(seed: string, size: number): string {
   const canvas = document.createElement("canvas");
@@ -71,11 +71,11 @@ function renderBlobsToDataURL(seed: string, size: number): string {
   const rand = sfc32(seedKeys[0], seedKeys[1], seedKeys[2], seedKeys[3]);
   const pickColor = () => COLORS[Math.floor(rand() * COLORS.length)];
 
-  // Base fill — medium-dark green (not black, so blobs glow against it)
+  // Base fill: medium-dark green (not black, so blobs glow against it)
   ctx.fillStyle = "rgb(4, 40, 22)";
   ctx.fillRect(0, 0, size, size);
 
-  // Pass 1 — large background blobs (wide, soft)
+  // Pass 1: large background blobs (wide, soft)
   const bgBlobs = 5 + Math.floor(rand() * 3);
   for (let i = 0; i < bgBlobs; i++) {
     const [r, g, b] = pickColor();
@@ -94,7 +94,7 @@ function renderBlobsToDataURL(seed: string, size: number): string {
     ctx.fillRect(0, 0, size, size);
   }
 
-  // Pass 2 — medium vivid blobs for colour richness
+  // Pass 2: medium vivid blobs for colour richness
   const midBlobs = 4 + Math.floor(rand() * 3);
   for (let i = 0; i < midBlobs; i++) {
     const [r, g, b] = pickColor();
@@ -113,7 +113,7 @@ function renderBlobsToDataURL(seed: string, size: number): string {
     ctx.fillRect(0, 0, size, size);
   }
 
-  // Pass 3 — small bright accent highlights
+  // Pass 3: small bright accent highlights
   const accents = 3 + Math.floor(rand() * 2);
   for (let i = 0; i < accents; i++) {
     const [r, g, b] = pickColor();
@@ -130,8 +130,7 @@ function renderBlobsToDataURL(seed: string, size: number): string {
     ctx.fillRect(0, 0, size, size);
   }
 
-  // Light canvas-level softening (1 pass, not too heavy —
-  // the real blur comes from backdrop-filter in CSS)
+  // Light canvas-level softening (1 pass, not too heavy; the real blur comes from CSS backdrop-filter)
   const small = 128;
   const tmpCanvas = document.createElement("canvas");
   tmpCanvas.width = small;
@@ -177,7 +176,7 @@ export default function ScalableGradientBlur({
         <div className="absolute inset-0 bg-[#042816]" />
       )}
 
-      {/* Layer 2: frosted-glass backdrop blur — sits on top of the blobs */}
+      {/* Layer 2: frosted-glass backdrop blur, sits on top of the blobs */}
       <div
         className="absolute inset-0"
         style={{
@@ -186,13 +185,13 @@ export default function ScalableGradientBlur({
         }}
       />
 
-      {/* Version label — on top of everything */}
+      {/* Version label: on top of everything */}
       {versionLabel && (
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           <span
             className="font-bold tracking-tight text-white drop-shadow-xl"
             style={{
-              fontSize: "clamp(20px, 6cqw, 56px)",
+              fontSize: "clamp(40px, 12cqw, 112px)",
               textShadow: "0 2px 24px rgba(0,0,0,0.3)",
             }}
           >

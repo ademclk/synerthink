@@ -9,18 +9,29 @@ import {
 } from '@phosphor-icons/react'
 import type { ReactNode } from 'react'
 import PixelArtHero from '@/components/PixelArtHero'
+import { absoluteUrl } from '@/lib/seo'
 
 export const Route = createFileRoute('/products/dotlanth')({
-  head: () => ({
-    meta: [
-      { title: 'Dotlanth | Synerthink' },
-      {
-        name: 'description',
-        content:
-          'Dotlanth is a high-trust execution fabric for autonomous systems and frontier compute. Artifacts by default, record/replay by default, and capability-explicit security.',
-      },
-    ],
-  }),
+  head: () => {
+    const title = 'Dotlanth | Synerthink'
+    const description =
+      'Dotlanth is a high-trust execution fabric for autonomous systems and frontier compute. Artifacts by default, record/replay by default, and capability-explicit security.'
+    const url = absoluteUrl('/products/dotlanth')
+
+    return {
+      meta: [
+        { title },
+        { name: 'description', content: description },
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: description },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: url },
+        { name: 'twitter:title', content: title },
+        { name: 'twitter:description', content: description },
+      ],
+      links: [{ rel: 'canonical', href: url }],
+    }
+  },
   component: DotlanthPage,
 })
 
@@ -29,7 +40,7 @@ function DotlanthPage() {
     <main className="relative flex min-h-screen flex-col bg-background text-foreground transition-colors">
       {/* Hero */}
       <section className="relative w-full overflow-hidden">
-        <div className="absolute inset-0 opacity-75">
+        <div className="absolute inset-0 hidden md:block opacity-75">
           <PixelArtHero />
         </div>
         <div className="absolute inset-0 bg-background/70" />
@@ -69,16 +80,16 @@ function DotlanthPage() {
               <a
                 href="https://github.com/ademclk/dotlanth/releases"
                 target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-2xl border border-primary-foreground/20 bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg glass-float hover:brightness-110 active:scale-[0.98] sm:px-8 sm:py-4 lg:text-lg"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-2xl border border-black/15 bg-primary px-6 py-3 text-base font-semibold text-black shadow-lg glass-float hover:brightness-110 active:scale-[0.98] sm:px-8 sm:py-4 lg:text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
               >
                 View releases
-                <ArrowRight className="ml-2 h-5 w-5" weight="bold" />
+                <ArrowRight className="ml-2 h-5 w-5" weight="bold" aria-hidden="true" focusable="false" />
               </a>
               <Link
                 to="/blog/$slug"
                 params={{ slug: 'dotlanth-v26-1-0-alpha' }}
-                className="inline-flex items-center justify-center rounded-2xl border border-foreground/15 bg-background/70 glass glass-1 px-6 py-3 text-base font-semibold text-foreground shadow-lg glass-float hover:bg-background/80 active:scale-[0.98] sm:px-8 sm:py-4 lg:text-lg"
+                className="inline-flex items-center justify-center rounded-2xl border border-foreground/15 bg-background/70 glass glass-1 px-6 py-3 text-base font-semibold text-foreground shadow-lg glass-float hover:bg-background/80 active:scale-[0.98] sm:px-8 sm:py-4 lg:text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
               >
                 Read v26.1.0-alpha
               </Link>
@@ -124,11 +135,9 @@ function DotlanthPage() {
               systems. It runs your system’s behavior, records what happened,
               and makes runs inspectable through artifacts.
             </p>
-            <p className="mt-3 text-base text-foreground/75">
-              dotDSL is a YAML-like declarative spec for capabilities and
-              execution. Dotlanth executes it on a register-based VM and records run
-              history in DotDB.
-            </p>
+	            <p className="mt-3 text-base text-foreground/75">
+	              dotDSL is a small declarative language for capabilities and execution. Dotlanth runs it on a register-based VM and records run history in DotDB.
+	            </p>
           </GlassPanel>
 
           <GlassPanel>
@@ -152,13 +161,13 @@ function DotlanthPage() {
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <GlassPanel>
-            <h3 className="text-xl font-semibold">Dotlanth runtime</h3>
-            <ul className="mt-4 space-y-2 text-base text-foreground/75">
-              <li>Register-based VM</li>
-              <li>dotDSL v0.1 (YAML-like spec)</li>
-              <li>Default record/replay mode</li>
-            </ul>
-          </GlassPanel>
+	            <h3 className="text-xl font-semibold">Dotlanth runtime</h3>
+	            <ul className="mt-4 space-y-2 text-base text-foreground/75">
+	              <li>Register-based VM</li>
+	              <li>dotDSL v0.1 (declarative language)</li>
+	              <li>Default record/replay mode</li>
+	            </ul>
+	          </GlassPanel>
           <GlassPanel>
             <h3 className="text-xl font-semibold">State and control</h3>
             <ul className="mt-4 space-y-2 text-base text-foreground/75">
@@ -366,15 +375,15 @@ function DotlanthPage() {
               <a
                 href="https://github.com/ademclk/dotlanth/releases"
                 target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-2xl border border-primary-foreground/20 bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg glass-float hover:brightness-110 active:scale-[0.98] sm:text-base"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-2xl border border-black/15 bg-primary px-6 py-3 text-sm font-semibold text-black shadow-lg glass-float hover:brightness-110 active:scale-[0.98] sm:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
               >
                 View releases
-                <ArrowRight className="ml-2 h-4 w-4" weight="bold" />
+                <ArrowRight className="ml-2 h-4 w-4" weight="bold" aria-hidden="true" focusable="false" />
               </a>
               <Link
                 to="/products"
-                className="inline-flex items-center justify-center rounded-2xl border border-foreground/15 bg-background/70 glass glass-1 px-6 py-3 text-sm font-semibold text-foreground glass-float hover:bg-background/80 active:scale-[0.98] sm:text-base"
+                className="inline-flex items-center justify-center rounded-2xl border border-foreground/15 bg-background/70 glass glass-1 px-6 py-3 text-sm font-semibold text-foreground glass-float hover:bg-background/80 active:scale-[0.98] sm:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
               >
                 Back to products
               </Link>

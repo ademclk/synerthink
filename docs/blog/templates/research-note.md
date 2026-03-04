@@ -1,11 +1,11 @@
 ---
-title: "Research Note — Title"
+title: "Research Note: Title"
 date: TBD
 tags: [research]
 status: draft
 ---
 
-# Research Note — Title
+# Research Note: Title
 
 ## Problem
 
@@ -39,4 +39,3 @@ Be honest.
 ## Next steps
 
 What we will try next.
-

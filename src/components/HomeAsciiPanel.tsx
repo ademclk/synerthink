@@ -59,6 +59,7 @@ export default function HomeAsciiPanel({ className }: HomeAsciiPanelProps) {
   const asciiRule = useMemo(() => '─'.repeat(220), [])
 
   useEffect(() => {
+    if (import.meta.env.SSR) return
     let ctx: gsap.Context | undefined
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -142,7 +143,7 @@ export default function HomeAsciiPanel({ className }: HomeAsciiPanelProps) {
           {asciiRule}
         </div>
 
-        <pre className="home-ascii-line mt-6 text-center font-mono text-xs leading-4 text-foreground/45">
+        <pre className="home-ascii-line mt-6 text-center font-mono text-xs leading-4 text-foreground/70">
           {`          execution
              │
 state ───────┼────── control
@@ -155,7 +156,7 @@ state ───────┼────── control
             Substrate
           </p>
           <p className="mt-3 text-pretty text-base text-foreground/80 sm:text-[1.05rem]">
-            Execution · state · control — the layers beneath the app.
+            Execution · state · control: the layers beneath the app.
           </p>
           <p className="mt-1 text-pretty text-sm text-foreground/70 sm:text-base">
             Simple to use. Predictable to operate. Built for real‑world autonomy.
@@ -265,4 +266,3 @@ state ───────┼────── control
     </div>
   )
 }
-

@@ -7,9 +7,12 @@
 		"node": "22"
 	},
 	"scripts": {
+		"predev": "node scripts/copy-public-vendors.mjs",
 		"dev": "vite dev --port 3000",
+		"prebuild": "node scripts/copy-public-vendors.mjs",
 		"build": "vite build",
-		"build:azure": "NITRO_PRESET=azure-swa vite build && cp staticwebapp.config.json .output/public/staticwebapp.config.json",
+		"prebuild:azure": "node scripts/copy-public-vendors.mjs",
+		"build:azure": "NITRO_PRESET=azure-swa vite build && cp public/staticwebapp.config.json .output/public/staticwebapp.config.json",
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},

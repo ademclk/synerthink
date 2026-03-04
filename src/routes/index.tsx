@@ -1,29 +1,44 @@
+import * as React from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowUpRightIcon } from '@phosphor-icons/react'
-import PixelArtHero from '@/components/PixelArtHero'
 import HomeSections from '@/components/HomeSections'
+import PixelArtHero from '@/components/PixelArtHero'
+import { absoluteUrl } from '@/lib/seo'
+import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion'
 
 export const Route = createFileRoute('/')({
-  head: () => ({
-    meta: [
-      { title: 'Synerthink' },
-      {
-        name: 'description',
-        content:
-          'We build foundational computing products that remove complexity in the AI era.',
-      },
-    ],
-  }),
+  head: () => {
+    const title = 'Synerthink'
+    const description =
+      'We build foundational computing products that remove complexity in the AI era.'
+    const url = absoluteUrl('/')
+
+    return {
+      meta: [
+        { title },
+        { name: 'description', content: description },
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: description },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: url },
+        { name: 'twitter:title', content: title },
+        { name: 'twitter:description', content: description },
+      ],
+      links: [{ rel: 'canonical', href: url }],
+    }
+  },
   component: HomePage,
 })
 
 function HomePage() {
+  const prefersReducedMotion = usePrefersReducedMotion()
+
   return (
     <main className="relative flex min-h-screen flex-col bg-background text-foreground transition-colors">
-      {/* Hero — full-bleed: sits behind navbar via negative margin-top */}
+      {/* Hero: full-bleed, sits behind navbar via negative margin-top */}
       <section className="relative -mt-[4.5rem] min-h-[100dvh] w-full overflow-hidden isolation-isolate">
-        <div className="pointer-events-none absolute inset-0 blur-sm scale-[1.01]">
-          <PixelArtHero />
+        <div className="pointer-events-none absolute inset-0 hidden md:block blur-sm scale-[1.01]">
+          {prefersReducedMotion ? null : <PixelArtHero />}
         </div>
         <div className="absolute inset-0 bg-background/45" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/10 to-background dark:via-background/15" />
@@ -56,6 +71,8 @@ function HomePage() {
                   <ArrowUpRightIcon
                     className="h-[1em] w-[1em] translate-x-[-0.25em] opacity-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
                     weight="bold"
+                    aria-hidden="true"
+                    focusable="false"
                   />
                 </span>
               </Link>
@@ -63,7 +80,7 @@ function HomePage() {
               <a
                 href="https://github.com/ademclk/dotlanth/releases"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="group relative inline-flex w-fit items-center whitespace-nowrap rounded-md text-sm font-semibold leading-none tracking-tight text-foreground/80 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25 sm:text-base"
               >
                 <span className="relative">
@@ -77,6 +94,8 @@ function HomePage() {
                   <ArrowUpRightIcon
                     className="h-[1em] w-[1em] translate-x-[-0.25em] opacity-0 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
                     weight="bold"
+                    aria-hidden="true"
+                    focusable="false"
                   />
                 </span>
               </a>

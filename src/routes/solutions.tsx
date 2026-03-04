@@ -1,17 +1,28 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
+import { absoluteUrl } from '@/lib/seo'
 
 export const Route = createFileRoute('/solutions')({
-  head: () => ({
-    meta: [
-      { title: 'Solutions | Synerthink' },
-      {
-        name: 'description',
-        content:
-          'Solutions coming soon — learn how Synerthink approaches enterprise, startup, and developer needs with Dotlanth.',
-      },
-    ],
-  }),
+  head: () => {
+    const title = 'Solutions | Synerthink'
+    const description =
+      'Solutions are coming soon. Learn how Synerthink approaches enterprise, startup, and developer needs with Dotlanth.'
+    const url = absoluteUrl('/solutions')
+
+    return {
+      meta: [
+        { title },
+        { name: 'description', content: description },
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: description },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: url },
+        { name: 'twitter:title', content: title },
+        { name: 'twitter:description', content: description },
+      ],
+      links: [{ rel: 'canonical', href: url }],
+    }
+  },
   component: SolutionsPage,
 })
 
@@ -19,6 +30,7 @@ function SolutionsPage() {
   const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (import.meta.env.SSR) return
     let ctx: gsap.Context | undefined
 
     ;(async () => {
@@ -52,14 +64,14 @@ function SolutionsPage() {
       <div className="development-notice mx-auto max-w-2xl text-center">
         <h1 className="text-4xl font-bold mb-6">Solutions coming soon</h1>
         <p className="mb-6 text-lg text-muted-foreground">
-          We’re currently developing our comprehensive solutions documentation.
-          Soon you’ll find detailed information about:
+          We’re currently drafting solution briefs for teams building and operating autonomous systems.
+          Soon you’ll find guidance on:
         </p>
         <ul className="space-y-2 text-muted-foreground">
-          <li>• Microservices Architecture</li>
-          <li>• Real-time Application Development</li>
-          <li>• Data Processing Solutions</li>
-          <li>• API Development Patterns</li>
+          <li>• Agent operability and run lifecycle</li>
+          <li>• Capability security and isolation</li>
+          <li>• Record/replay debugging workflows</li>
+          <li>• Modular upgrades and deterministic surfaces</li>
         </ul>
       </div>
     </main>

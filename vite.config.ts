@@ -11,7 +11,23 @@ export default defineConfig({
     nitro(),
     tsconfigPaths({ projects: ['./tsconfig.json'] }),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({
+      sitemap: {
+        enabled: true,
+        host: (process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://synerthink.com').replace(/\/+$/, ''),
+        outputPath: 'sitemap.xml',
+      },
+      pages: [
+        { path: '/' },
+        { path: '/about' },
+        { path: '/solutions' },
+        { path: '/resources' },
+        { path: '/products' },
+        { path: '/products/dotlanth' },
+        { path: '/blog' },
+        { path: '/blog/dotlanth-v26-1-0-alpha' },
+      ],
+    }),
     react(),
   ],
 })

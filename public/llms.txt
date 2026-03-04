@@ -1,0 +1,21 @@
+# Synerthink
+
+> Synerthink builds foundational computing products for autonomous systems. Our first product, Dotlanth, is a high-trust execution fabric focused on record-first observability, replayable runs, and capability-explicit security.
+
+Synerthink exists to make execution legible. We design small cores with stable interfaces, explicit control, and artifacts you can audit.
+
+## Key Pages
+
+- [Home](/): Company overview.
+- [About](/about): Thesis and operating principles.
+- [Products](/products): Product index.
+- [Dotlanth](/products/dotlanth): Product overview and roadmap.
+- [Blog](/blog): Research and releases.
+- [Dotlanth v26.1.0-alpha](/blog/dotlanth-v26-1-0-alpha): Release post.
+
+## External Links
+
+- [Synerthink on GitHub](https://github.com/synerthink): Organization profile.
+- [Dotlanth releases](https://github.com/ademclk/dotlanth/releases): Binaries and changelogs.
+- [Synerthink on LinkedIn](https://linkedin.com/company/synerthink): Company updates.
+- [Synerthink on X](https://twitter.com/synerthink): Announcements.

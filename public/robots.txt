@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /_serverFn/
+
+Sitemap: https://synerthink.com/sitemap.xml
+

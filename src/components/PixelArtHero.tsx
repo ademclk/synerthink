@@ -1,10 +1,12 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import type p5 from 'p5';
+import { loadP5 } from '@/lib/load-p5';
 
 type NavigatorWithExtras = Navigator & {
     deviceMemory?: number;
     connection?: {
         effectiveType?: string;
+        saveData?: boolean;
     };
 };
 
@@ -28,6 +30,8 @@ type Pixel = {
     cachedFinalColor: RGB;
 };
 
+const STATIC_PATTERN_URL = '/pixel-hero.svg';
+
 // Device performance detection utility
 const detectLowEndDevice = (): boolean => {
     // Check hardware concurrency (CPU cores)
@@ -50,92 +54,30 @@ const detectLowEndDevice = (): boolean => {
     const connection = navigatorWithExtras.connection;
     const effectiveType = connection?.effectiveType;
     const isSlowConnection = effectiveType === 'slow-2g' || effectiveType === '2g';
+    const saveData = connection?.saveData === true;
 
     return cores < 4 ||
         (memory && memory < 4) ||
         isOldAndroid ||
         isOldIOS ||
         isSlowConnection ||
+        saveData ||
         false; // Default to false for unknown devices
 };
 
 const PixelArtHero = () => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [isLowEndDevice, setIsLowEndDevice] = useState<boolean>(false);
-    const [staticPattern, setStaticPattern] = useState<string>('');
-
-    // Generate a static SVG pattern for low-end devices
-    const generateStaticPattern = () => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const rect = container.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-
-        const pixelSize = 12;
-        const spacing = 24; // Larger spacing for fewer pixels
-        const cols = Math.floor(width / spacing);
-        const rows = Math.floor(height / spacing);
-
-        // Limit pixels for performance
-        const maxPixels = 500;
-        const totalPixels = cols * rows;
-        const keepProbability = totalPixels > maxPixels ? maxPixels / totalPixels : 1;
-
-        // Generate SVG pixels
-        let svgContent = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
-
-        // Get theme colors
-        const isDark = document.documentElement.classList.contains('dark');
-        const primaryColor = '#00A6AE'; // Cyan
-        const grayColor = isDark ? '#323232' : '#646464';
-        const bgColor = isDark ? '#000000' : '#FFFFFF';
-
-        const colors = [primaryColor, grayColor, bgColor];
-
-        for (let col = 0; col < cols; col++) {
-            for (let row = 0; row < rows; row++) {
-                if (Math.random() < keepProbability) {
-                    const x = col * spacing + spacing / 2 - pixelSize / 2;
-                    const y = row * spacing + spacing / 2 - pixelSize / 2;
-                    const r = Math.random();
-                    const colorIndex = r < 0.08 ? 0 : (r < 0.34 ? 1 : 2);
-                    const color = colors[colorIndex];
-                    const opacity = 0.7 + Math.random() * 0.3;
-
-                    svgContent += `<rect x="${x}" y="${y}" width="${pixelSize}" height="${pixelSize}" fill="${color}" opacity="${opacity}" />`;
-                }
-            }
-        }
-
-        svgContent += '</svg>';
-
-        // Convert to data URL
-        const dataUrl = `data:image/svg+xml;base64,${btoa(svgContent)}`;
-        setStaticPattern(dataUrl);
-    };
+    const hasStartedP5Ref = useRef(false);
 
     useEffect(() => {
+        if (import.meta.env.SSR) return;
         // Detect device performance on mount
-        const lowEnd = detectLowEndDevice();
-        setIsLowEndDevice(lowEnd);
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
+        const lowEnd = detectLowEndDevice() || prefersReducedMotion || isSmallScreen;
 
-        // For low-end devices, generate a static SVG pattern once
         if (lowEnd) {
-            // Delay generation to ensure container is sized
-            setTimeout(generateStaticPattern, 100);
-
-            // Add resize handler for static pattern
-            const handleStaticResize = () => {
-                setTimeout(generateStaticPattern, 100);
-            };
-
-            window.addEventListener('resize', handleStaticResize);
-
-            return () => {
-                window.removeEventListener('resize', handleStaticResize);
-            };
+            return;
         }
 
         let pixels: Pixel[] = [];
@@ -391,21 +333,25 @@ const PixelArtHero = () => {
             };
         };
 
-        // Defer p5 initialization to avoid blocking main thread
-        let isCancelled = false;
-        let p5Instance: p5 | null = null;
-        let initTimeout: ReturnType<typeof setTimeout> | undefined;
+	        // Defer p5 initialization to avoid blocking main thread
+	        let isCancelled = false;
+	        let p5Instance: p5 | null = null;
 
-        (async () => {
-            const { default: P5 } = await import('p5');
+        const initP5 = async () => {
+            if (hasStartedP5Ref.current) return;
+            hasStartedP5Ref.current = true;
+            const P5 = await loadP5();
             if (isCancelled) return;
+            if (!containerRef.current) return;
+            p5Instance = new P5(sketch, containerRef.current);
+        };
 
-            initTimeout = window.setTimeout(() => {
-                if (containerRef.current) {
-                    p5Instance = new P5(sketch, containerRef.current);
-                }
-            }, 100); // Small delay to let main content render first
-        })();
+        // Only load p5 after a real user interaction.
+        const triggerInit = () => {
+            initP5().catch(() => {
+                // Best-effort only; keep the page usable even if p5 fails to load.
+            });
+        };
 
         // Handle window resize to ensure canvas stays in sync
         const handleResize = () => {
@@ -479,7 +425,11 @@ const PixelArtHero = () => {
 
         window.addEventListener('resize', handleResize);
         const container = containerRef.current;
-        const overlay = container?.querySelector('div') as HTMLElement; // Get the overlay div
+        const overlay = container?.querySelector('[data-pixel-overlay]') as HTMLElement | null;
+
+        window.addEventListener('keydown', triggerInit, { once: true });
+        container?.addEventListener('pointerenter', triggerInit, { once: true, passive: true });
+        container?.addEventListener('pointerdown', triggerInit, { once: true, passive: true });
 
         container?.addEventListener('mouseenter', handleMouseEnter);
         container?.addEventListener('mouseleave', handleMouseLeave);
@@ -490,8 +440,10 @@ const PixelArtHero = () => {
 
         return () => {
             isCancelled = true;
-            if (initTimeout) clearTimeout(initTimeout);
             window.removeEventListener('resize', handleResize);
+            window.removeEventListener('keydown', triggerInit);
+            container?.removeEventListener('pointerenter', triggerInit);
+            container?.removeEventListener('pointerdown', triggerInit);
             container?.removeEventListener('mouseenter', handleMouseEnter);
             container?.removeEventListener('mouseleave', handleMouseLeave);
             // Remove touch event listeners
@@ -504,30 +456,14 @@ const PixelArtHero = () => {
         };
     }, []);
 
-    // Render static pattern for low-end devices
-    if (isLowEndDevice) {
-        return (
-            <div ref={containerRef} className="absolute inset-0 overflow-hidden">
-                {staticPattern && (
-                    <div
-                        className="absolute inset-0 bg-center bg-no-repeat"
-                        style={{
-                            backgroundImage: `url(${staticPattern})`,
-                            backgroundSize: 'cover'
-                        }}
-                    />
-                )}
-                {/* Transparent overlay for touch events */}
-                <div className="absolute inset-0 z-10 pointer-events-auto" />
-            </div>
-        );
-    }
-
-    // Render full interactive version for high-end devices
     return (
-        <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+        <div ref={containerRef} className="absolute inset-0 overflow-hidden" aria-hidden="true">
+            <div
+                className="absolute inset-0 z-0 bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${STATIC_PATTERN_URL})`, backgroundSize: 'cover' }}
+            />
             {/* Transparent overlay for touch events */}
-            <div className="absolute inset-0 z-10 pointer-events-auto" />
+            <div data-pixel-overlay className="absolute inset-0 z-10 pointer-events-auto" />
         </div>
     );
 };

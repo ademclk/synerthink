@@ -1,17 +1,28 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight } from '@phosphor-icons/react'
+import { absoluteUrl } from '@/lib/seo'
 
 export const Route = createFileRoute('/products/')({
-  head: () => ({
-    meta: [
-      { title: 'Products | Synerthink' },
-      {
-        name: 'description',
-        content:
-          'Explore Synerthink products. Dotlanth is a high-trust execution fabric for autonomous systems and frontier compute. Dotlanth Studio is a private console for operating Dotlanth.',
-      },
-    ],
-  }),
+  head: () => {
+    const title = 'Products | Synerthink'
+    const description =
+      'Explore Synerthink products. Dotlanth is a high-trust execution fabric for autonomous systems and frontier compute. Dotlanth Studio is a private console for operating Dotlanth.'
+    const url = absoluteUrl('/products')
+
+    return {
+      meta: [
+        { title },
+        { name: 'description', content: description },
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: description },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: url },
+        { name: 'twitter:title', content: title },
+        { name: 'twitter:description', content: description },
+      ],
+      links: [{ rel: 'canonical', href: url }],
+    }
+  },
   component: ProductsPage,
 })
 
@@ -20,16 +31,16 @@ function ProductsPage() {
     <main className="min-h-[calc(100svh-4rem)] px-4 py-12 pt-28 sm:px-8 md:px-12 lg:px-24">
       <div className="mx-auto max-w-5xl">
         <header className="max-w-2xl text-center mx-auto mb-20">
-          <p className="text-sm font-semibold tracking-widest text-foreground/40 uppercase outline-none">
+          <p className="text-sm font-semibold tracking-widest text-foreground/60 uppercase outline-none">
             Ecosystem
           </p>
-          <h1 className="mt-4 text-balance text-5xl font-semibold tracking-tight sm:text-6xl text-foreground">
-            Products
-          </h1>
-          <p className="mt-6 text-pretty text-lg text-foreground/60 leading-relaxed sm:text-xl">
-            Foundational computing products designed to remove complexity in the AI era. Built for durability and scale.
-          </p>
-        </header>
+	          <h1 className="mt-4 text-balance text-5xl font-semibold tracking-tight sm:text-6xl text-foreground">
+	            Products
+	          </h1>
+	          <p className="mt-6 text-pretty text-lg text-foreground/60 leading-relaxed sm:text-xl">
+	            Foundational computing products for the AI era, built for durability and scale.
+	          </p>
+	        </header>
 
         <section className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
           <Link
@@ -71,7 +82,7 @@ function ProductsPage() {
             <p className="mt-4 text-base text-foreground/60 leading-relaxed flex-1">
               Studio consumes Dotlanth APIs to inspect artifacts and manage environments. It stays entirely separate from the execution semantics.
             </p>
-            <div className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-foreground/40 cursor-not-allowed">
+            <div className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-foreground/60 cursor-not-allowed">
               Private Project
             </div>
           </div>
@@ -88,11 +99,11 @@ function ProductsPage() {
             <a
               href="https://github.com/ademclk/dotlanth/releases"
               target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center rounded-2xl border border-foreground/15 bg-background px-8 py-4 text-base font-semibold text-foreground shadow-sm hover:bg-foreground/5 transition-all active:scale-[0.98]"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-2xl border border-foreground/15 bg-background px-8 py-4 text-base font-semibold text-foreground shadow-sm hover:bg-foreground/5 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
             >
               View Releases
-              <ArrowRight className="ml-2 h-5 w-5 opacity-70" weight="bold" />
+              <ArrowRight className="ml-2 h-5 w-5 opacity-70" weight="bold" aria-hidden="true" focusable="false" />
             </a>
           </div>
         </section>

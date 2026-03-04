@@ -1,11 +1,11 @@
 ---
-title: "Dotlanth vX.Y.Z — Title"
+title: "Dotlanth vX.Y.Z: Title"
 date: TBD
 tags: [release]
 status: draft
 ---
 
-# Dotlanth vX.Y.Z — Title
+# Dotlanth vX.Y.Z: Title
 
 A one-paragraph summary.
 What it enables. What it removes.
@@ -28,4 +28,3 @@ dot init hello-api
 dot run
 curl http://localhost:8080/hello
 ```
-

@@ -14,8 +14,9 @@ dist-ssr
 .output
 .nitro
 .tanstack
-staticwebapp.config.json
+/staticwebapp.config.json
 .codex
+public/vendor/
 
 # Editor directories and files
 .vscode/*

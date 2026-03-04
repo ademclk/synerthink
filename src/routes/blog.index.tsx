@@ -1,37 +1,34 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { getAllBlogPosts } from '@/lib/blog'
 import ScalableGradientBlur from '@/components/blog/ScalableGradientBlur'
+import { absoluteUrl } from '@/lib/seo'
 
 export const Route = createFileRoute('/blog/')({
-  head: () => ({
-    meta: [
-      { title: 'Blog | Synerthink' },
-      {
-        name: 'description',
-        content:
-          'Explore our latest insights, updates, and thoughts on software development, technology, and innovation at Synerthink.',
-      },
-      {
-        name: 'keywords',
-        content:
-          'Synerthink, blog, software development, technology, innovation, Dotlanth',
-      },
-      { property: 'og:title', content: 'Blog | Synerthink' },
-      {
-        property: 'og:description',
-        content:
-          'Explore our latest insights, updates, and thoughts on software development, technology, and innovation at Synerthink.',
-      },
-      { property: 'og:type', content: 'website' },
-      { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:title', content: 'Blog | Synerthink' },
-      {
-        name: 'twitter:description',
-        content:
-          'Explore our latest insights, updates, and thoughts on software development, technology, and innovation at Synerthink.',
-      },
-    ],
-  }),
+  head: () => {
+    const title = 'Blog | Synerthink'
+    const description =
+      'Research notes and release updates from Synerthink on runtime transparency, record/replay, and building Dotlanth.'
+    const url = absoluteUrl('/blog')
+
+    return {
+      meta: [
+        { title },
+        { name: 'description', content: description },
+        {
+          name: 'keywords',
+          content:
+            'Synerthink, blog, software development, technology, innovation, Dotlanth',
+        },
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: description },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: url },
+        { name: 'twitter:title', content: title },
+        { name: 'twitter:description', content: description },
+      ],
+      links: [{ rel: 'canonical', href: url }],
+    }
+  },
   component: BlogIndex,
 })
 
@@ -42,7 +39,7 @@ function BlogIndex() {
     <main className="min-h-[calc(100svh-4rem)] px-4 py-12 pt-28 sm:px-8 md:px-12 lg:px-24">
       <div className="mx-auto max-w-5xl">
         <header className="max-w-2xl text-center mx-auto mb-20">
-          <p className="text-sm font-semibold tracking-widest text-foreground/40 uppercase outline-none">
+          <p className="text-sm font-semibold tracking-widest text-foreground/60 uppercase outline-none">
             Research & Updates
           </p>
           <h1 className="mt-4 text-balance text-5xl font-semibold tracking-tight sm:text-6xl text-foreground">
@@ -64,10 +61,10 @@ function BlogIndex() {
                 key={post.slug}
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
-                className="group flex flex-col gap-0"
+                className="group flex flex-col gap-0 rounded-[1.75rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
               >
                 <article className="flex w-full flex-col gap-4">
-                  {/* Gradient card — square */}
+                  {/* Gradient card: square */}
                   <div
                     className="@container relative w-full overflow-hidden rounded-[1.5rem] bg-foreground/5 transition-transform duration-500 will-change-transform group-hover:scale-[1.02]"
                     style={{ aspectRatio: '1/1' }}
