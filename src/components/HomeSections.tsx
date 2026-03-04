@@ -180,7 +180,7 @@ function TransitionSection() {
               <GradientText>Software creation, effortless.</GradientText>
             </SectionHeadline>
             <SectionBody className="mt-8 text-left max-w-lg">
-              Synerthink builds foundational computing products that remove complexity—especially in the AI era.
+              Synerthink builds foundational computing products that remove complexity, especially in the AI era.
             </SectionBody>
           </div>
 
@@ -188,8 +188,8 @@ function TransitionSection() {
           <div className="relative order-1 lg:order-2 h-[50vh] lg:h-[75vh] w-full rounded-[2.5rem] overflow-hidden shadow-2xl flex outline outline-1 outline-foreground/5 dark:outline-white/10 group">
             <img
               src="/hero-core.png"
-              alt="Dotlanth Core Foundation"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              alt="Dotlanth Foundation"
+              className="absolute inset-0 w-full h-full object-cover object-bottom transition-transform duration-1000 group-hover:scale-105"
             />
             {/* Subtle overlay gradient to ensure the CTA stands out */}
             {/* Progressive blur bottom bar CTA */}
@@ -198,12 +198,12 @@ function TransitionSection() {
                 className="absolute inset-0 bg-black/40"
                 style={{ WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 100%)', maskImage: 'linear-gradient(to bottom, transparent, black 100%)' }}
               />
-              <div className="absolute inset-0 backdrop-blur-xl" style={{ WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 80%)', maskImage: 'linear-gradient(to bottom, transparent, black 80%)' }} />
+              <div className="absolute inset-0 backdrop-blur-2xl" style={{ WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 80%)', maskImage: 'linear-gradient(to bottom, transparent, black 80%)' }} />
 
               <div className="relative pt-24 pb-6 flex items-end justify-center">
                 <ArrowLink
-                  to="/products/dotlanth-core"
-                  className="pointer-events-auto flex w-full items-center justify-center text-white/90 hover:text-white transition-all duration-300 py-4 text-lg tracking-wide border-t border-white/10 hover:bg-white/5"
+                  to="/products/dotlanth"
+                  className="pointer-events-auto flex w-full items-center justify-center text-white/90 hover:text-white transition-all duration-300 py-4 text-lg tracking-wide"
                 >
                   Explore the Architecture
                 </ArrowLink>
@@ -234,18 +234,12 @@ function DotlanthIdentitySection() {
             </div>
 
             <h2 className="mt-10 text-balance text-[clamp(2.5vw,5vw,4rem)] font-semibold tracking-tight leading-[1.05]">
-              Not a framework.<br />
-              <GradientText>An AI-native execution fabric.</GradientText>
+              AI-Native Execution Fabric.<br />
             </h2>
 
             <p className="mt-8 text-xl text-foreground/60 leading-relaxed max-w-prose">
               The layer below the application. Dotlanth makes execution observable, reproducible, and secure by default.
             </p>
-
-            <div className="mt-12 flex flex-wrap items-center gap-8">
-              <ArrowLink href="https://github.com/ademclk/dotlanth/releases">Releases</ArrowLink>
-              <ArrowLink to="/products/dotlanth-core">Explore Dotlanth</ArrowLink>
-            </div>
           </div>
 
           {/* Right: Bento Grid */}
@@ -286,7 +280,7 @@ function PillarsSection() {
     {
       icon: Package,
       headline: 'Artifact-First Runtime',
-      body: 'Every run leaves a bundle. Traces, state diffs, and structured outputs—captured instantly.',
+      body: 'Every run leaves a bundle. Traces, state diffs, and structured outputs, captured instantly.',
     },
     {
       icon: Lock,
@@ -358,11 +352,11 @@ function DotDBSection() {
               <GradientText>built right in.</GradientText>
             </SectionHeadline>
             <SectionBody className="mt-8">
-              DotDB stores internal state and the complete artifact history natively. External connectors exist only as controlled side-effects. Zero connector explosion. Just pure, isolated execution.
+              DotDB stores internal state and the complete artifact history natively. External connectors exist only as controlled side-effects, with zero connector explosion. Just pure, isolated execution.
             </SectionBody>
 
             <div className="mt-12">
-              <ArrowLink to="/products/dotlanth-core">Learn about Architecture</ArrowLink>
+              <ArrowLink to="/products/dotlanth">Learn about Architecture</ArrowLink>
             </div>
           </div>
         </div>
@@ -418,7 +412,7 @@ function RoadmapSection() {
               From local runtime to execution network.
             </SectionHeadline>
             <div className="mt-12">
-              <ArrowLink to="/products/dotlanth-core">View complete roadmap</ArrowLink>
+              <ArrowLink to="/products/dotlanth">View complete roadmap</ArrowLink>
             </div>
           </div>
 
@@ -428,29 +422,29 @@ function RoadmapSection() {
 
             <div className="space-y-16 lg:space-y-24">
               {phases.map((phase) => (
-                <div key={phase.phase} className="relative md:pl-20">
+                <div key={phase.phase} className="relative md:pl-20 min-w-0">
                   {/* Timeline node */}
                   <div className={cn(
-                    "absolute left-[-5px] md:left-[19px] top-1.5 h-3 w-3 rounded-full border-2 border-background ring-4 ring-background transition-colors",
+                    "absolute left-[-5px] md:left-[19px] top-1.5 h-3 w-3 rounded-full border-2 border-background ring-4 ring-background transition-colors flex-shrink-0",
                     phase.status === 'current' ? 'bg-foreground' : 'bg-foreground/20'
                   )} />
 
-                  <div>
-                    <div className="flex items-center gap-4 flex-wrap">
-                      <span className="font-mono text-sm tracking-widest text-foreground/40 uppercase">{phase.phase}</span>
+                  <div className="min-w-0 pl-5 md:pl-0">
+                    <div className="flex items-center gap-4 flex-wrap min-w-0">
+                      <span className="font-mono text-sm tracking-widest text-foreground/40 uppercase shrink-0">{phase.phase}</span>
                       {phase.status === 'current' && (
-                        <span className="rounded-full bg-foreground px-2.5 py-0.5 text-xs font-medium text-background">
+                        <span className="rounded-full bg-foreground px-2.5 py-0.5 text-xs font-medium text-background shrink-0">
                           In progress
                         </span>
                       )}
                     </div>
                     <h3 className={cn(
-                      "mt-3 text-2xl font-semibold tracking-tight transition-colors",
+                      "mt-3 text-2xl font-semibold tracking-tight transition-colors break-words",
                       phase.status === 'current' ? 'text-foreground' : 'text-foreground/80'
                     )}>
                       {phase.title}
                     </h3>
-                    <p className="mt-4 text-xl text-foreground/60 leading-relaxed max-w-md">
+                    <p className="mt-4 text-xl text-foreground/60 leading-relaxed break-words">
                       {phase.description}
                     </p>
                   </div>
@@ -469,31 +463,70 @@ function RoadmapSection() {
 // ============================================================================
 function FinalCTASection() {
   return (
-    <Section dark className="border-t border-foreground/5 min-h-[60vh] flex items-center">
-      <Container>
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-balance text-[clamp(2.5rem,7vw,5rem)] font-semibold tracking-tight leading-[1.0] mb-12">
-            Foundation ready.
-          </h2>
+    <section className="relative overflow-hidden bg-background border-t border-foreground/[0.06]">
+      {/* Ambient cyan glow */}
+      <div className="pointer-events-none absolute inset-0">
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[900px] rounded-full"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(0,166,174,0.10) 0%, transparent 70%)',
+            filter: 'blur(60px)',
+          }}
+        />
+        <div
+          className="absolute left-1/4 bottom-0 h-[300px] w-[400px] rounded-full"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(0,166,174,0.06) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+          }}
+        />
+      </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-12">
+      {/* Main content */}
+      <div className="relative z-10 mx-auto max-w-6xl px-6 sm:px-10 lg:px-16 pt-32 pb-24">
+        {/* Overline */}
+        <p className="text-xs font-semibold tracking-[0.25em] uppercase text-foreground/30 mb-8">Start building</p>
+
+        {/* Giant headline */}
+        <h2 className="text-[clamp(3rem,9vw,7.5rem)] font-semibold tracking-tight leading-[0.95] text-foreground max-w-4xl">
+          Foundation
+          <br />
+          <span
+            style={{
+              background: 'linear-gradient(90deg, var(--foreground, #000) 0%, rgba(0,166,174,0.9) 60%, #00A6AE 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            ready.
+          </span>
+        </h2>
+
+        {/* Subtext + CTAs row */}
+        <div className="mt-16 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-10">
+          <p className="text-lg text-foreground/45 max-w-sm leading-relaxed">
+            Explore Dotlanth, our first product. Simple to use, predictable to operate.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <Link
-              to="/products/dotlanth-core"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-foreground px-8 py-4 text-lg font-medium text-background transition-transform hover:scale-105 active:scale-95"
+              to="/products/dotlanth"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-foreground px-7 py-3.5 text-base font-semibold text-background transition-all hover:opacity-90 hover:scale-[1.02] active:scale-95"
             >
               Explore Dotlanth
             </Link>
             <Link
               to="/blog/$slug"
-              params={{ slug: 'introducing-dotlanth' }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-foreground/10 bg-transparent px-8 py-4 text-lg font-medium transition-colors hover:border-foreground/30 hover:bg-foreground/5 active:scale-95"
+              params={{ slug: 'dotlanth-v26-1-0-alpha' }}
+              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-foreground/15 px-7 py-3.5 text-base font-semibold text-foreground/70 transition-all hover:border-foreground/35 hover:text-foreground active:scale-95"
             >
-              Read our vision
+              Read v26.1.0-alpha
             </Link>
           </div>
         </div>
-      </Container>
-    </Section>
+      </div>
+    </section>
   )
 }
 

@@ -99,7 +99,8 @@ const PixelArtHero = () => {
                 if (Math.random() < keepProbability) {
                     const x = col * spacing + spacing / 2 - pixelSize / 2;
                     const y = row * spacing + spacing / 2 - pixelSize / 2;
-                    const colorIndex = Math.random() < 0.1 ? 0 : (Math.random() < 0.3 ? 1 : 2);
+                    const r = Math.random();
+                    const colorIndex = r < 0.08 ? 0 : (r < 0.34 ? 1 : 2);
                     const color = colors[colorIndex];
                     const opacity = 0.7 + Math.random() * 0.3;
 
@@ -172,16 +173,16 @@ const PixelArtHero = () => {
                 const rand = Math.random();
                 const isLargeScreen = window.innerWidth >= 768;
 
-                // Primary cyan stays same for both
-                if (rand < 0.1) return 0; // Primary cyan (10%)
+                // Increase cyan presence significantly
+                if (rand < 0.22) return 0; // Primary cyan (22%)
 
                 // Different gray percentages based on screen size
                 if (isLargeScreen) {
-                    if (rand < 0.35) return 1; // Gray (25% on large screens)
-                    return 2; // Background blend (65%)
+                    if (rand < 0.52) return 1; // Gray (30% on large screens)
+                    return 2; // Background blend (48%)
                 } else {
-                    if (rand < 0.3) return 1; // Gray (20% on mobile)
-                    return 2; // Background blend (70%)
+                    if (rand < 0.48) return 1; // Gray (26% on mobile)
+                    return 2; // Background blend (52%)
                 }
             };
 

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
+import { ArrowRight } from '@phosphor-icons/react'
 
 export const Route = createFileRoute('/about')({
   head: () => ({
@@ -8,7 +8,7 @@ export const Route = createFileRoute('/about')({
       {
         name: 'description',
         content:
-          'Learn about Synerthink — building the next generation of digital infrastructure with the Dotlanth ecosystem.',
+          'Learn about Synerthink: building the next generation of digital infrastructure with the Dotlanth ecosystem.',
       },
     ],
   }),
@@ -16,56 +16,78 @@ export const Route = createFileRoute('/about')({
 })
 
 function AboutPage() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    let ctx: gsap.Context | undefined
-
-    ;(async () => {
-      const { default: gsapRuntime } = await import('gsap')
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-
-      gsapRuntime.registerPlugin(ScrollTrigger)
-
-      ctx = gsapRuntime.context(() => {
-        gsapRuntime.from('.about-section', {
-          opacity: 0,
-          y: 20,
-          duration: 0.9,
-          ease: 'power2.out',
-          stagger: 0.12,
-          scrollTrigger: {
-            trigger: '.about-section',
-            start: 'top 80%',
-          },
-        })
-      }, sectionRef)
-    })()
-
-    return () => ctx?.revert?.()
-  }, [])
-
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 pb-20 pt-28 text-center sm:px-6">
-      <div ref={sectionRef} className="space-y-10">
-        <div className="about-section">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+    <main className="min-h-[calc(100svh-4rem)] px-4 py-12 pt-28 sm:px-8 md:px-12 lg:px-24">
+      <div className="mx-auto max-w-4xl">
+        <header className="max-w-2xl text-center mx-auto mb-20">
+          <p className="text-sm font-semibold tracking-widest text-foreground/40 uppercase outline-none">
+            About
+          </p>
+          <h1 className="mt-4 text-balance text-5xl font-semibold tracking-tight sm:text-6xl text-foreground">
             Synerthink
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-foreground/75 sm:text-lg">
-            We’re building Dotlanth — a new foundation that helps teams ship
+          <p className="mt-6 text-pretty text-lg text-foreground/60 leading-relaxed sm:text-xl">
+            We are building Dotlanth. A new foundation that helps teams ship
             durable software with less ceremony and more clarity.
           </p>
-        </div>
+        </header>
 
-        <div className="about-section rounded-[2rem] border border-foreground/10 bg-foreground/5 px-6 py-8 text-left shadow-xl backdrop-blur-xl sm:px-10">
-          <h2 className="text-xl font-bold">Our thesis</h2>
-          <p className="mt-3 text-sm leading-relaxed text-foreground/75 sm:text-base">
-            Great products are built when the tooling disappears. The best
-            developer experience is the one that keeps you in flow — close to
-            the user and the idea.
-          </p>
-        </div>
+        <section className="mt-16 space-y-8">
+          <div className="rounded-[2.5rem] bg-foreground/5 glass glass-1 px-8 py-12 sm:px-12 sm:py-16 text-center shadow-sm">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Our thesis</h2>
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-foreground/75 sm:text-lg">
+              Great products are built when the tooling disappears. The best
+              developer experience is the one that keeps you in flow, close to
+              the user and the idea. We build foundations that stay out of your way.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="rounded-[2rem] bg-foreground/5 glass glass-2 px-8 py-10 transition-colors hover:bg-foreground/10 flex flex-col items-start text-left">
+              <div className="text-4xl text-foreground/20 font-light mb-4 text-left">01</div>
+              <h3 className="text-xl font-semibold tracking-tight text-foreground">Simplicity is the feature.</h3>
+              <p className="mt-3 text-base text-foreground/60 leading-relaxed">
+                We design systems that are predictable to operate. No magic, no hidden complexity. Just clear execution paths and explicit state.
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] bg-foreground/5 glass glass-2 px-8 py-10 transition-colors hover:bg-foreground/10 flex flex-col items-start text-left">
+              <div className="text-4xl text-foreground/20 font-light mb-4 text-left">02</div>
+              <h3 className="text-xl font-semibold tracking-tight text-foreground">Trust is required.</h3>
+              <p className="mt-3 text-base text-foreground/60 leading-relaxed">
+                Make guarantees explicit and composable. When you run an autonomous system, you need to know exactly what it is allowed to do.
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] bg-foreground/5 glass glass-2 px-8 py-10 transition-colors hover:bg-foreground/10 flex flex-col items-start text-left">
+              <div className="text-4xl text-foreground/20 font-light mb-4 text-left">03</div>
+              <h3 className="text-xl font-semibold tracking-tight text-foreground">Control the core.</h3>
+              <p className="mt-3 text-base text-foreground/60 leading-relaxed">
+                Keep foundations small. Optimize the primitives. If the lowest level is rock solid, everything built on top of it inherits that stability.
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] bg-foreground/5 glass glass-2 px-8 py-10 transition-colors hover:bg-foreground/10 flex flex-col items-start text-left">
+              <div className="text-4xl text-foreground/20 font-light mb-4 text-left">04</div>
+              <h3 className="text-xl font-semibold tracking-tight text-foreground">Ship in modules.</h3>
+              <p className="mt-3 text-base text-foreground/60 leading-relaxed">
+                Scale capability without scaling complexity. We build composable pieces that work together seamlessly but remain independently verifiable.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-20 text-center pb-12">
+          <a
+            href="https://github.com/synerthink"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center rounded-2xl border border-foreground/15 bg-background px-8 py-4 text-base font-semibold text-foreground shadow-sm hover:bg-foreground/5 transition-all active:scale-[0.98]"
+          >
+            Follow our work on GitHub
+            <ArrowRight className="ml-2 h-5 w-5 opacity-70" weight="bold" />
+          </a>
+        </section>
       </div>
     </main>
   )

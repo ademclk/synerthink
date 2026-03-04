@@ -10,9 +10,9 @@ interface EcosystemCardProps {
 
 const EcosystemCard = ({ title, description, colorClass, icon }: EcosystemCardProps) => {
     return (
-        <div className="flex flex-col p-6 sm:p-8 rounded-full bg-foreground/10 backdrop-blur-xl shadow-2xl border border-foreground/10">
+        <div className="flex flex-col p-6 sm:p-8 rounded-[1.75rem] bg-foreground/10 glass glass-1 glass-float">
             <div className="flex items-start gap-4">
-                <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
                     {icon}
                 </div>
                 <div className="min-w-0">

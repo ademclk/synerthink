@@ -13,7 +13,9 @@ import { Route as SolutionsRouteImport } from './routes/solutions'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as ProductsDotlanthRouteImport } from './routes/products.dotlanth'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const SolutionsRoute = SolutionsRouteImport.update({
@@ -36,9 +38,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsDotlanthRoute = ProductsDotlanthRouteImport.update({
+  id: '/products/dotlanth',
+  path: '/products/dotlanth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -53,7 +65,9 @@ export interface FileRoutesByFullPath {
   '/resources': typeof ResourcesRoute
   '/solutions': typeof SolutionsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/products/dotlanth': typeof ProductsDotlanthRoute
   '/blog/': typeof BlogIndexRoute
+  '/products/': typeof ProductsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,7 +75,9 @@ export interface FileRoutesByTo {
   '/resources': typeof ResourcesRoute
   '/solutions': typeof SolutionsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/products/dotlanth': typeof ProductsDotlanthRoute
   '/blog': typeof BlogIndexRoute
+  '/products': typeof ProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,7 +86,9 @@ export interface FileRoutesById {
   '/resources': typeof ResourcesRoute
   '/solutions': typeof SolutionsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/products/dotlanth': typeof ProductsDotlanthRoute
   '/blog/': typeof BlogIndexRoute
+  '/products/': typeof ProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -80,9 +98,19 @@ export interface FileRouteTypes {
     | '/resources'
     | '/solutions'
     | '/blog/$slug'
+    | '/products/dotlanth'
     | '/blog/'
+    | '/products/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/resources' | '/solutions' | '/blog/$slug' | '/blog'
+  to:
+    | '/'
+    | '/about'
+    | '/resources'
+    | '/solutions'
+    | '/blog/$slug'
+    | '/products/dotlanth'
+    | '/blog'
+    | '/products'
   id:
     | '__root__'
     | '/'
@@ -90,7 +118,9 @@ export interface FileRouteTypes {
     | '/resources'
     | '/solutions'
     | '/blog/$slug'
+    | '/products/dotlanth'
     | '/blog/'
+    | '/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -99,7 +129,9 @@ export interface RootRouteChildren {
   ResourcesRoute: typeof ResourcesRoute
   SolutionsRoute: typeof SolutionsRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  ProductsDotlanthRoute: typeof ProductsDotlanthRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -132,11 +164,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
       fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products/dotlanth': {
+      id: '/products/dotlanth'
+      path: '/products/dotlanth'
+      fullPath: '/products/dotlanth'
+      preLoaderRoute: typeof ProductsDotlanthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -155,7 +201,9 @@ const rootRouteChildren: RootRouteChildren = {
   ResourcesRoute: ResourcesRoute,
   SolutionsRoute: SolutionsRoute,
   BlogSlugRoute: BlogSlugRoute,
+  ProductsDotlanthRoute: ProductsDotlanthRoute,
   BlogIndexRoute: BlogIndexRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

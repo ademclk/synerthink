@@ -1,248 +1,100 @@
-import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
-const footerLinks = {
-    products: [
-        { label: "Platform", href: "/" },
-        { label: "Solutions", href: "/" },
-        { label: "Features", href: "/" }
-    ],
-    solutions: [
-        { label: "Enterprise", href: "/" },
-        { label: "Startups", href: "/" },
-        { label: "Developers", href: "/" }
-    ],
-    developer: [
-        { label: "Documentation", href: "/" },
-        { label: "API Reference", href: "/" },
-        { label: "SDK", href: "/" }
-    ],
-    research: [
-        { label: "Publications", href: "/" },
-        { label: "Case Studies", href: "/" },
-        { label: "Research Papers", href: "/" }
-    ],
-    about: [
-        { label: "Company", href: "/" },
-        { label: "Careers", href: "/" },
-        { label: "Press", href: "/" }
-    ],
-    contact: [
-        { label: "Support", href: "/" },
-        { label: "Sales", href: "/" },
-        { label: "Partners", href: "/" }
-    ],
-    training: [
-        { label: "Courses", href: "/" },
-        { label: "Certification", href: "/" },
-        { label: "Workshops", href: "/" }
-    ],
-    investor: [
-        { label: "Investors", href: "/" },
-        { label: "Financials", href: "/" },
-        { label: "News", href: "/" }
-    ]
-};
+const footerLinks = [
+    {
+        heading: "Product",
+        links: [
+            { label: "Dotlanth", href: "/products/dotlanth" },
+            { label: "Releases", href: "https://github.com/ademclk/dotlanth/releases", external: true },
+            { label: "Roadmap", href: "/#roadmap" },
+        ],
+    },
+    {
+        heading: "Company",
+        links: [
+            { label: "About", href: "/about" },
+            { label: "Blog", href: "/blog" },
+        ],
+    },
+    {
+        heading: "Developers",
+        links: [
+            { label: "GitHub", href: "https://github.com/synerthink", external: true },
+            { label: "Documentation", href: "/" },
+        ],
+    },
+    {
+        heading: "Connect",
+        links: [
+            { label: "LinkedIn", href: "https://linkedin.com/company/synerthink", external: true },
+            { label: "X / Twitter", href: "https://twitter.com/synerthink", external: true },
+        ],
+    },
+];
 
 export function Footer() {
-    const footerRef = useRef<HTMLElement>(null);
-    const sectionsRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        let ctx: gsap.Context | undefined;
-
-        (async () => {
-            const { default: gsapRuntime } = await import("gsap");
-            const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-
-            gsapRuntime.registerPlugin(ScrollTrigger);
-
-            ctx = gsapRuntime.context(() => {
-                gsapRuntime.from(sectionsRef.current?.children || [], {
-                    y: 50,
-                    opacity: 0,
-                    duration: 1,
-                    stagger: 0.1,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: footerRef.current,
-                        start: "top bottom-=100",
-                        end: "top center",
-                        toggleActions: "play none none none"
-                    }
-                });
-            }, footerRef);
-        })();
-
-        return () => ctx?.revert?.();
-    }, []);
-
-    const renderFooterSection = (title: string, items: typeof footerLinks.products) => (
-        <div>
-            <h3 className="text-xs font-semibold leading-6 text-gray-800 dark:text-gray-200">{title}</h3>
-            <ul role="list" className="space-y-1">
-                {items.map((item, index) => (
-                    <li key={index}>
-                        <Link
-                            to={item.href}
-                            className="text-xs leading-6 text-gray-800 dark:text-gray-200 hover:underline"
-                        >
-                            {item.label}
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-
-    const renderFooterLinks = (items: typeof footerLinks.products) => (
-        <ul role="list" className="space-y-1">
-            {items.map((item, index) => (
-                <li key={index}>
-                    <Link
-                        to={item.href}
-                        className="text-xs leading-6 text-gray-800 dark:text-gray-200 hover:underline"
-                    >
-                        {item.label}
-                    </Link>
-                </li>
-            ))}
-        </ul>
-    );
-
     return (
-        <footer
-            ref={footerRef}
-            className="py-8 bg-zinc-100 dark:bg-zinc-900 px-4"
-            aria-labelledby="footer-heading"
-        >
-            <div className="max-w-4xl mx-auto text-left">
-                <p className="max-w-4xl text-sm text-center text-gray-800 dark:text-gray-200">
-                    Advancing technology for all. Building the next generation of digital infrastructure that enables people to connect, create, and collaborate.
-                </p>
-
-                <div className="h-4" />
-                <div className="border-t border-gray-200 dark:border-gray-800" />
-                <div className="h-4" />
-
-                <div className="hidden md:grid md:grid-cols-2 gap-8 mt-16 xl:col-span-2 xl:mt-0">
-                    <div className="md:grid md:grid-cols-2 md:gap-8">
-                        {renderFooterSection("Products", footerLinks.products)}
-                        {renderFooterSection("Solutions", footerLinks.solutions)}
-                    </div>
-                    <div className="md:grid md:grid-cols-2 md:gap-8">
-                        {renderFooterSection("Developer", footerLinks.developer)}
-                        {renderFooterSection("Research", footerLinks.research)}
-                    </div>
-                    <div className="md:grid md:grid-cols-2 md:gap-8">
-                        {renderFooterSection("About", footerLinks.about)}
-                        {renderFooterSection("Contact", footerLinks.contact)}
-                    </div>
-                    <div className="md:grid md:grid-cols-2 md:gap-8">
-                        {renderFooterSection("Training", footerLinks.training)}
-                        {renderFooterSection("Investor", footerLinks.investor)}
-                    </div>
+        <footer className="relative overflow-clip bg-background border-t border-foreground/[0.06]">
+            {/* Top section: nav links + brand statement */}
+            <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16 pt-20 pb-16">
+                <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:gap-16">
+                    {footerLinks.map((group) => (
+                        <div key={group.heading}>
+                            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/35 mb-5">
+                                {group.heading}
+                            </h3>
+                            <ul className="space-y-3">
+                                {group.links.map((link) =>
+                                    link.external ? (
+                                        <li key={link.label}>
+                                            <a
+                                                href={link.href}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-sm text-foreground/55 transition-colors hover:text-foreground"
+                                            >
+                                                {link.label}
+                                            </a>
+                                        </li>
+                                    ) : (
+                                        <li key={link.label}>
+                                            <Link
+                                                to={link.href}
+                                                className="text-sm text-foreground/55 transition-colors hover:text-foreground"
+                                            >
+                                                {link.label}
+                                            </Link>
+                                        </li>
+                                    )
+                                )}
+                            </ul>
+                        </div>
+                    ))}
                 </div>
 
-                <div className="md:hidden">
-                    <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="products">
-                            <AccordionTrigger className="text-sm">Products</AccordionTrigger>
-                            <AccordionContent>
-                                {renderFooterLinks(footerLinks.products)}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="solutions">
-                            <AccordionTrigger className="text-sm">Solutions</AccordionTrigger>
-                            <AccordionContent>
-                                {renderFooterLinks(footerLinks.solutions)}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="developer">
-                            <AccordionTrigger className="text-sm">Developer</AccordionTrigger>
-                            <AccordionContent>
-                                {renderFooterLinks(footerLinks.developer)}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="research">
-                            <AccordionTrigger className="text-sm">Research</AccordionTrigger>
-                            <AccordionContent>
-                                {renderFooterLinks(footerLinks.research)}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="about">
-                            <AccordionTrigger className="text-sm">About</AccordionTrigger>
-                            <AccordionContent>
-                                {renderFooterLinks(footerLinks.about)}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="contact">
-                            <AccordionTrigger className="text-sm">Contact</AccordionTrigger>
-                            <AccordionContent>
-                                {renderFooterLinks(footerLinks.contact)}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="training">
-                            <AccordionTrigger className="text-sm">Training</AccordionTrigger>
-                            <AccordionContent>
-                                {renderFooterLinks(footerLinks.training)}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="investor">
-                            <AccordionTrigger className="text-sm">Investor</AccordionTrigger>
-                            <AccordionContent>
-                                {renderFooterLinks(footerLinks.investor)}
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div>
+                {/* Divider */}
+                <div className="mt-16 border-t border-foreground/[0.06]" />
 
-                <div className="h-4" />
-                <div className="px-2 mt-2 pt-4 flex justify-center">
-                    <p className="text-xs leading-5 text-gray-500 text-center">
-                        © {new Date().getFullYear()} Synerthink. All rights reserved.
+                {/* Bottom bar */}
+                <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <p className="text-xs text-foreground/30">
+                        &copy; 2023 Synerthink. All rights reserved.
+                    </p>
+                    <p className="text-xs text-foreground/30">
+                        Building foundational computing products for the AI era.
                     </p>
                 </div>
-                <div className="h-2" />
-                <div className="border-t border-gray-200 dark:border-gray-800" />
-                <div className="px-2 md:px-unit-xl py-4 flex justify-center">
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <a
-                            href="https://github.com/synerthink"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-gray-800 dark:text-gray-200 hover:underline"
-                        >
-                            GitHub
-                        </a>
-                        <a
-                            href="https://linkedin.com/company/synerthink"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-gray-800 dark:text-gray-200 hover:underline"
-                        >
-                            LinkedIn
-                        </a>
-                        <a
-                            href="https://twitter.com/synerthink"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-gray-800 dark:text-gray-200 hover:underline"
-                        >
-                            Twitter
-                        </a>
-                        <a
-                            href="https://instagram.com/synerthink"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-gray-800 dark:text-gray-200 hover:underline"
-                        >
-                            Instagram
-                        </a>
-                    </div>
-                </div>
+            </div>
+
+            {/* Giant SYNERTHINK wordmark */}
+            <div className="w-full overflow-clip select-none pointer-events-none flex justify-center items-center" aria-hidden="true">
+                <p
+                    className="whitespace-nowrap font-semibold leading-none tracking-[-0.04em] text-foreground/[0.04]"
+                    style={{ fontSize: 'clamp(3rem, 16vw, 16rem)', paddingInline: '1.5rem', paddingBlock: '1.5rem' }}
+                >
+                    SYNERTHINK
+                </p>
             </div>
         </footer>
     );
-} 
+}

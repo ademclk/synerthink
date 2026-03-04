@@ -1,13 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "@tanstack/react-router";
+import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import SynerthinkLogo from "./synerthink-logo";
-import { ModeToggle } from './mode-toggle';
 
 const NAV_LINKS = [
-    { name: "About", href: "/about" },
-    { name: "Solutions", href: "/solutions" },
-    { name: "Resources", href: "/resources" },
+    { name: "Products", href: "/products" },
     { name: "Blog", href: "/blog" },
+    { name: "About", href: "/about" },
 ];
 
 function useBodyScrollLock(isLocked: boolean) {
@@ -134,26 +133,36 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="sticky top-4 z-[100] flex h-14 items-center justify-end bg-foreground/10 backdrop-blur-xl px-4 lg:px-6 rounded-full mx-4 lg:mx-6 border border-border/50 shadow-sm">
+            <header className="sticky top-4 z-[100] flex h-14 items-center justify-end bg-foreground/10 glass glass-4 px-4 lg:px-6 rounded-2xl mx-4 lg:mx-6">
                 <div className="mx-auto flex w-full items-center relative">
-                    <Link to="/" className="flex items-center text-center gap-2 text-lg font-semibold md:text-base" onClick={closeMenu}>
+                    <Link to="/" className="flex items-center gap-2 text-base font-semibold leading-none tracking-tight" onClick={closeMenu}>
                         <SynerthinkLogo className="h-6 w-6" />
-                        <span className="text-sm">Synerthink</span>
+                        <span className="font-semibold">Synerthink</span>
                     </Link>
                     <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-10">
                         {NAV_LINKS.map(({ name, href }) => (
-                            <Link key={name} to={href} className="text-sm font-extralight text-link dark:text-foreground/80">
+                            <Link
+                                key={name}
+                                to={href}
+                                className="text-base font-normal tracking-tight text-foreground/60 transition-colors hover:text-foreground/90"
+                            >
                                 {name}
                             </Link>
                         ))}
                     </nav>
-                    <div className="relative z-[101] ml-auto flex items-center gap-2">
-                        <div className="hidden md:block">
-                            <ModeToggle />
-                        </div>
-                        <button
-                            ref={menuButtonRef}
-                            className="md:hidden lg:order-3 p-2"
+	                    <div className="relative z-[101] ml-auto flex items-center gap-2">
+	                        <a
+	                            href="https://github.com/ademclk/dotlanth/releases"
+	                            target="_blank"
+	                            rel="noreferrer"
+	                            className="inline-flex items-center gap-2 rounded-2xl bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm glass-float transition-colors hover:bg-black/90 active:scale-[0.98] dark:bg-white dark:text-black dark:hover:bg-white/90"
+	                        >
+	                            Releases
+	                            <ArrowUpRightIcon className="h-4 w-4" weight="bold" />
+	                        </a>
+	                        <button
+	                            ref={menuButtonRef}
+	                            className="md:hidden lg:order-3 p-2"
                             onClick={() => {
                                 if (!isAnimating) {
                                     setMenuOpen(!isMenuOpen);
@@ -196,7 +205,7 @@ export default function Navbar() {
             </header>
             <div
                 ref={menuOverlayRef}
-                className="fixed inset-0 z-[99] bg-background/80 backdrop-blur-3xl flex flex-col px-8 py-8 h-full overflow-y-auto"
+                className="fixed inset-0 z-[99] bg-background/70 glass-3 backdrop-saturate-150 flex flex-col px-8 py-8 h-full overflow-y-auto"
                 style={{
                     minHeight: "100dvh",
                     display: 'none',
@@ -220,8 +229,18 @@ export default function Navbar() {
                         </span>
                     </Link>
                 ))}
-            </nav>
-            </div>
-        </>
+	                    <a
+	                        href="https://github.com/ademclk/dotlanth/releases"
+	                        target="_blank"
+	                        rel="noreferrer"
+	                        className="mt-4 inline-flex items-center justify-center rounded-2xl bg-black px-4 py-3 text-base font-semibold text-white shadow-sm glass-float transition-colors hover:bg-black/90 active:scale-[0.98] dark:bg-white dark:text-black dark:hover:bg-white/90"
+	                        onClick={closeMenu}
+	                    >
+	                        Releases
+	                        <ArrowUpRightIcon className="ml-2 h-5 w-5" weight="bold" />
+	                    </a>
+	            </nav>
+	            </div>
+	        </>
     );
 }  

@@ -219,7 +219,7 @@ export const CanvasBackground = () => {
                 style={{ background: 'transparent' }}
             />
             {!isLoaded && (
-                <div className="absolute inset-0 bg-background/50 backdrop-blur-xl" />
+                <div className="absolute inset-0 bg-background/50 glass-2 backdrop-saturate-150" />
             )}
         </div>
     );

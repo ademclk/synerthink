@@ -12,30 +12,30 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
-      { title: 'Synerthink - Create What Matters' },
+      { title: 'Synerthink' },
       {
         name: 'description',
         content:
-          'Create what matters. We handle the rest. Synerthink is building the next generation of digital infrastructure with the Dotlanth ecosystem - featuring dotVM, dotDB, dotUX, and dotCloud.',
+          'We build foundational computing products that remove complexity in the AI era.',
       },
       {
         name: 'keywords',
         content:
-          'Synerthink, Dotlanth, dotVM, dotDB, dotUX, dotCloud, technology, software development, innovation, digital infrastructure, create what matters',
+          'Synerthink, Dotlanth, autonomous systems, artifacts, record replay, capability security, dotDSL, DotDB',
       },
-      { property: 'og:title', content: 'Synerthink - Create What Matters' },
+      { property: 'og:title', content: 'Synerthink' },
       {
         property: 'og:description',
         content:
-          'Create what matters. We handle the rest. Synerthink is building the next generation of digital infrastructure with the Dotlanth ecosystem - featuring dotVM, dotDB, dotUX, and dotCloud.',
+          'We build foundational computing products that remove complexity in the AI era.',
       },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:title', content: 'Synerthink - Create What Matters' },
+      { name: 'twitter:title', content: 'Synerthink' },
       {
         name: 'twitter:description',
         content:
-          'Create what matters. We handle the rest. Synerthink is building the next generation of digital infrastructure with the Dotlanth ecosystem - featuring dotVM, dotDB, dotUX, and dotCloud.',
+          'We build foundational computing products that remove complexity in the AI era.',
       },
     ],
     links: [
@@ -68,4 +68,3 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     </html>
   )
 }
-

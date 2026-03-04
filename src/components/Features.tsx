@@ -286,12 +286,12 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = ({ title, colorClass, bgClass, span = "", children }: FeatureCardProps) => {
-    const defaultBgClass = "bg-foreground/10 backdrop-blur-lg";
+    const defaultBgClass = "bg-foreground/10";
     const appliedBgClass = bgClass || defaultBgClass;
 
     return (
         <div
-            className={`relative ${appliedBgClass} border border-border rounded-full transition-all duration-300 hover:border-primary/60 hover:shadow-lg hover:shadow-primary/20 cursor-pointer group ${span} px-4 py-3 min-h-[60px] flex flex-col items-center justify-center`}
+            className={`relative ${appliedBgClass} glass glass-1 rounded-[1.25rem] glass-float hover:border-foreground/20 cursor-pointer group ${span} px-4 py-3 min-h-[60px] flex flex-col items-center justify-center`}
         >
             {children ? (
                 children
@@ -302,7 +302,7 @@ const FeatureCard = ({ title, colorClass, bgClass, span = "", children }: Featur
             )}
 
             {/* Interactive glow effect on hover */}
-            <div className="absolute inset-0 rounded-full bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            <div className="absolute inset-0 rounded-[1.25rem] bg-foreground/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         </div>
     );
 };
@@ -321,12 +321,12 @@ export default function Features() {
                     {/* Modular APIs at top-left */}
                     <div className="relative col-span-2 row-span-2">
                         {/* Animation behind the card */}
-                        <div className="absolute inset-0 overflow-hidden rounded-full">
+                        <div className="absolute inset-0 overflow-hidden rounded-[1.75rem]">
                             <ModularAPIsAnimation />
                         </div>
 
                         {/* Card with backdrop blur over the animation */}
-                        <div className="absolute inset-0 bg-foreground/10 backdrop-blur-lg border border-border rounded-full transition-all duration-300 hover:border-primary/60 hover:shadow-lg hover:shadow-primary/20 cursor-pointer group flex flex-col items-center justify-center">
+                        <div className="absolute inset-0 bg-foreground/10 glass glass-2 rounded-[1.75rem] glass-float hover:border-foreground/20 cursor-pointer group flex flex-col items-center justify-center">
                             <span className="font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl texy-primary group-hover:text-primary transition-colors duration-300 text-center select-none px-4">
                                 Modular APIs
                             </span>
@@ -387,12 +387,12 @@ export default function Features() {
                     {/* Auto Updates at bottom-right */}
                     <div className="relative col-span-2 row-span-2">
                         {/* Animation behind the card */}
-                        <div className="absolute inset-0 overflow-hidden rounded-full">
+                        <div className="absolute inset-0 overflow-hidden rounded-[1.75rem]">
                             <WarpSpeedAnimation />
                         </div>
 
                         {/* Card with backdrop blur over the animation */}
-                        <div className="absolute inset-0 bg-foreground/10 backdrop-blur-sm border border-border rounded-full transition-all duration-300 hover:border-primary/60 hover:shadow-lg hover:shadow-primary/20 cursor-pointer group flex flex-col items-center justify-center">
+                        <div className="absolute inset-0 bg-foreground/10 glass glass-1 rounded-[1.75rem] glass-float hover:border-foreground/20 cursor-pointer group flex flex-col items-center justify-center">
                             <span className="font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl texy-primary group-hover:text-primary transition-colors duration-300 text-center px-4">
                                 Auto Updates
                             </span>

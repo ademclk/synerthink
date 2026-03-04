@@ -22,20 +22,10 @@ const buttonVariants = cva(
         icon: "size-9 p-0",
       },
       shape: {
-        rectangle: "rounded-md", // or `rounded` if you want Apple radius  
-        ellipse: "rounded-full", // pill  
-        circle: "rounded-full aspect-square p-0", // circular, must be icon-size  
+        rectangle: "rounded-lg",
+        ellipse: "rounded-xl",
       },
     },
-    compoundVariants: [
-      // Makes circle buttons always use icon sizing  
-      {
-        shape: "circle",
-        size: "icon",
-        className: "size-9",
-      },
-      // You can add more size mapping here (icon-sm etc. if needed)  
-    ],
     defaultVariants: {
       variant: "default",
       size: "default",
@@ -54,7 +44,7 @@ function Button({
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
-    shape?: "rectangle" | "ellipse" | "circle"
+    shape?: "rectangle" | "ellipse"
   }) {
   const Comp = asChild ? Slot : "button"
   return (
