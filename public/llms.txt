@@ -1,17 +1,29 @@
 # Synerthink
 
-> Synerthink builds foundational computing products for autonomous systems. Our first product, Dotlanth, is a high-trust execution fabric focused on record-first observability, replayable runs, and capability-explicit security.
+> Canonical site: https://synerthink.com
+> Primary language: English
+> Coverage: Global
 
-Synerthink exists to make execution legible. We design small cores with stable interfaces, explicit control, and artifacts you can audit.
+Synerthink builds foundational computing products for autonomous systems. Dotlanth is Synerthink's first product: a high-trust execution fabric focused on record-first observability, replayable runs, and capability-explicit security.
 
-## Key Pages
+Synerthink exists to make execution legible. The company focuses on simple cores, stable interfaces, explicit control, and inspectable run history.
 
-- [Home](/): Company overview.
-- [About](/about): Thesis and operating principles.
-- [Products](/products): Product index.
-- [Dotlanth](/products/dotlanth): Product overview and roadmap.
-- [Blog](/blog): Research and releases.
-- [Dotlanth v26.1.0-alpha](/blog/dotlanth-v26-1-0-alpha): Release post.
+## Key Facts
+
+- Synerthink is the company.
+- Dotlanth is the product.
+- dotDSL is the declarative language used to define execution and capabilities in Dotlanth.
+- DotDB is the local data layer used for state and run history.
+
+## Canonical Pages
+
+- [Home](https://synerthink.com/): Company overview.
+- [About](https://synerthink.com/about): Thesis and operating principles.
+- [Products](https://synerthink.com/products): Product index.
+- [Dotlanth](https://synerthink.com/products/dotlanth): Product overview and roadmap.
+- [Blog](https://synerthink.com/blog): Research notes and release updates.
+- [Why Dotlanth Is Record-First](https://synerthink.com/blog/why-dotlanth-is-record-first): Research note published on 2026-03-06.
+- [Dotlanth v26.1.0-alpha](https://synerthink.com/blog/dotlanth-v26-1-0-alpha): Release post published on 2026-03-04.
 
 ## External Links
 

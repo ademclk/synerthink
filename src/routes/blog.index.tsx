@@ -56,7 +56,7 @@ function BlogIndex() {
               No posts yet.
             </div>
           ) : (
-            posts.map((post) => (
+            posts.map((post, index) => (
               <Link
                 key={post.slug}
                 to="/blog/$slug"
@@ -67,13 +67,43 @@ function BlogIndex() {
                   {/* Gradient card: square */}
                   <div
                     className="@container relative w-full overflow-hidden rounded-[1rem] bg-foreground/5 transition-transform duration-500 will-change-transform group-hover:scale-[1.02]"
-                    style={{ aspectRatio: '1/1' }}
+                    style={{
+                      aspectRatio: '1/1',
+                      position: 'relative',
+                      overflow: 'hidden',
+                    }}
                   >
                     {post.slug === 'dotlanth-v26-1-0-alpha' ? (
                       <img
                         src="/dotlanth-v2610alpha.svg"
                         alt="Dotlanth v26.1.0-alpha preview"
-                        className="w-full h-full object-cover"
+                        decoding="async"
+                        loading={index < 3 ? 'eager' : 'lazy'}
+                        className="absolute inset-0 h-full w-full object-cover"
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                        draggable={false}
+                      />
+                    ) : post.frontmatter.image ? (
+                      <img
+                        src={post.frontmatter.image}
+                        alt={`${post.frontmatter.title} preview`}
+                        decoding="async"
+                        loading={index < 3 ? 'eager' : 'lazy'}
+                        className="absolute inset-0 h-full w-full object-cover"
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                        draggable={false}
                       />
                     ) : post.kind === 'releases' ? (
                       <ScalableGradientBlur

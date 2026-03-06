@@ -19,29 +19,44 @@ export const Route = createFileRoute('/blog/$slug')({
     const post = getBlogPostBySlug(params.slug, { includeDrafts: INCLUDE_DRAFTS })
     const title = post ? `${post.frontmatter.title} | Synerthink Blog` : 'Blog | Synerthink'
     const description = post?.frontmatter.description ?? 'Synerthink blog.'
+    const keywords = post
+      ? ['Synerthink', 'Dotlanth', 'blog', post.kind, ...post.frontmatter.tags].join(', ')
+      : 'Dotlanth, Synerthink, software development'
     const url = absoluteUrl(`/blog/${params.slug}`)
     const image = absoluteUrl(post?.frontmatter.image ?? DEFAULT_OG_IMAGE_PATH)
     const siteUrl = getSiteUrl()
     const organizationId = `${siteUrl}/#organization`
+    const websiteId = `${siteUrl}/#website`
 
     return {
       meta: [
         { title },
         { name: 'description', content: description },
-        { name: 'keywords', content: 'Dotlanth, Synerthink, software development' },
+        {
+          name: 'robots',
+          content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+        },
+        { name: 'author', content: 'Synerthink' },
+        { name: 'keywords', content: keywords },
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:type', content: 'article' },
         { property: 'og:url', content: url },
         { property: 'og:image', content: image },
+        { property: 'og:image:alt', content: post?.frontmatter.title ?? 'Synerthink blog post' },
         ...(post?.frontmatter.date
           ? [
             {
               property: 'article:published_time',
               content: post.frontmatter.date,
             },
+            {
+              property: 'article:modified_time',
+              content: post.frontmatter.date,
+            },
           ]
           : []),
+        { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: image },
@@ -54,6 +69,10 @@ export const Route = createFileRoute('/blog/$slug')({
                 headline: post.frontmatter.title,
                 description,
                 url,
+                inLanguage: 'en',
+                isPartOf: {
+                  '@id': websiteId,
+                },
                 mainEntityOfPage: {
                   '@type': 'WebPage',
                   '@id': url,
@@ -122,6 +141,12 @@ function BlogPostRoute() {
         <h1 className="text-balance text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl leading-[1.15] mb-12">
           {displayTitle}
         </h1>
+
+        {post.frontmatter.subtitle ? (
+          <p className="mx-auto mb-12 max-w-2xl text-balance text-lg leading-relaxed text-foreground/60 sm:text-xl">
+            {post.frontmatter.subtitle}
+          </p>
+        ) : null}
 
         {/* Call to Action Button */}
         {post.kind === 'releases' ? (

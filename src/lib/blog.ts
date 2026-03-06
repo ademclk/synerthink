@@ -1,42 +1,30 @@
 import React from 'react'
 
-export type BlogStatus = 'draft' | 'published'
-export type BlogKind = 'releases' | 'research'
+import { blogPostsMeta, type BlogPostMeta } from '@/content/blog/posts'
 
-export type BlogFrontmatter = {
-  title: string
-  date: string
-  tags: string[]
-  status: BlogStatus
-  description?: string
-  image?: string
-  slug: string
-}
+export type { BlogFrontmatter, BlogKind, BlogStatus } from '@/content/blog/posts'
 
-export type BlogPost = {
-  slug: string
-  kind: BlogKind
-  frontmatter: BlogFrontmatter
+export type BlogPost = BlogPostMeta & {
   component: React.ComponentType
 }
 
+const componentsBySlug: Record<
+  string,
+  () => Promise<{ default: React.ComponentType }>
+> = {
+  'why-dotlanth-is-record-first': () =>
+    import('@/components/blog/posts/RecordFirstPost'),
+  'dotlanth-v26-1-0-alpha': () => import('@/components/blog/posts/V26AlphaPost'),
+}
+
 // Lazy load the actual post components so they don't bloat the main bundle
-const posts: BlogPost[] = [
-  {
-    slug: 'dotlanth-v26-1-0-alpha',
-    kind: 'releases',
-    frontmatter: {
-      title: 'Dotlanth v26.1.0-alpha',
-      date: '2026-03-04',
-      tags: ['release'],
-      status: 'published',
-      description: 'A foundational milestone for autonomous execution. Built seamlessly from the ground up for absolute trust and immediate inspectability.',
-      image: '/dotlanth-v2610alpha-og.png',
-      slug: 'dotlanth-v26-1-0-alpha',
-    },
-    component: React.lazy(() => import('@/components/blog/posts/V26AlphaPost')),
-  },
-]
+const posts: BlogPost[] = blogPostsMeta.map((postMeta) => {
+  const importer = componentsBySlug[postMeta.slug]
+  if (!importer) {
+    throw new Error(`Missing blog post component for slug: ${postMeta.slug}`)
+  }
+  return { ...postMeta, component: React.lazy(importer) }
+})
 
 function toSortableTime(date: string) {
   const time = new Date(date).getTime()

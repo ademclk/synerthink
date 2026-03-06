@@ -20,6 +20,10 @@ export const Route = createRootRoute({
         { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
         { title: 'Synerthink' },
         {
+          name: 'robots',
+          content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+        },
+        {
           name: 'description',
           content:
             'We build foundational computing products that remove complexity in the AI era.',
@@ -56,7 +60,18 @@ export const Route = createRootRoute({
                 '@id': `${siteUrl}/#organization`,
                 name: 'Synerthink',
                 url: siteUrl,
+                description:
+                  'Synerthink builds foundational computing products for autonomous systems, with a focus on legible execution, explicit control, and inspectable run history.',
                 logo: absoluteUrl('/android-chrome-512x512.png'),
+                areaServed: 'Worldwide',
+                knowsAbout: [
+                  'autonomous systems',
+                  'execution fabrics',
+                  'record/replay',
+                  'capability security',
+                  'dotDSL',
+                  'DotDB',
+                ],
                 sameAs: [
                   'https://github.com/synerthink',
                   'https://twitter.com/synerthink',
@@ -68,6 +83,7 @@ export const Route = createRootRoute({
                 '@id': `${siteUrl}/#website`,
                 url: siteUrl,
                 name: 'Synerthink',
+                inLanguage: 'en',
                 publisher: { '@id': `${siteUrl}/#organization` },
               },
             ],
