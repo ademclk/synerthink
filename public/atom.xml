@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Synerthink</title>
+  <subtitle>Synerthink builds foundational computing products for autonomous systems. Dotlanth is a high-trust execution fabric focused on record-first observability, replayable runs, and capability-explicit security.</subtitle>
+  <link href="https://synerthink.com/atom.xml" rel="self" />
+  <link href="https://synerthink.com/blog" />
+  <id>https://synerthink.com/blog</id>
+  <updated>2026-03-06T00:00:00.000Z</updated>
+  <author>
+    <name>Synerthink</name>
+  </author>
+  <entry>
+    <title>Why Dotlanth Is Record-First</title>
+    <link href="https://synerthink.com/blog/why-dotlanth-is-record-first" />
+    <id>https://synerthink.com/blog/why-dotlanth-is-record-first</id>
+    <updated>2026-03-06T00:00:00.000Z</updated>
+    <summary>A research note on Dotlanth&apos;s record-first model: one syscall boundary, explicit capabilities, and run history written by default.</summary>
+    <author>
+      <name>Synerthink</name>
+    </author>
+  </entry>
+  <entry>
+    <title>Dotlanth v26.1.0-alpha</title>
+    <link href="https://synerthink.com/blog/dotlanth-v26-1-0-alpha" />
+    <id>https://synerthink.com/blog/dotlanth-v26-1-0-alpha</id>
+    <updated>2026-03-04T00:00:00.000Z</updated>
+    <summary>A foundational milestone for autonomous execution. Built seamlessly from the ground up for absolute trust and immediate inspectability.</summary>
+    <author>
+      <name>Synerthink</name>
+    </author>
+  </entry>
+</feed>

@@ -1,4 +1,6 @@
 import { execFileSync } from 'node:child_process'
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { defineConfig } from 'vite'
 import { nitro } from 'nitro/vite'
 import tailwindcss from '@tailwindcss/vite'
@@ -6,6 +8,14 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import react from '@vitejs/plugin-react'
 import { blogPostsMeta } from './src/content/blog/posts'
+
+const SITE_URL = (process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://synerthink.com').replace(
+  /\/+$/,
+  ''
+)
+const SITE_TITLE = 'Synerthink'
+const SITE_DESCRIPTION =
+  'Synerthink builds foundational computing products for autonomous systems. Dotlanth is a high-trust execution fabric focused on record-first observability, replayable runs, and capability-explicit security.'
 
 function getGitLastModified(...sourcePaths: string[]) {
   const paths = sourcePaths.filter(Boolean)
@@ -52,6 +62,114 @@ const blogSourcePathsBySlug: Record<string, string[]> = {
   ],
 }
 
+function xmlEscape(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&apos;')
+}
+
+function toRssDate(value: string) {
+  return new Date(value).toUTCString()
+}
+
+const publishedBlogPosts = blogPostsMeta
+  .filter((post) => post.frontmatter.status === 'published')
+  .sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime())
+
+function buildRssFeed(siteUrl: string) {
+  const lastBuildDate = publishedBlogPosts[0]?.frontmatter.date ?? new Date().toISOString()
+  const items = publishedBlogPosts
+    .map((post) => {
+      const url = `${siteUrl}/blog/${post.slug}`
+      const description = post.frontmatter.description ?? post.frontmatter.subtitle ?? post.frontmatter.title
+      const categories = post.frontmatter.tags
+        .map((tag) => `    <category>${xmlEscape(tag)}</category>`)
+        .join('\n')
+
+      return [
+        '  <item>',
+        `    <title>${xmlEscape(post.frontmatter.title)}</title>`,
+        `    <link>${xmlEscape(url)}</link>`,
+        `    <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
+        `    <pubDate>${toRssDate(post.frontmatter.date)}</pubDate>`,
+        `    <description>${xmlEscape(description)}</description>`,
+        categories,
+        '  </item>',
+      ]
+        .filter(Boolean)
+        .join('\n')
+    })
+    .join('\n')
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
+    '  <channel>',
+    `    <title>${SITE_TITLE}</title>`,
+    `    <link>${siteUrl}/blog</link>`,
+    `    <description>${xmlEscape(SITE_DESCRIPTION)}</description>`,
+    '    <language>en</language>',
+    `    <lastBuildDate>${toRssDate(lastBuildDate)}</lastBuildDate>`,
+    `    <atom:link href="${siteUrl}/feed.xml" rel="self" type="application/rss+xml" />`,
+    items,
+    '  </channel>',
+    '</rss>',
+    '',
+  ].join('\n')
+}
+
+function buildAtomFeed(siteUrl: string) {
+  const updated = publishedBlogPosts[0]?.frontmatter.date ?? new Date().toISOString()
+  const entries = publishedBlogPosts
+    .map((post) => {
+      const url = `${siteUrl}/blog/${post.slug}`
+      const summary = post.frontmatter.description ?? post.frontmatter.subtitle ?? post.frontmatter.title
+
+      return [
+        '  <entry>',
+        `    <title>${xmlEscape(post.frontmatter.title)}</title>`,
+        `    <link href="${xmlEscape(url)}" />`,
+        `    <id>${xmlEscape(url)}</id>`,
+        `    <updated>${new Date(post.frontmatter.date).toISOString()}</updated>`,
+        `    <summary>${xmlEscape(summary)}</summary>`,
+        '    <author>',
+        '      <name>Synerthink</name>',
+        '    </author>',
+        '  </entry>',
+      ].join('\n')
+    })
+    .join('\n')
+
+  return [
+    '<?xml version="1.0" encoding="utf-8"?>',
+    '<feed xmlns="http://www.w3.org/2005/Atom">',
+    `  <title>${SITE_TITLE}</title>`,
+    `  <subtitle>${xmlEscape(SITE_DESCRIPTION)}</subtitle>`,
+    `  <link href="${siteUrl}/atom.xml" rel="self" />`,
+    `  <link href="${siteUrl}/blog" />`,
+    `  <id>${siteUrl}/blog</id>`,
+    `  <updated>${new Date(updated).toISOString()}</updated>`,
+    '  <author>',
+    '    <name>Synerthink</name>',
+    '  </author>',
+    entries,
+    '</feed>',
+    '',
+  ].join('\n')
+}
+
+function writeFeedArtifacts(siteUrl: string) {
+  const publicDir = join(process.cwd(), 'public')
+  mkdirSync(publicDir, { recursive: true })
+  writeFileSync(join(publicDir, 'feed.xml'), buildRssFeed(siteUrl))
+  writeFileSync(join(publicDir, 'atom.xml'), buildAtomFeed(siteUrl))
+}
+
+writeFeedArtifacts(SITE_URL)
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -61,7 +179,7 @@ export default defineConfig({
     tanstackStart({
       sitemap: {
         enabled: true,
-        host: (process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://synerthink.com').replace(/\/+$/, ''),
+        host: SITE_URL,
         outputPath: 'sitemap.xml',
       },
       pages: [

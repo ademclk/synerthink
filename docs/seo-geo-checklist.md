@@ -37,3 +37,5 @@ This repo ships a TanStack Start + Nitro site. This document is a practical punc
 - Add schema types only if you can keep them correct (`FAQPage`, `Product`, etc.).
 - Advanced i18n (`hreflang`, locale sitemaps) if/when multiple languages ship.
 
+Operational follow-up:
+- Use [search-monitoring-checklist.md](./search-monitoring-checklist.md) after launches to verify Google/Bing coverage and freshness.

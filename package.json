@@ -13,6 +13,7 @@
 		"build": "vite build",
 		"prebuild:azure": "node scripts/copy-public-vendors.mjs",
 		"build:azure": "NITRO_PRESET=azure-swa vite build && node scripts/patch-azure-swa-handler.mjs && cp public/staticwebapp.config.json .output/public/staticwebapp.config.json",
+		"geo:indexnow": "node scripts/indexnow.mjs",
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},
