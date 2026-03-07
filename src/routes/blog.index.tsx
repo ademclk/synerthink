@@ -1,14 +1,18 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { getAllBlogPosts } from '@/lib/blog'
 import ScalableGradientBlur from '@/components/blog/ScalableGradientBlur'
-import { absoluteUrl } from '@/lib/seo'
+import { absoluteUrl, DEFAULT_OG_IMAGE_PATH, getSiteUrl } from '@/lib/seo'
 
 export const Route = createFileRoute('/blog/')({
   head: () => {
+    const posts = getAllBlogPosts({ includeDrafts: import.meta.env.DEV })
     const title = 'Blog | Synerthink'
     const description =
       'Research notes and release updates from Synerthink on runtime transparency, record/replay, and building Dotlanth.'
     const url = absoluteUrl('/blog')
+    const image = absoluteUrl(posts[0]?.frontmatter.image ?? DEFAULT_OG_IMAGE_PATH)
+    const siteUrl = getSiteUrl()
+    const websiteId = `${siteUrl}/#website`
 
     return {
       meta: [
@@ -19,12 +23,61 @@ export const Route = createFileRoute('/blog/')({
           content:
             'Synerthink, blog, software development, technology, innovation, Dotlanth',
         },
+        { property: 'og:site_name', content: 'Synerthink' },
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:type', content: 'website' },
         { property: 'og:url', content: url },
+        { property: 'og:image', content: image },
+        { property: 'og:image:alt', content: 'Synerthink blog' },
+        { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
+        { name: 'twitter:image', content: image },
+        {
+          'script:ld+json': {
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'Blog',
+                '@id': `${url}#blog`,
+                url,
+                name: 'Synerthink Blog',
+                description,
+                isPartOf: {
+                  '@id': websiteId,
+                },
+                inLanguage: 'en',
+              },
+              {
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                  {
+                    '@type': 'ListItem',
+                    position: 1,
+                    name: 'Home',
+                    item: absoluteUrl('/'),
+                  },
+                  {
+                    '@type': 'ListItem',
+                    position: 2,
+                    name: 'Blog',
+                    item: url,
+                  },
+                ],
+              },
+              {
+                '@type': 'ItemList',
+                itemListElement: posts.map((post, index) => ({
+                  '@type': 'ListItem',
+                  position: index + 1,
+                  url: absoluteUrl(`/blog/${post.slug}`),
+                  name: post.frontmatter.title,
+                })),
+              },
+            ],
+          },
+        },
       ],
       links: [{ rel: 'canonical', href: url }],
     }

@@ -24,7 +24,7 @@ export default function V26AlphaPost() {
             </p>
 
             <p className="mb-6 text-lg leading-relaxed">
-                You describe what you want to build in a plain-language file called a <code className="rounded-md bg-foreground/8 px-2 py-0.5 text-sm font-mono text-foreground">dot</code> file. Not JSON, not YAML, not a configuration format masquerading as a programming language. Something closer to pseudocode: readable on the first pass, writable without a manual.
+                You describe what you want to build in a plain-language file called a <code className="rounded-md bg-foreground/8 px-2 py-0.5 text-sm font-mono text-foreground">dot</code> file. Not a configuration format masquerading as a programming language. Something closer to pseudocode: readable on the first pass, writable without a manual.
             </p>
 
             <div className="my-10 rounded-2xl border border-foreground/10 bg-foreground/4 px-7 py-6">

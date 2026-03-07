@@ -76,6 +76,11 @@
       "statusCode": 301
     },
     {
+      "route": "/blog/why-dotdsl-uses-dot-not-yaml",
+      "redirect": "/blog/why-dotdsl-is-a-source-language",
+      "statusCode": 301
+    },
+    {
       "route": "/products/",
       "redirect": "/products",
       "statusCode": 301

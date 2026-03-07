@@ -12,6 +12,8 @@ const componentsBySlug: Record<
   string,
   () => Promise<{ default: React.ComponentType }>
 > = {
+  'why-dotdsl-is-a-source-language': () =>
+    import('@/components/blog/posts/DotDslPseudocodePost'),
   'why-dotlanth-is-record-first': () =>
     import('@/components/blog/posts/RecordFirstPost'),
   'dotlanth-v26-1-0-alpha': () => import('@/components/blog/posts/V26AlphaPost'),

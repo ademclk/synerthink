@@ -27,6 +27,7 @@ export const Route = createFileRoute('/blog/$slug')({
     const siteUrl = getSiteUrl()
     const organizationId = `${siteUrl}/#organization`
     const websiteId = `${siteUrl}/#website`
+    const blogUrl = absoluteUrl('/blog')
 
     return {
       meta: [
@@ -38,12 +39,23 @@ export const Route = createFileRoute('/blog/$slug')({
         },
         { name: 'author', content: 'Synerthink' },
         { name: 'keywords', content: keywords },
+        { property: 'og:site_name', content: 'Synerthink' },
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:type', content: 'article' },
         { property: 'og:url', content: url },
         { property: 'og:image', content: image },
         { property: 'og:image:alt', content: post?.frontmatter.title ?? 'Synerthink blog post' },
+        ...(post
+          ? [
+            { property: 'article:author', content: 'Synerthink' },
+            { property: 'article:section', content: post.kind === 'releases' ? 'Product' : 'Research' },
+            ...post.frontmatter.tags.map((tag) => ({
+              property: 'article:tag',
+              content: tag,
+            })),
+          ]
+          : []),
         ...(post?.frontmatter.date
           ? [
             {
@@ -60,40 +72,77 @@ export const Route = createFileRoute('/blog/$slug')({
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: image },
+        { name: 'twitter:image:alt', content: post?.frontmatter.title ?? 'Synerthink blog post' },
         ...(post
           ? [
             {
               'script:ld+json': {
                 '@context': 'https://schema.org',
-                '@type': 'BlogPosting',
-                headline: post.frontmatter.title,
-                description,
-                url,
-                inLanguage: 'en',
-                isPartOf: {
-                  '@id': websiteId,
-                },
-                mainEntityOfPage: {
-                  '@type': 'WebPage',
-                  '@id': url,
-                },
-                image: [image],
-                datePublished: post.frontmatter.date,
-                dateModified: post.frontmatter.date,
-                author: {
-                  '@type': 'Organization',
-                  '@id': organizationId,
-                  name: 'Synerthink',
-                },
-                publisher: {
-                  '@type': 'Organization',
-                  '@id': organizationId,
-                  name: 'Synerthink',
-                  logo: {
-                    '@type': 'ImageObject',
-                    url: absoluteUrl('/android-chrome-512x512.png'),
+                '@graph': [
+                  {
+                    '@type': 'BlogPosting',
+                    headline: post.frontmatter.title,
+                    description,
+                    url,
+                    inLanguage: 'en',
+                    isPartOf: {
+                      '@id': websiteId,
+                    },
+                    mainEntityOfPage: {
+                      '@type': 'WebPage',
+                      '@id': url,
+                    },
+                    image: [image],
+                    datePublished: post.frontmatter.date,
+                    dateModified: post.frontmatter.date,
+                    keywords: post.frontmatter.tags,
+                    articleSection: post.kind === 'releases' ? 'Product' : 'Research',
+                    about: [
+                      'Dotlanth',
+                      'dotDSL',
+                      'DSL design',
+                      'capability security',
+                      'runtime validation',
+                    ],
+                    author: {
+                      '@type': 'Organization',
+                      '@id': organizationId,
+                      name: 'Synerthink',
+                    },
+                    publisher: {
+                      '@type': 'Organization',
+                      '@id': organizationId,
+                      name: 'Synerthink',
+                      logo: {
+                        '@type': 'ImageObject',
+                        url: absoluteUrl('/android-chrome-512x512.png'),
+                      },
+                    },
                   },
-                },
+                  {
+                    '@type': 'BreadcrumbList',
+                    itemListElement: [
+                      {
+                        '@type': 'ListItem',
+                        position: 1,
+                        name: 'Home',
+                        item: absoluteUrl('/'),
+                      },
+                      {
+                        '@type': 'ListItem',
+                        position: 2,
+                        name: 'Blog',
+                        item: blogUrl,
+                      },
+                      {
+                        '@type': 'ListItem',
+                        position: 3,
+                        name: post.frontmatter.title,
+                        item: url,
+                      },
+                    ],
+                  },
+                ],
               },
             },
           ]
@@ -136,6 +185,24 @@ function BlogPostRoute() {
           <span>&middot;</span>
           <span>Synerthink</span>
         </div>
+
+        <nav aria-label="Breadcrumb" className="mb-8 text-sm text-foreground/50">
+          <ol className="flex flex-wrap items-center justify-center gap-2">
+            <li>
+              <a href="/" className="hover:text-foreground">
+                Home
+              </a>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li>
+              <a href="/blog" className="hover:text-foreground">
+                Blog
+              </a>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li className="text-foreground/70">{post.frontmatter.title}</li>
+          </ol>
+        </nav>
 
         {/* Title */}
         <h1 className="text-balance text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl leading-[1.15] mb-12">

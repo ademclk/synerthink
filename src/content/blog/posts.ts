@@ -20,6 +20,21 @@ export type BlogPostMeta = {
 
 export const blogPostsMeta: BlogPostMeta[] = [
   {
+    slug: 'why-dotdsl-is-a-source-language',
+    kind: 'research',
+    frontmatter: {
+      title: 'Why dotDSL Reads Like a Program',
+      date: '2026-03-07',
+      tags: ['research', 'dotdsl', 'dsl-design', 'language-design'],
+      status: 'published',
+      subtitle: 'Why the language optimizes for intent, validation, and runtime alignment',
+      description:
+        'A research note on why dotDSL v0.1 is designed as a source language with a single dot file, explicit end blocks, strict validation, and capability declarations.',
+      image: '/dotdsl-programs.png',
+      slug: 'why-dotdsl-is-a-source-language',
+    },
+  },
+  {
     slug: 'why-dotlanth-is-record-first',
     kind: 'research',
     frontmatter: {

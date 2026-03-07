@@ -52,6 +52,10 @@ function createPage(
 }
 
 const blogSourcePathsBySlug: Record<string, string[]> = {
+  'why-dotdsl-is-a-source-language': [
+    'src/content/blog/posts.ts',
+    'src/components/blog/posts/DotDslPseudocodePost.tsx',
+  ],
   'why-dotlanth-is-record-first': [
     'src/content/blog/posts.ts',
     'src/components/blog/posts/RecordFirstPost.tsx',
@@ -75,9 +79,15 @@ function toRssDate(value: string) {
   return new Date(value).toUTCString()
 }
 
+function maxIsoDate(...values: Array<string | undefined>) {
+  return values.filter(Boolean).sort().at(-1)
+}
+
 const publishedBlogPosts = blogPostsMeta
   .filter((post) => post.frontmatter.status === 'published')
   .sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime())
+
+const latestPublishedBlogDate = publishedBlogPosts[0]?.frontmatter.date
 
 function buildRssFeed(siteUrl: string) {
   const lastBuildDate = publishedBlogPosts[0]?.frontmatter.date ?? new Date().toISOString()
@@ -191,14 +201,6 @@ export default defineConfig({
           changefreq: 'monthly',
           priority: 0.6,
         }),
-        createPage('/solutions', ['src/routes/solutions.tsx'], {
-          changefreq: 'monthly',
-          priority: 0.5,
-        }),
-        createPage('/resources', ['src/routes/resources.tsx'], {
-          changefreq: 'monthly',
-          priority: 0.5,
-        }),
         createPage('/products', ['src/routes/products.index.tsx'], {
           changefreq: 'weekly',
           priority: 0.8,
@@ -210,6 +212,7 @@ export default defineConfig({
         createPage('/blog', ['src/routes/blog.index.tsx', 'src/content/blog/posts.ts'], {
           changefreq: 'weekly',
           priority: 0.8,
+          ...(latestPublishedBlogDate ? { lastmod: latestPublishedBlogDate } : {}),
         }),
         ...blogPostsMeta
           .filter((post) => post.frontmatter.status === 'published')
@@ -220,9 +223,10 @@ export default defineConfig({
               {
                 changefreq: post.kind === 'releases' ? 'monthly' : 'yearly',
                 priority: post.kind === 'releases' ? 0.8 : 0.7,
-                lastmod:
-                  getGitLastModified(...(blogSourcePathsBySlug[post.slug] ?? [])) ??
-                  post.frontmatter.date,
+                lastmod: maxIsoDate(
+                  getGitLastModified(...(blogSourcePathsBySlug[post.slug] ?? [])),
+                  post.frontmatter.date
+                ),
               }
             )
           ),
