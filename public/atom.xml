@@ -5,10 +5,20 @@
   <link href="https://synerthink.com/atom.xml" rel="self" />
   <link href="https://synerthink.com/blog" />
   <id>https://synerthink.com/blog</id>
-  <updated>2026-03-07T00:00:00.000Z</updated>
+  <updated>2026-03-10T00:00:00.000Z</updated>
   <author>
     <name>Synerthink</name>
   </author>
+  <entry>
+    <title>Inside DotDB: Why Deterministic Systems Start Local</title>
+    <link href="https://synerthink.com/blog/why-dotdb-starts-with-sqlite" />
+    <id>https://synerthink.com/blog/why-dotdb-starts-with-sqlite</id>
+    <updated>2026-03-10T00:00:00.000Z</updated>
+    <summary>Why DotDB uses a local SQLite backend for runs, logs, and state in Dotlanth, and why that storage contract matters more than the specific engine.</summary>
+    <author>
+      <name>Synerthink</name>
+    </author>
+  </entry>
   <entry>
     <title>Why dotDSL Reads Like a Program</title>
     <link href="https://synerthink.com/blog/why-dotdsl-is-a-source-language" />

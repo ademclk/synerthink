@@ -20,6 +20,21 @@ export type BlogPostMeta = {
 
 export const blogPostsMeta: BlogPostMeta[] = [
   {
+    slug: 'why-dotdb-starts-with-sqlite',
+    kind: 'research',
+    frontmatter: {
+      title: 'Inside DotDB: Why Deterministic Systems Start Local',
+      date: '2026-03-10',
+      tags: ['research', 'dotdb', 'sqlite', 'deterministic-systems', 'state'],
+      status: 'published',
+      subtitle: 'Why DotDB begins as a local storage contract, not a remote service',
+      description:
+        'Why DotDB uses a local SQLite backend for runs, logs, and state in Dotlanth, and why that storage contract matters more than the specific engine.',
+      image: '/inside_dotdb.png',
+      slug: 'why-dotdb-starts-with-sqlite',
+    },
+  },
+  {
     slug: 'why-dotdsl-is-a-source-language',
     kind: 'research',
     frontmatter: {

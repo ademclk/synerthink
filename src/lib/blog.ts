@@ -12,6 +12,8 @@ const componentsBySlug: Record<
   string,
   () => Promise<{ default: React.ComponentType }>
 > = {
+  'why-dotdb-starts-with-sqlite': () =>
+    import('@/components/blog/posts/DotDbStartsWithSqlitePost'),
   'why-dotdsl-is-a-source-language': () =>
     import('@/components/blog/posts/DotDslPseudocodePost'),
   'why-dotlanth-is-record-first': () =>

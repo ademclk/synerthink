@@ -22,6 +22,7 @@ Synerthink exists to make execution legible. The company focuses on simple cores
 - [Products](https://synerthink.com/products): Product index.
 - [Dotlanth](https://synerthink.com/products/dotlanth): Product overview and roadmap.
 - [Blog](https://synerthink.com/blog): Research notes and release updates.
+- [Inside DotDB: Why Deterministic Systems Start Local](https://synerthink.com/blog/why-dotdb-starts-with-sqlite): Research note published on 2026-03-10.
 - [Why dotDSL Reads Like a Program](https://synerthink.com/blog/why-dotdsl-is-a-source-language): Research note published on 2026-03-07.
 - [Why Dotlanth Is Record-First](https://synerthink.com/blog/why-dotlanth-is-record-first): Research note published on 2026-03-06.
 - [Dotlanth v26.1.0-alpha](https://synerthink.com/blog/dotlanth-v26-1-0-alpha): Release post published on 2026-03-04.

@@ -5,8 +5,20 @@
     <link>https://synerthink.com/blog</link>
     <description>Synerthink builds foundational computing products for autonomous systems. Dotlanth is a high-trust execution fabric focused on record-first observability, replayable runs, and capability-explicit security.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 07 Mar 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 10 Mar 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://synerthink.com/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Inside DotDB: Why Deterministic Systems Start Local</title>
+    <link>https://synerthink.com/blog/why-dotdb-starts-with-sqlite</link>
+    <guid isPermaLink="true">https://synerthink.com/blog/why-dotdb-starts-with-sqlite</guid>
+    <pubDate>Tue, 10 Mar 2026 00:00:00 GMT</pubDate>
+    <description>Why DotDB uses a local SQLite backend for runs, logs, and state in Dotlanth, and why that storage contract matters more than the specific engine.</description>
+    <category>research</category>
+    <category>dotdb</category>
+    <category>sqlite</category>
+    <category>deterministic-systems</category>
+    <category>state</category>
+  </item>
   <item>
     <title>Why dotDSL Reads Like a Program</title>
     <link>https://synerthink.com/blog/why-dotdsl-is-a-source-language</link>

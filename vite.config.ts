@@ -52,6 +52,10 @@ function createPage(
 }
 
 const blogSourcePathsBySlug: Record<string, string[]> = {
+  'why-dotdb-starts-with-sqlite': [
+    'src/content/blog/posts.ts',
+    'src/components/blog/posts/DotDbStartsWithSqlitePost.tsx',
+  ],
   'why-dotdsl-is-a-source-language': [
     'src/content/blog/posts.ts',
     'src/components/blog/posts/DotDslPseudocodePost.tsx',
