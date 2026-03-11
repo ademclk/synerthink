@@ -18,7 +18,22 @@ export type BlogPostMeta = {
   frontmatter: BlogFrontmatter
 }
 
-export const blogPostsMeta: BlogPostMeta[] = [
+export const blogPostsMeta = [
+  {
+    slug: 'inside-dotvm-syscall-boundary',
+    kind: 'research',
+    frontmatter: {
+      title: 'The ABI Behind Replayable Compute',
+      date: '2026-03-12',
+      tags: ['research', 'dotvm', 'vm-design', 'deterministic-systems', 'record-replay'],
+      status: 'published',
+      subtitle: 'Why Dotlanth starts with a tiny register VM, a versioned syscall ABI, and recorded events',
+      description:
+        'How Dotlanth uses a minimal register VM, a versioned syscall ABI, and structured recorded events to make replayable execution practical for AI-native systems.',
+      image: '/replayable_compute.png',
+      slug: 'inside-dotvm-syscall-boundary',
+    },
+  },
   {
     slug: 'why-dotdb-starts-with-sqlite',
     kind: 'research',
@@ -78,4 +93,4 @@ export const blogPostsMeta: BlogPostMeta[] = [
       slug: 'dotlanth-v26-1-0-alpha',
     },
   },
-]
+] satisfies BlogPostMeta[]

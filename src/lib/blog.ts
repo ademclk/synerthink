@@ -8,10 +8,11 @@ export type BlogPost = BlogPostMeta & {
   component: React.ComponentType
 }
 
-const componentsBySlug: Record<
-  string,
-  () => Promise<{ default: React.ComponentType }>
-> = {
+type BlogSlug = (typeof blogPostsMeta)[number]['slug']
+
+const componentsBySlug = {
+  'inside-dotvm-syscall-boundary': () =>
+    import('@/components/blog/posts/DotVmSyscallBoundaryPost'),
   'why-dotdb-starts-with-sqlite': () =>
     import('@/components/blog/posts/DotDbStartsWithSqlitePost'),
   'why-dotdsl-is-a-source-language': () =>
@@ -19,11 +20,11 @@ const componentsBySlug: Record<
   'why-dotlanth-is-record-first': () =>
     import('@/components/blog/posts/RecordFirstPost'),
   'dotlanth-v26-1-0-alpha': () => import('@/components/blog/posts/V26AlphaPost'),
-}
+} satisfies Record<BlogSlug, () => Promise<{ default: React.ComponentType }>>
 
 // Lazy load the actual post components so they don't bloat the main bundle
 const posts: BlogPost[] = blogPostsMeta.map((postMeta) => {
-  const importer = componentsBySlug[postMeta.slug]
+  const importer = componentsBySlug[postMeta.slug as BlogSlug]
   if (!importer) {
     throw new Error(`Missing blog post component for slug: ${postMeta.slug}`)
   }

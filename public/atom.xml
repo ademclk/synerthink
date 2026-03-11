@@ -5,10 +5,20 @@
   <link href="https://synerthink.com/atom.xml" rel="self" />
   <link href="https://synerthink.com/blog" />
   <id>https://synerthink.com/blog</id>
-  <updated>2026-03-10T00:00:00.000Z</updated>
+  <updated>2026-03-12T00:00:00.000Z</updated>
   <author>
     <name>Synerthink</name>
   </author>
+  <entry>
+    <title>The ABI Behind Replayable Compute</title>
+    <link href="https://synerthink.com/blog/inside-dotvm-syscall-boundary" />
+    <id>https://synerthink.com/blog/inside-dotvm-syscall-boundary</id>
+    <updated>2026-03-12T00:00:00.000Z</updated>
+    <summary>How Dotlanth uses a minimal register VM, a versioned syscall ABI, and structured recorded events to make replayable execution practical for AI-native systems.</summary>
+    <author>
+      <name>Synerthink</name>
+    </author>
+  </entry>
   <entry>
     <title>Inside DotDB: Why Deterministic Systems Start Local</title>
     <link href="https://synerthink.com/blog/why-dotdb-starts-with-sqlite" />
