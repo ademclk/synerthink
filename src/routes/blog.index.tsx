@@ -1,7 +1,15 @@
+import * as React from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { getAllBlogPosts } from '@/lib/blog'
-import ScalableGradientBlur from '@/components/blog/ScalableGradientBlur'
 import { absoluteUrl, DEFAULT_OG_IMAGE_PATH, getSiteUrl } from '@/lib/seo'
+
+const ScalableGradientBlur = React.lazy(() => import('@/components/blog/ScalableGradientBlur'))
+
+const blogCardImageBySource: Record<string, string> = {
+  '/replayable_compute.png': '/replayable_compute-card.webp',
+  '/inside_dotdb.png': '/inside_dotdb-card.webp',
+  '/dotdsl-programs.png': '/dotdsl-programs-card.webp',
+}
 
 export const Route = createFileRoute('/blog/')({
   head: () => {
@@ -109,90 +117,112 @@ function BlogIndex() {
               No posts yet.
             </div>
           ) : (
-            posts.map((post, index) => (
-              <Link
-                key={post.slug}
-                to="/blog/$slug"
-                params={{ slug: post.slug }}
-                className="group flex flex-col gap-0 rounded-[1.75rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
-              >
-                <article className="flex w-full flex-col gap-4">
-                  {/* Gradient card: square */}
-                  <div
-                    className="@container relative w-full overflow-hidden rounded-[1rem] bg-foreground/5 transition-transform duration-500 will-change-transform group-hover:scale-[1.02]"
-                    style={{
-                      aspectRatio: '1/1',
-                      position: 'relative',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {post.slug === 'dotlanth-v26-1-0-alpha' ? (
-                      <img
-                        src="/dotlanth-v2610alpha.svg"
-                        alt="Dotlanth v26.1.0-alpha preview"
-                        decoding="async"
-                        loading={index < 3 ? 'eager' : 'lazy'}
-                        className="absolute inset-0 h-full w-full object-cover"
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                        }}
-                        draggable={false}
-                      />
-                    ) : post.frontmatter.image ? (
-                      <img
-                        src={post.frontmatter.image}
-                        alt={`${post.frontmatter.title} preview`}
-                        decoding="async"
-                        loading={index < 3 ? 'eager' : 'lazy'}
-                        className="absolute inset-0 h-full w-full object-cover"
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                        }}
-                        draggable={false}
-                      />
-                    ) : post.kind === 'releases' ? (
-                      <ScalableGradientBlur
-                        seed={post.slug}
-                        versionLabel="v26.1.0-alpha"
-                      />
-                    ) : (
-                      <ScalableGradientBlur seed={post.slug} />
-                    )}
-                  </div>
+            posts.map((post, index) => {
+              const cardWebpImage = post.frontmatter.image
+                ? blogCardImageBySource[post.frontmatter.image]
+                : undefined
 
-                  {/* Post metadata below the card */}
-                  <div className="flex flex-col gap-1.5 px-1 pt-1">
-                    <h2 className="text-balance text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-foreground/80 sm:text-2xl leading-[1.2]">
-                      {post.frontmatter.title}
-                    </h2>
-
-                    <div className="flex items-center gap-3 text-sm font-medium text-foreground/50">
-                      <span>{post.kind === 'releases' ? 'Product' : 'Research'}</span>
-                      {post.frontmatter.date ? (
-                        <>
-                          <span className="h-1 w-1 rounded-full bg-foreground/30"></span>
-                          <span>{post.frontmatter.date}</span>
-                        </>
-                      ) : null}
-                      {post.frontmatter.status === 'draft' ? (
-                        <>
-                          <span className="h-1 w-1 rounded-full bg-foreground/30"></span>
-                          <span className="uppercase tracking-widest text-[10px] border border-foreground/20 px-1.5 py-0.5 rounded-sm">Draft</span>
-                        </>
-                      ) : null}
+              return (
+                <Link
+                  key={post.slug}
+                  to="/blog/$slug"
+                  params={{ slug: post.slug }}
+                  className="group flex flex-col gap-0 rounded-[1.75rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/25"
+                >
+                  <article className="flex w-full flex-col gap-4">
+                    {/* Gradient card: square */}
+                    <div
+                      className="@container relative w-full overflow-hidden rounded-[1rem] bg-foreground/5 transition-transform duration-500 will-change-transform group-hover:scale-[1.02]"
+                      style={{
+                        aspectRatio: '1/1',
+                        position: 'relative',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {post.slug === 'dotlanth-v26-1-0-alpha' ? (
+                        <img
+                          src="/dotlanth-v2610alpha.svg"
+                          alt="Dotlanth v26.1.0-alpha preview"
+                          decoding="async"
+                          loading={index === 0 ? 'eager' : 'lazy'}
+                          fetchPriority={index === 0 ? 'high' : 'auto'}
+                          className="absolute inset-0 h-full w-full object-cover"
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                          }}
+                          draggable={false}
+                        />
+                      ) : post.frontmatter.image ? (
+                        <picture className="absolute inset-0 block h-full w-full">
+                          {cardWebpImage ? (
+                            <source
+                              type="image/webp"
+                              srcSet={cardWebpImage}
+                            />
+                          ) : null}
+                          <img
+                            src={post.frontmatter.image}
+                            alt={`${post.frontmatter.title} preview`}
+                            width={768}
+                            height={768}
+                            decoding="async"
+                            loading={index === 0 ? 'eager' : 'lazy'}
+                            fetchPriority={index === 0 ? 'high' : 'auto'}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            style={{
+                              position: 'absolute',
+                              inset: 0,
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
+                            draggable={false}
+                          />
+                        </picture>
+                      ) : post.kind === 'releases' ? (
+                        <React.Suspense fallback={<div className="absolute inset-0 bg-foreground/5" />}>
+                          <ScalableGradientBlur
+                            seed={post.slug}
+                            versionLabel="v26.1.0-alpha"
+                          />
+                        </React.Suspense>
+                      ) : (
+                        <React.Suspense fallback={<div className="absolute inset-0 bg-foreground/5" />}>
+                          <ScalableGradientBlur seed={post.slug} />
+                        </React.Suspense>
+                      )}
                     </div>
-                  </div>
-                </article>
-              </Link>
-            ))
+
+                    {/* Post metadata below the card */}
+                    <div className="flex flex-col gap-1.5 px-1 pt-1">
+                      <h2 className="text-balance text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-foreground/80 sm:text-2xl leading-[1.2]">
+                        {post.frontmatter.title}
+                      </h2>
+
+                      <div className="flex items-center gap-3 text-sm font-medium text-foreground/50">
+                        <span>{post.kind === 'releases' ? 'Product' : 'Research'}</span>
+                        {post.frontmatter.date ? (
+                          <>
+                            <span className="h-1 w-1 rounded-full bg-foreground/30"></span>
+                            <span>{post.frontmatter.date}</span>
+                          </>
+                        ) : null}
+                        {post.frontmatter.status === 'draft' ? (
+                          <>
+                            <span className="h-1 w-1 rounded-full bg-foreground/30"></span>
+                            <span className="uppercase tracking-widest text-[10px] border border-foreground/20 px-1.5 py-0.5 rounded-sm">Draft</span>
+                          </>
+                        ) : null}
+                      </div>
+                    </div>
+                  </article>
+                </Link>
+              )
+            })
           )}
         </section>
       </div>

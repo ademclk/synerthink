@@ -97,6 +97,8 @@ export function Footer() {
                     width={1200}
                     height={220}
                     decoding="async"
+                    loading="lazy"
+                    fetchPriority="low"
                     className="opacity-[0.08] dark:invert"
                     style={{
                         height: 'clamp(5rem, 22vw, 20rem)',

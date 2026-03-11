@@ -10,6 +10,21 @@ const NAV_LINKS = [
     { name: "About", href: "/about" },
 ];
 
+let gsapPromise: Promise<typeof import("gsap")["default"]> | null = null;
+
+async function loadGsap() {
+    if (!gsapPromise) {
+        gsapPromise = import("gsap")
+            .then((module) => module.default)
+            .catch((error) => {
+                gsapPromise = null;
+                throw error;
+            });
+    }
+
+    return gsapPromise;
+}
+
 function useBodyScrollLock(isLocked: boolean) {
     useEffect(() => {
         if (isLocked) {
@@ -108,123 +123,132 @@ export default function Navbar() {
     }, [isMenuOpen]);
 
     useEffect(() => {
-        if (topLineRef.current && middleLineRef.current && bottomLineRef.current) {
-            let cancelled = false;
+        if (!topLineRef.current || !middleLineRef.current || !bottomLineRef.current) {
+            return;
+        }
 
-            const topLine = topLineRef.current;
-            const middleLine = middleLineRef.current;
-            const bottomLine = bottomLineRef.current;
-            const menuOverlay = menuOverlayRef.current;
+        let cancelled = false;
 
-            if (prefersReducedMotion) {
-                if (isMenuOpen) {
-                    topLine.setAttribute("points", "3.5 3.5, 15 15");
-                    middleLine.style.opacity = "0";
-                    bottomLine.setAttribute("points", "3.5 15, 15 3.5");
-                } else {
-                    topLine.setAttribute("points", "2 5, 16 5");
-                    middleLine.style.opacity = "1";
-                    bottomLine.setAttribute("points", "2 15, 16 15");
-                    setMenuRendered(false);
-                }
+        const topLine = topLineRef.current;
+        const middleLine = middleLineRef.current;
+        const bottomLine = bottomLineRef.current;
+        const menuOverlay = menuOverlayRef.current;
 
-                if (menuOverlay) {
-                    menuOverlay.style.opacity = isMenuOpen ? "1" : "0";
-                    menuOverlay.style.transform = isMenuOpen ? "none" : "translateY(-20px) scale(0.98)";
-                }
+        if (!isMenuRendered && !isMenuOpen) {
+            topLine.setAttribute("points", "2 5, 16 5");
+            middleLine.style.opacity = "1";
+            bottomLine.setAttribute("points", "2 15, 16 15");
+            if (menuOverlay) {
+                menuOverlay.style.opacity = "0";
+                menuOverlay.style.transform = "translateY(-20px) scale(0.98)";
+            }
+            return;
+        }
 
-                return;
+        if (prefersReducedMotion) {
+            if (isMenuOpen) {
+                topLine.setAttribute("points", "3.5 3.5, 15 15");
+                middleLine.style.opacity = "0";
+                bottomLine.setAttribute("points", "3.5 15, 15 3.5");
+            } else {
+                topLine.setAttribute("points", "2 5, 16 5");
+                middleLine.style.opacity = "1";
+                bottomLine.setAttribute("points", "2 15, 16 15");
+                setMenuRendered(false);
             }
 
-            (async () => {
-                const { default: gsapRuntime } = await import("gsap");
-                if (cancelled) return;
+            if (menuOverlay) {
+                menuOverlay.style.opacity = isMenuOpen ? "1" : "0";
+                menuOverlay.style.transform = isMenuOpen ? "none" : "translateY(-20px) scale(0.98)";
+            }
 
-                if (isMenuOpen) {
-                    setIsAnimating(true);
-                    // Animate to X
-                    gsapRuntime.to(topLine, {
-                        attr: { points: "3.5 3.5, 15 15" },
-                        duration: 0.24,
-                        ease: "power2.inOut"
-                    });
-                    gsapRuntime.to(middleLine, {
-                        opacity: 0,
-                        duration: 0.2
-                    });
-                    gsapRuntime.to(bottomLine, {
-                        attr: { points: "3.5 15, 15 3.5" },
-                        duration: 0.24,
-                        ease: "power2.inOut"
-                    });
+            return;
+        }
 
-                    // Animate menu overlay
-                    if (menuOverlay) {
-                        gsapRuntime.killTweensOf(menuOverlay);
-                        gsapRuntime.fromTo(menuOverlay,
-                            {
-                                opacity: 0,
-                                y: -20,
-                                scale: 0.98
-                            },
-                            {
-                                opacity: 1,
-                                y: 0,
-                                scale: 1,
-                                duration: 0.4,
-                                ease: "power2.out",
-                                onComplete: () => setIsAnimating(false)
-                            }
-                        );
-                    } else {
-                        setIsAnimating(false);
-                    }
-                } else {
-                    setIsAnimating(true);
-                    // Animate back to hamburger
-                    gsapRuntime.to(topLine, {
-                        attr: { points: "2 5, 16 5" },
-                        duration: 0.24,
-                        ease: "power2.inOut"
-                    });
-                    gsapRuntime.to(middleLine, {
-                        opacity: 1,
-                        duration: 0.2,
-                        delay: 0.1
-                    });
-                    gsapRuntime.to(bottomLine, {
-                        attr: { points: "2 15, 16 15" },
-                        duration: 0.24,
-                        ease: "power2.inOut"
-                    });
+        (async () => {
+            const gsapRuntime = await loadGsap();
+            if (cancelled) return;
 
-                    // Animate menu overlay out
-                    if (menuOverlay) {
-                        gsapRuntime.killTweensOf(menuOverlay);
-                        gsapRuntime.to(menuOverlay, {
+            if (isMenuOpen) {
+                setIsAnimating(true);
+                gsapRuntime.to(topLine, {
+                    attr: { points: "3.5 3.5, 15 15" },
+                    duration: 0.24,
+                    ease: "power2.inOut"
+                });
+                gsapRuntime.to(middleLine, {
+                    opacity: 0,
+                    duration: 0.2
+                });
+                gsapRuntime.to(bottomLine, {
+                    attr: { points: "3.5 15, 15 3.5" },
+                    duration: 0.24,
+                    ease: "power2.inOut"
+                });
+
+                if (menuOverlay) {
+                    gsapRuntime.killTweensOf(menuOverlay);
+                    gsapRuntime.fromTo(menuOverlay,
+                        {
                             opacity: 0,
                             y: -20,
-                            scale: 0.98,
+                            scale: 0.98
+                        },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
                             duration: 0.4,
-                            ease: "power2.in",
-                            onComplete: () => {
-                                if (cancelled) return;
-                                setIsAnimating(false);
-                                setMenuRendered(false);
-                            }
-                        });
-                    } else {
-                        setIsAnimating(false);
-                        setMenuRendered(false);
-                    }
+                            ease: "power2.out",
+                            onComplete: () => setIsAnimating(false)
+                        }
+                    );
+                } else {
+                    setIsAnimating(false);
                 }
-            })();
+            } else {
+                setIsAnimating(true);
+                gsapRuntime.to(topLine, {
+                    attr: { points: "2 5, 16 5" },
+                    duration: 0.24,
+                    ease: "power2.inOut"
+                });
+                gsapRuntime.to(middleLine, {
+                    opacity: 1,
+                    duration: 0.2,
+                    delay: 0.1
+                });
+                gsapRuntime.to(bottomLine, {
+                    attr: { points: "2 15, 16 15" },
+                    duration: 0.24,
+                    ease: "power2.inOut"
+                });
 
-            return () => {
-                cancelled = true;
-            };
-        }
-    }, [isMenuOpen, prefersReducedMotion]);
+                if (menuOverlay) {
+                    gsapRuntime.killTweensOf(menuOverlay);
+                    gsapRuntime.to(menuOverlay, {
+                        opacity: 0,
+                        y: -20,
+                        scale: 0.98,
+                        duration: 0.4,
+                        ease: "power2.in",
+                        onComplete: () => {
+                            if (cancelled) return;
+                            setIsAnimating(false);
+                            setMenuRendered(false);
+                        }
+                    });
+                } else {
+                    setIsAnimating(false);
+                    setMenuRendered(false);
+                }
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [isMenuOpen, isMenuRendered, prefersReducedMotion]);
 
     return (
         <>
