@@ -9,6 +9,9 @@ export type BlogFrontmatter = {
   subtitle?: string
   description?: string
   image?: string
+  versionLabel?: string
+  ctaHref?: string
+  ctaLabel?: string
   slug: string
 }
 
@@ -19,6 +22,30 @@ export type BlogPostMeta = {
 }
 
 export const blogPostsMeta = [
+  {
+    slug: 'dotlanth-v26-2-0-alpha',
+    kind: 'releases',
+    frontmatter: {
+      title: 'Dotlanth v26.2.0-alpha',
+      date: '2026-03-13',
+      tags: [
+        'release',
+        'artifacts',
+        'replayable-systems',
+        'capability-security',
+        'ai-infrastructure',
+      ],
+      status: 'published',
+      subtitle: 'Why artifact-first execution matters for reliable AI-native systems',
+      description:
+        'Dotlanth v26.2.0-alpha turns artifacts into the unit of truth with capability reports, trace export, replay tooling, and a new capability lab for exercising real runs.',
+      image: '/dotlanth-v2620alpha.png',
+      versionLabel: 'v26.2.0-alpha',
+      ctaHref: 'https://github.com/ademclk/dotlanth/releases/tag/v26.2.0-alpha',
+      ctaLabel: 'Try it on GitHub',
+      slug: 'dotlanth-v26-2-0-alpha',
+    },
+  },
   {
     slug: 'inside-dotvm-syscall-boundary',
     kind: 'research',
@@ -90,6 +117,9 @@ export const blogPostsMeta = [
       description:
         'A foundational milestone for autonomous execution. Built seamlessly from the ground up for absolute trust and immediate inspectability.',
       image: '/dotlanth-v2610alpha-og.png',
+      versionLabel: 'v26.1.0-alpha',
+      ctaHref: 'https://github.com/ademclk/dotlanth/releases/tag/v26.1.0-alpha',
+      ctaLabel: 'Try it on GitHub',
       slug: 'dotlanth-v26-1-0-alpha',
     },
   },

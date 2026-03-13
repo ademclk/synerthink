@@ -218,12 +218,12 @@ function BlogPostRoute() {
         {/* Call to Action Button */}
         {post.kind === 'releases' ? (
           <a
-            href="https://github.com/ademclk/dotlanth/releases/tag/v26.1.0-alpha"
+            href={post.frontmatter.ctaHref ?? 'https://github.com/ademclk/dotlanth/releases'}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-8 py-3.5 text-sm font-semibold shadow-sm transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            Try it on GitHub
+            {post.frontmatter.ctaLabel ?? 'Try it on GitHub'}
           </a>
         ) : null}
       </section>

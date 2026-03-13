@@ -11,6 +11,7 @@ export type BlogPost = BlogPostMeta & {
 type BlogSlug = (typeof blogPostsMeta)[number]['slug']
 
 const componentsBySlug = {
+  'dotlanth-v26-2-0-alpha': () => import('@/components/blog/posts/V262AlphaPost'),
   'inside-dotvm-syscall-boundary': () =>
     import('@/components/blog/posts/DotVmSyscallBoundaryPost'),
   'why-dotdb-starts-with-sqlite': () =>

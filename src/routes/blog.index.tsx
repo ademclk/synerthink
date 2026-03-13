@@ -6,6 +6,7 @@ import { absoluteUrl, DEFAULT_OG_IMAGE_PATH, getSiteUrl } from '@/lib/seo'
 const ScalableGradientBlur = React.lazy(() => import('@/components/blog/ScalableGradientBlur'))
 
 const blogCardImageBySource: Record<string, string> = {
+  '/dotlanth-v2620alpha.png': '/dotlanth-v2620alpha-card.webp',
   '/replayable_compute.png': '/replayable_compute-card.webp',
   '/inside_dotdb.png': '/inside_dotdb-card.webp',
   '/dotdsl-programs.png': '/dotdsl-programs-card.webp',
@@ -187,7 +188,7 @@ function BlogIndex() {
                         <React.Suspense fallback={<div className="absolute inset-0 bg-foreground/5" />}>
                           <ScalableGradientBlur
                             seed={post.slug}
-                            versionLabel="v26.1.0-alpha"
+                            versionLabel={post.frontmatter.versionLabel ?? post.frontmatter.title}
                           />
                         </React.Suspense>
                       ) : (
