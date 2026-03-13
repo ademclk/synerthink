@@ -21,18 +21,6 @@ export default function V262AlphaPost() {
         that model usable.
       </p>
 
-      <figure className="mb-16 overflow-hidden rounded-[2rem] border border-foreground/10 bg-foreground/4">
-        <img
-          src="/dotlanth-v2620alpha.png"
-          alt="Dotlanth v26.2.0-alpha release artwork"
-          width={1200}
-          height={1200}
-          className="h-auto w-full"
-          loading="eager"
-          decoding="async"
-        />
-      </figure>
-
       <div className="mb-16 h-px w-full bg-foreground/8" />
 
       <h2 className="mb-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
