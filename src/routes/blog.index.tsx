@@ -6,6 +6,7 @@ import { absoluteUrl, DEFAULT_OG_IMAGE_PATH, getSiteUrl } from '@/lib/seo'
 const ScalableGradientBlur = React.lazy(() => import('@/components/blog/ScalableGradientBlur'))
 
 const blogCardImageBySource: Record<string, string> = {
+  '/artifact-bundles.png': '/artifact-bundles.png',
   '/dotlanth-v2620alpha.png': '/dotlanth-v2620alpha-card.webp',
   '/replayable_compute.png': '/replayable_compute-card.webp',
   '/inside_dotdb.png': '/inside_dotdb-card.webp',

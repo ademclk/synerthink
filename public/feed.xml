@@ -5,8 +5,19 @@
     <link>https://synerthink.com/blog</link>
     <description>Synerthink builds foundational computing products for autonomous systems. Dotlanth is a high-trust execution fabric focused on record-first observability, replayable runs, and capability-explicit security.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 13 Mar 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 15 Mar 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://synerthink.com/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Why Every Run Needs an Artifact Bundle</title>
+    <link>https://synerthink.com/blog/why-every-run-needs-an-artifact-bundle</link>
+    <guid isPermaLink="true">https://synerthink.com/blog/why-every-run-needs-an-artifact-bundle</guid>
+    <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+    <description>Why Dotlanth treats the artifact bundle as the primary output of a run, and why that matters for inspection, replay, and reliable AI systems.</description>
+    <category>research</category>
+    <category>artifacts</category>
+    <category>replayable-systems</category>
+    <category>ai-infrastructure</category>
+  </item>
   <item>
     <title>Dotlanth v26.2.0-alpha</title>
     <link>https://synerthink.com/blog/dotlanth-v26-2-0-alpha</link>

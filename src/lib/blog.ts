@@ -11,6 +11,8 @@ export type BlogPost = BlogPostMeta & {
 type BlogSlug = (typeof blogPostsMeta)[number]['slug']
 
 const componentsBySlug = {
+  'why-every-run-needs-an-artifact-bundle': () =>
+    import('@/components/blog/posts/ArtifactBundlePost'),
   'dotlanth-v26-2-0-alpha': () => import('@/components/blog/posts/V262AlphaPost'),
   'inside-dotvm-syscall-boundary': () =>
     import('@/components/blog/posts/DotVmSyscallBoundaryPost'),

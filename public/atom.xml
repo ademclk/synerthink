@@ -5,10 +5,20 @@
   <link href="https://synerthink.com/atom.xml" rel="self" />
   <link href="https://synerthink.com/blog" />
   <id>https://synerthink.com/blog</id>
-  <updated>2026-03-13T00:00:00.000Z</updated>
+  <updated>2026-03-15T00:00:00.000Z</updated>
   <author>
     <name>Synerthink</name>
   </author>
+  <entry>
+    <title>Why Every Run Needs an Artifact Bundle</title>
+    <link href="https://synerthink.com/blog/why-every-run-needs-an-artifact-bundle" />
+    <id>https://synerthink.com/blog/why-every-run-needs-an-artifact-bundle</id>
+    <updated>2026-03-15T00:00:00.000Z</updated>
+    <summary>Why Dotlanth treats the artifact bundle as the primary output of a run, and why that matters for inspection, replay, and reliable AI systems.</summary>
+    <author>
+      <name>Synerthink</name>
+    </author>
+  </entry>
   <entry>
     <title>Dotlanth v26.2.0-alpha</title>
     <link href="https://synerthink.com/blog/dotlanth-v26-2-0-alpha" />

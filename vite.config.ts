@@ -52,6 +52,10 @@ function createPage(
 }
 
 const blogSourcePathsBySlug: Record<string, string[]> = {
+  'why-every-run-needs-an-artifact-bundle': [
+    'src/content/blog/posts.ts',
+    'src/components/blog/posts/ArtifactBundlePost.tsx',
+  ],
   'why-dotdb-starts-with-sqlite': [
     'src/content/blog/posts.ts',
     'src/components/blog/posts/DotDbStartsWithSqlitePost.tsx',

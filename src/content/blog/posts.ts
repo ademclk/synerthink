@@ -23,6 +23,21 @@ export type BlogPostMeta = {
 
 export const blogPostsMeta = [
   {
+    slug: 'why-every-run-needs-an-artifact-bundle',
+    kind: 'research',
+    frontmatter: {
+      title: 'Why Every Run Needs an Artifact Bundle',
+      date: '2026-03-15',
+      tags: ['research', 'artifacts', 'replayable-systems', 'ai-infrastructure'],
+      status: 'published',
+      subtitle: 'Reliable AI systems need a portable record of execution, not just logs',
+      description:
+        'Why Dotlanth treats the artifact bundle as the primary output of a run, and why that matters for inspection, replay, and reliable AI systems.',
+      image: '/artifact-bundles.png',
+      slug: 'why-every-run-needs-an-artifact-bundle',
+    },
+  },
+  {
     slug: 'dotlanth-v26-2-0-alpha',
     kind: 'releases',
     frontmatter: {
